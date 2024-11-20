@@ -1,6 +1,6 @@
 {
 	"name": "nestjs-yookassa",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "A NestJS library for integrating with YooKassa API",
 	"keywords": [
 		"nest",

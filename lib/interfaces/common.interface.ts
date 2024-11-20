@@ -126,6 +126,6 @@ export enum CurrencyEnum {
 }
 
 export interface Amount {
-	value: string
+	value: number
 	currency: CurrencyEnum
 }

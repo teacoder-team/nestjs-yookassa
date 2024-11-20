@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios'
 import { Inject, Injectable } from '@nestjs/common'
 import { firstValueFrom } from 'rxjs'
+import { v4 as uuidv4 } from 'uuid'
 import { PaymentDetails } from './interfaces/payment-details.interface'
 import { PaymentCreateRequest } from './interfaces/payment-request.interface'
 import {
@@ -28,6 +29,8 @@ export class YookassaService {
 	public async createPayment(
 		paymentData: PaymentCreateRequest
 	): Promise<PaymentResponse> {
+		const idempotenceKey = uuidv4()
+
 		const response = await firstValueFrom(
 			this.httpService.post<PaymentResponse>(
 				`${this.apiUrl}payments`,
@@ -35,7 +38,8 @@ export class YookassaService {
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
 					}
 				}
 			)

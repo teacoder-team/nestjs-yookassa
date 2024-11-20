@@ -10,7 +10,7 @@ export enum ConfirmationTypesEnum {
 
 export interface ConfirmationRedirect {
 	type: 'redirect'
-	confirmation_url: string
+	confirmation_url?: string
 	enforce?: boolean
 	locale?: LocaleEnum
 	return_url: string

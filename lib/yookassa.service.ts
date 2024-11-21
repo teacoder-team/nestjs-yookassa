@@ -177,10 +177,18 @@ export class YookassaService {
 	): Promise<ReceiptRegistrationEnum> {
 		const idempotenceKey = uuidv4()
 
+		const receiptData = {
+			customer: receipt.customer,
+			payment_id: paymentId,
+			type: 'payment',
+			send: true,
+			items: receipt.items
+		}
+
 		const response = await firstValueFrom(
 			this.httpService.post<ReceiptRegistrationEnum>(
 				`${this.apiUrl}payments/${paymentId}/receipt/register`,
-				receipt,
+				receiptData,
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,

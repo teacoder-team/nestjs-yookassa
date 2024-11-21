@@ -95,12 +95,9 @@ export class YookassaService {
 	 * console.log(paymentDetails);
 	 * ```
 	 */
-	public async confirmPayment(
-		paymentId: string,
-		confirmationToken: string
-	): Promise<PaymentDetails> {
+	public async confirmPayment(paymentId: string, confirmationToken: string) {
 		const response = await firstValueFrom(
-			this.httpService.post<PaymentDetails>(
+			this.httpService.post(
 				`${this.apiUrl}payments/${paymentId}/confirm`,
 				{ confirmation_token: confirmationToken },
 				{
@@ -111,6 +108,7 @@ export class YookassaService {
 				}
 			)
 		)
+
 		return response.data
 	}
 

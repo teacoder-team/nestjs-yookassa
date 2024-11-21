@@ -57,3 +57,81 @@ import { YookassaModule } from 'nestjs-yookassa'
 })
 export class AppModule {}
 ```
+
+## Методы
+
+**1. Создание платежа**
+Создает новый платеж через YooKassa. Этот метод отправляет запрос на создание нового платежа с данными из paymentData и возвращает информацию о созданном платеже.
+
+Параметры:
+
+-   paymentData (PaymentCreateRequest): Данные для создания платежа. Пример структуры данных см. ниже.
+
+Пример:
+
+```typescript
+const paymentData: PaymentCreateRequest = {
+	amount: {
+		value: 1000,
+		currency: 'RUB'
+	},
+	description: 'Test payment',
+	payment_method_data: {
+		type: PaymentMethodsEnum.yoo_money
+	},
+	confirmation: {
+		type: 'redirect',
+		return_url: 'https://example.com/thanks'
+	},
+	capture: false
+}
+
+const paymentResponse = await this.yookassaService.createPayment(paymentData)
+console.log(paymentResponse)
+```
+
+**2. Отмена платежа**
+Отменяет платеж по его ID.
+Параметры:
+
+-   paymentId (string): ID платежа, который нужно отменить.
+
+Пример:
+
+```typescript
+const paymentId = '123456'
+const canceledPaymentDetails =
+	await this.yookassaService.cancelPayment(paymentId)
+console.log(canceledPaymentDetails)
+```
+
+**3. Получение платежей**
+Получает список всех платежей с возможностью фильтрации по дате и пагинации.
+
+-   limit (number): Максимальное количество платежей на страницу (по умолчанию 10).
+-   from (string): Начальная дата для фильтрации (формат YYYY-MM-DD).
+-   to (string): Конечная дата для фильтрации (формат YYYY-MM-DD).
+
+Пример:
+
+```typescript
+const payments = await this.yookassaService.getPayments(
+	10,
+	'2024-01-01',
+	'2024-12-31'
+)
+console.log(payments)
+```
+
+**3. Получение деталей плтежа**
+Получает подробную информацию о платеже по его ID, включая статус, сумму и другие данные.
+
+-   paymentId (string): Уникальный идентификатор платежа.
+
+Пример:
+
+```typescript
+const paymentId = '123456'
+const paymentDetails = await this.yookassaService.getPaymentDetails(paymentId)
+console.log(paymentDetails)
+```

@@ -96,6 +96,8 @@ export class YookassaService {
 	 * ```
 	 */
 	public async confirmPayment(paymentId: string, confirmationToken: string) {
+		const idempotenceKey = uuidv4()
+
 		const response = await firstValueFrom(
 			this.httpService.post(
 				`${this.apiUrl}payments/${paymentId}/confirm`,
@@ -103,7 +105,8 @@ export class YookassaService {
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
 					}
 				}
 			)
@@ -127,6 +130,8 @@ export class YookassaService {
 	 * ```
 	 */
 	public async cancelPayment(paymentId: string): Promise<PaymentDetails> {
+		const idempotenceKey = uuidv4()
+
 		const response = await firstValueFrom(
 			this.httpService.post<PaymentDetails>(
 				`${this.apiUrl}payments/${paymentId}/cancel`,
@@ -134,7 +139,8 @@ export class YookassaService {
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
 					}
 				}
 			)
@@ -169,6 +175,8 @@ export class YookassaService {
 		paymentId: string,
 		receipt: Receipt
 	): Promise<ReceiptRegistrationEnum> {
+		const idempotenceKey = uuidv4()
+
 		const response = await firstValueFrom(
 			this.httpService.post<ReceiptRegistrationEnum>(
 				`${this.apiUrl}payments/${paymentId}/receipt/register`,
@@ -176,7 +184,8 @@ export class YookassaService {
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
 					}
 				}
 			)

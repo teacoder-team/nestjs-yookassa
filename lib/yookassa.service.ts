@@ -6,8 +6,6 @@ import {
 	YookassaOptionsSymbol,
 	type PaymentCreateRequest,
 	type PaymentDetails,
-	type Receipt,
-	type ReceiptRegistrationEnum,
 	type YookassaOptions
 } from './interfaces'
 import { DEFAULT_URL } from './yookassa.constants'
@@ -80,42 +78,6 @@ export class YookassaService {
 	}
 
 	/**
-	 * Подтверждает платеж.
-	 * Этот метод используется для подтверждения платежа в случае, если платеж был создан с подтверждением (например, redirect).
-	 *
-	 * @param {string} paymentId - ID платежа.
-	 * @param {string} confirmationToken - Токен подтверждения (если требуется).
-	 * @returns {Promise<PaymentDetails>} Детали подтвержденного платежа.
-	 *
-	 * @example
-	 * ```ts
-	 * const paymentId = '123456';
-	 * const confirmationToken = 'some-token';
-	 * const paymentDetails = await this.yookassaService.confirmPayment(paymentId, confirmationToken);
-	 * console.log(paymentDetails);
-	 * ```
-	 */
-	public async confirmPayment(paymentId: string, confirmationToken: string) {
-		const idempotenceKey = uuidv4()
-
-		const response = await firstValueFrom(
-			this.httpService.post(
-				`${this.apiUrl}payments/${paymentId}/confirm`,
-				{ confirmation_token: confirmationToken },
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
-					}
-				}
-			)
-		)
-
-		return response.data
-	}
-
-	/**
 	 * Отменяет платеж.
 	 * Этот метод используется для отмены платежа.
 	 *
@@ -145,60 +107,6 @@ export class YookassaService {
 				}
 			)
 		)
-		return response.data
-	}
-
-	/**
-	 * Создает и регистрирует чек.
-	 * Этот метод используется для создания чека и его регистрации в системе.
-	 *
-	 * @param {string} paymentId - ID платежа.
-	 * @param {Receipt} receipt - Данные чека.
-	 * @returns {Promise<ReceiptRegistrationEnum>} Статус регистрации чека.
-	 *
-	 * @example
-	 * ```ts
-	 * const paymentId = '123456';
-	 * const receiptData: Receipt = {
-	 *   items: [{
-	 *     description: 'Product',
-	 *     amount: { value: 1000, currency: 'RUB' },
-	 *     vat_code: VatCodesEnum.ndsNone,
-	 *     quantity: '1'
-	 *   }]
-	 * };
-	 * const receiptStatus = await this.yookassaService.registerReceipt(paymentId, receiptData);
-	 * console.log(receiptStatus);
-	 * ```
-	 */
-	public async registerReceipt(
-		paymentId: string,
-		receipt: Receipt
-	): Promise<ReceiptRegistrationEnum> {
-		const idempotenceKey = uuidv4()
-
-		const receiptData = {
-			customer: receipt.customer,
-			payment_id: paymentId,
-			type: 'payment',
-			send: true,
-			items: receipt.items
-		}
-
-		const response = await firstValueFrom(
-			this.httpService.post<ReceiptRegistrationEnum>(
-				`${this.apiUrl}payments/${paymentId}/receipt/register`,
-				receiptData,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
-					}
-				}
-			)
-		)
-
 		return response.data
 	}
 

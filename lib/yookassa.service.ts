@@ -190,6 +190,7 @@ export class YookassaService {
 				}
 			)
 		)
+
 		return response.data
 	}
 

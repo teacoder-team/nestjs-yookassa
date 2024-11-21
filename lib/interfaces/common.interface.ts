@@ -1,131 +1,154 @@
+/**
+ * Перечисление поддерживаемых локалей.
+ * Каждая локаль представляет собой комбинацию языка и страны.
+ * @enum {string}
+ */
 export enum LocaleEnum {
+	/**
+	 * Русский язык, Россия.
+	 */
 	ru_RU = 'ru_RU',
+
+	/**
+	 * Английский язык, США.
+	 */
 	en_US = 'en_US'
 }
 
+/**
+ * Перечисление поддерживаемых валют.
+ * Каждая валюта представлена в виде трехбуквенного кода.
+ * @enum {string}
+ */
 export enum CurrencyEnum {
-	USD = 'USD',
-	CAD = 'CAD',
-	EUR = 'EUR',
-	AED = 'AED',
-	AFN = 'AFN',
-	ALL = 'ALL',
-	AMD = 'AMD',
-	ARS = 'ARS',
-	AUD = 'AUD',
-	AZN = 'AZN',
-	BAM = 'BAM',
-	BDT = 'BDT',
-	BGN = 'BGN',
-	BHD = 'BHD',
-	BIF = 'BIF',
-	BND = 'BND',
-	BOB = 'BOB',
-	BRL = 'BRL',
-	BWP = 'BWP',
-	BYN = 'BYN',
-	BZD = 'BZD',
-	CDF = 'CDF',
-	CHF = 'CHF',
-	CLP = 'CLP',
-	CNY = 'CNY',
-	COP = 'COP',
-	CRC = 'CRC',
-	CVE = 'CVE',
-	CZK = 'CZK',
-	DJF = 'DJF',
-	DKK = 'DKK',
-	DOP = 'DOP',
-	DZD = 'DZD',
-	EEK = 'EEK',
-	EGP = 'EGP',
-	ERN = 'ERN',
-	ETB = 'ETB',
-	GBP = 'GBP',
-	GEL = 'GEL',
-	GHS = 'GHS',
-	GNF = 'GNF',
-	GTQ = 'GTQ',
-	HKD = 'HKD',
-	HNL = 'HNL',
-	HRK = 'HRK',
-	HUF = 'HUF',
-	IDR = 'IDR',
-	ILS = 'ILS',
-	INR = 'INR',
-	IQD = 'IQD',
-	IRR = 'IRR',
-	ISK = 'ISK',
-	JMD = 'JMD',
-	JOD = 'JOD',
-	JPY = 'JPY',
-	KES = 'KES',
-	KHR = 'KHR',
-	KMF = 'KMF',
-	KRW = 'KRW',
-	KWD = 'KWD',
-	KZT = 'KZT',
-	LBP = 'LBP',
-	LKR = 'LKR',
-	LTL = 'LTL',
-	LVL = 'LVL',
-	LYD = 'LYD',
-	MAD = 'MAD',
-	MDL = 'MDL',
-	MGA = 'MGA',
-	MKD = 'MKD',
-	MMK = 'MMK',
-	MOP = 'MOP',
-	MUR = 'MUR',
-	MXN = 'MXN',
-	MYR = 'MYR',
-	MZN = 'MZN',
-	NAD = 'NAD',
-	NGN = 'NGN',
-	NIO = 'NIO',
-	NOK = 'NOK',
-	NPR = 'NPR',
-	NZD = 'NZD',
-	OMR = 'OMR',
-	PAB = 'PAB',
-	PEN = 'PEN',
-	PHP = 'PHP',
-	PKR = 'PKR',
-	PLN = 'PLN',
-	PYG = 'PYG',
-	QAR = 'QAR',
-	RON = 'RON',
-	RSD = 'RSD',
-	RUB = 'RUB',
-	RWF = 'RWF',
-	SAR = 'SAR',
-	SDG = 'SDG',
-	SEK = 'SEK',
-	SGD = 'SGD',
-	SOS = 'SOS',
-	SYP = 'SYP',
-	THB = 'THB',
-	TND = 'TND',
-	TOP = 'TOP',
-	TRY = 'TRY',
-	TTD = 'TTD',
-	TWD = 'TWD',
-	TZS = 'TZS',
-	UAH = 'UAH',
-	UGX = 'UGX',
-	UYU = 'UYU',
-	UZS = 'UZS',
-	VEF = 'VEF',
-	VND = 'VND',
-	XAF = 'XAF',
-	XOF = 'XOF',
-	YER = 'YER',
-	ZAR = 'ZAR',
-	ZMK = 'ZMK',
-	ZWL = 'ZWL'
+	USD = 'USD', // Доллар США
+	CAD = 'CAD', // Канадский доллар
+	EUR = 'EUR', // Евро
+	AED = 'AED', // Дирхам ОАЭ
+	AFN = 'AFN', // Афгани
+	ALL = 'ALL', // Албанский лек
+	AMD = 'AMD', // Армянский драм
+	ARS = 'ARS', // Аргентинский песо
+	AUD = 'AUD', // Австралийский доллар
+	AZN = 'AZN', // Азербайджанский манат
+	BAM = 'BAM', // Конвертируемая марка (Босния и Герцеговина)
+	BDT = 'BDT', // Бангладешская така
+	BGN = 'BGN', // Болгарский лев
+	BHD = 'BHD', // Бахрейнский динар
+	BIF = 'BIF', // Бурундийский франк
+	BND = 'BND', // Брунейский доллар
+	BOB = 'BOB', // Боливийский боливиано
+	BRL = 'BRL', // Бразильский реал
+	BWP = 'BWP', // Ботсванская пула
+	BYN = 'BYN', // Белорусский рубль
+	BZD = 'BZD', // Белизский доллар
+	CDF = 'CDF', // Конголезский франк
+	CHF = 'CHF', // Швейцарский франк
+	CLP = 'CLP', // Чилийский песо
+	CNY = 'CNY', // Китайский юань
+	COP = 'COP', // Колумбийский песо
+	CRC = 'CRC', // Коста-риканский колон
+	CVE = 'CVE', // Эскудо Кабо-Верде
+	CZK = 'CZK', // Чешская крона
+	DJF = 'DJF', // Франк Джибути
+	DKK = 'DKK', // Датская крона
+	DOP = 'DOP', // Доминиканский песо
+	DZD = 'DZD', // Алжирский динар
+	EEK = 'EEK', // Эстонская крона
+	EGP = 'EGP', // Египетский фунт
+	ERN = 'ERN', // Эритрейская накфа
+	ETB = 'ETB', // Эфиопский бирр
+	GBP = 'GBP', // Фунт стерлингов
+	GEL = 'GEL', // Грузинский лари
+	GHS = 'GHS', // Ганский седи
+	GNF = 'GNF', // Гвинейский франк
+	GTQ = 'GTQ', // Гватемальский кетсаль
+	HKD = 'HKD', // Гонконгский доллар
+	HNL = 'HNL', // Гондурасская лемпира
+	HRK = 'HRK', // Хорватская куна
+	HUF = 'HUF', // Венгерский форинт
+	IDR = 'IDR', // Индонезийская рупия
+	ILS = 'ILS', // Израильский шекель
+	INR = 'INR', // Индийская рупия
+	IQD = 'IQD', // Иракский динар
+	IRR = 'IRR', // Иранский риал
+	ISK = 'ISK', // Исландская крона
+	JMD = 'JMD', // Ямайский доллар
+	JOD = 'JOD', // Иорданский динар
+	JPY = 'JPY', // Японская иена
+	KES = 'KES', // Кенийский шиллинг
+	KHR = 'KHR', // Камбоджийский риель
+	KMF = 'KMF', // Франк Коморских островов
+	KRW = 'KRW', // Южнокорейская вона
+	KWD = 'KWD', // Кувейтский динар
+	KZT = 'KZT', // Казахстанский тенге
+	LBP = 'LBP', // Ливанский фунт
+	LKR = 'LKR', // Шри-ланкийская рупия
+	LTL = 'LTL', // Литовский лит
+	LVL = 'LVL', // Латвийский лат
+	LYD = 'LYD', // Ливийский динар
+	MAD = 'MAD', // Марокканский дирхам
+	MDL = 'MDL', // Молдавский лей
+	MGA = 'MGA', // Мадагаскарский ариари
+	MKD = 'MKD', // Македонский денар
+	MMK = 'MMK', // Мьянмский кьят
+	MOP = 'MOP', // Патака Макао
+	MUR = 'MUR', // Маврикийская рупия
+	MXN = 'MXN', // Мексиканское песо
+	MYR = 'MYR', // Малайзийский ринггит
+	MZN = 'MZN', // Мозамбикское метикал
+	NAD = 'NAD', // Намибийский доллар
+	NGN = 'NGN', // Нигерийская найра
+	NIO = 'NIO', // Никарагуанская кордоба
+	NOK = 'NOK', // Норвежская крона
+	NPR = 'NPR', // Непальская рупия
+	NZD = 'NZD', // Новозеландский доллар
+	OMR = 'OMR', // Оманский риал
+	PAB = 'PAB', // Панамский балбоа
+	PEN = 'PEN', // Перуанский соль
+	PHP = 'PHP', // Филиппинское песо
+	PKR = 'PKR', // Пакистанская рупия
+	PLN = 'PLN', // Польский злотый
+	PYG = 'PYG', // Парагвайский гуарани
+	QAR = 'QAR', // Катарский риал
+	RON = 'RON', // Румынский лей
+	RSD = 'RSD', // Сербский динар
+	RUB = 'RUB', // Российский рубль
+	RWF = 'RWF', // Руандийский франк
+	SAR = 'SAR', // Саудовский риал
+	SDG = 'SDG', // Суданский фунт
+	SEK = 'SEK', // Шведская крона
+	SGD = 'SGD', // Сингапурский доллар
+	SOS = 'SOS', // Сомалийский шиллинг
+	SYP = 'SYP', // Сирийский фунт
+	THB = 'THB', // Таиландский бат
+	TND = 'TND', // Тунисский динар
+	TOP = 'TOP', // Тонгана паанга
+	TRY = 'TRY', // Турецкая лира
+	TTD = 'TTD', // Тринидад и Тобаго доллар
+	TWD = 'TWD', // Новый тайваньский доллар
+	TZS = 'TZS', // Танзанийский шиллинг
+	UAH = 'UAH', // Украинская гривна
+	UGX = 'UGX', // Угандийский шиллинг
+	UYU = 'UYU', // Уругвайское песо
+	UZS = 'UZS', // Узбекский сум
+	VEF = 'VEF', // Венесуэльский боливар
+	VND = 'VND', // Вьетнамский донг
+	XAF = 'XAF', // Франк Центральноафриканского CFA
+	XOF = 'XOF', // Франк Западноафриканского CFA
+	YER = 'YER', // Йеменский риал
+	ZAR = 'ZAR', // Южноафриканский рэнд
+	ZMK = 'ZMK', // Замбийская квача
+	ZWL = 'ZWL' // Зимбабвийский доллар
 }
 
 export interface Amount {
+	/**
+	 * Значение суммы.
+	 */
 	value: number
+	/**
+	 * Валюта суммы, представленная кодом валюты из перечисления `CurrencyEnum`.
+	 */
 	currency: CurrencyEnum
 }

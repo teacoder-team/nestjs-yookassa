@@ -26,6 +26,35 @@ export class YookassaService {
 		this.apiUrl = DEFAULT_URL
 	}
 
+	/**
+	 * Создает платеж через YooKassa.
+	 * Этот метод отправляет запрос на создание нового платежа с данными из `paymentData`.
+	 * Возвращает информацию о созданном платеже.
+	 *
+	 * @param {PaymentCreateRequest} paymentData - Данные для создания платежа.
+	 * @returns {Promise<PaymentResponse>} Ответ от API с деталями платежа.
+	 *
+	 * @example
+	 * ```ts
+	 * const paymentData: PaymentCreateRequest = {
+	 *   amount: {
+	 *     value: 1000,
+	 *     currency: 'RUB'
+	 *   },
+	 *   description: 'Test payment',
+	 *   payment_method_data: {
+	 *	   type: PaymentMethodsEnum.yoo_money,
+	 *	 },
+	 *	 confirmation: {
+	 *     type: 'redirect',
+	 *     return_url: 'https://example.com/thanks'
+	 *   },
+	 *   capture: false,
+	 * };
+	 * const paymentResponse = await yookassaService.createPayment(paymentData);
+	 * console.log(paymentResponse);
+	 * ```
+	 */
 	public async createPayment(
 		paymentData: PaymentCreateRequest
 	): Promise<PaymentResponse> {

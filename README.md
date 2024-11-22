@@ -77,35 +77,20 @@ const paymentData: PaymentCreateRequest = {
 	},
 	description: 'Test payment',
 	payment_method_data: {
-		type: PaymentMethodsEnum.yoo_money
+		type: PaymentMethodsEnum.bank_card
 	},
 	confirmation: {
 		type: 'redirect',
 		return_url: 'https://example.com/thanks'
-	},
-	capture: false
+	}
 }
 
 const paymentResponse = await this.yookassaService.createPayment(paymentData)
-console.log(paymentResponse)
+
+return paymentResponse
 ```
 
-**2. Отмена платежа**
-Отменяет платеж по его ID.
-Параметры:
-
--   paymentId (string): ID платежа, который нужно отменить.
-
-Пример:
-
-```typescript
-const paymentId = '123456'
-const canceledPaymentDetails =
-	await this.yookassaService.cancelPayment(paymentId)
-console.log(canceledPaymentDetails)
-```
-
-**3. Получение платежей**
+**2. Получение платежей**
 Получает список всех платежей с возможностью фильтрации по дате и пагинации.
 
 -   limit (number): Максимальное количество платежей на страницу (по умолчанию 10).
@@ -120,10 +105,11 @@ const payments = await this.yookassaService.getPayments(
 	'2024-01-01',
 	'2024-12-31'
 )
-console.log(payments)
+
+return payments
 ```
 
-**4. Получение деталей плтежа**
+**3. Получение деталей плтежа**
 Получает подробную информацию о платеже по его ID, включая статус, сумму и другие данные.
 
 -   paymentId (string): Уникальный идентификатор платежа.
@@ -132,6 +118,58 @@ console.log(payments)
 
 ```typescript
 const paymentId = '123456'
+
+const payment = await this.yookassaService.getPaymentDetails(id)
+
+if (!payment) {
+	throw new NotFoundException('Платеж не найден')
+}
+
+return payment
+```
+
+**4. Подтверждение платежа**
+Выполняет захват средств с карты клиента после того, как был создан платеж. Обычно этот метод используется, когда заказ подтвержден, и продавец готов забрать средства.
+
+Параметры:
+
+-   paymentId (string): Уникальный идентификатор платежа, который нужно подтвердить.
+-   amount (Amount): Сумма, которую необходимо захватить.
+
+Пример:
+
+```typescript
+const paymentId = '123456'
+
 const paymentDetails = await this.yookassaService.getPaymentDetails(paymentId)
-console.log(paymentDetails)
+
+if (!paymentDetails) {
+	throw new NotFoundException('Платеж не найден')
+}
+
+const amount: Amount = paymentDetails.amount
+
+const capturedPaymentDetails = await this.yookassaService.capturePayment(
+	paymentId,
+	amount
+)
+
+return capturedPaymentDetails
+```
+
+**5. Отмена платежа**
+Отменяет платеж по его ID.
+Параметры:
+
+-   paymentId (string): ID платежа, который нужно отменить.
+
+Пример:
+
+```typescript
+const paymentId = '123456'
+
+const canceledPaymentDetails =
+	await this.yookassaService.cancelPayment(paymentId)
+
+return canceledPaymentDetails
 ```

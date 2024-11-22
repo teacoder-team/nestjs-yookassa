@@ -43,8 +43,9 @@ export interface PaymentCreateRequest {
 
 	/**
 	 * Указывает, следует ли сразу захватывать платеж.
+	 * Необязательное поле, по умолчанию false.
 	 */
-	capture: boolean
+	capture?: boolean
 
 	/**
 	 * Тип подтверждения для платежа.

@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { firstValueFrom } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import {
+	Amount,
 	YookassaOptionsSymbol,
 	type PaymentCreateRequest,
 	type PaymentDetails,
@@ -78,39 +79,6 @@ export class YookassaService {
 	}
 
 	/**
-	 * Отменяет платеж.
-	 * Этот метод используется для отмены платежа.
-	 *
-	 * @param {string} paymentId - ID платежа.
-	 * @returns {Promise<PaymentDetails>} Детали отмененного платежа.
-	 *
-	 * @example
-	 * ```ts
-	 * const paymentId = '123456';
-	 * const canceledPaymentDetails = await this.yookassaService.cancelPayment(paymentId);
-	 * console.log(canceledPaymentDetails);
-	 * ```
-	 */
-	public async cancelPayment(paymentId: string): Promise<PaymentDetails> {
-		const idempotenceKey = uuidv4()
-
-		const response = await firstValueFrom(
-			this.httpService.post<PaymentDetails>(
-				`${this.apiUrl}payments/${paymentId}/cancel`,
-				{},
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
-					}
-				}
-			)
-		)
-		return response.data
-	}
-
-	/**
 	 * Получает список платежей.
 	 * Этот метод используется для получения списка всех платежей с возможностью пагинации.
 	 *
@@ -166,6 +134,90 @@ export class YookassaService {
 				{
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+					}
+				}
+			)
+		)
+		return response.data
+	}
+
+	/**
+	 * Выполняет захват платежа.
+	 * Этот метод используется для захвата средств с карты клиента после того, как был создан платеж.
+	 * Обычно это делается, когда заказ подтвержден, и продавец готов забрать средства.
+	 * Возвращает обновленные детали платежа после захвата средств.
+	 *
+	 * @param {string} paymentId - Уникальный идентификатор платежа, который нужно захватить.
+	 * @param {Amount} amount - Сумма, которую необходимо захватить. Если сумма равна нулю, захватится полная сумма платежа.
+	 * @returns {Promise<PaymentDetails>} Промис, который возвращает объект `PaymentDetails` с информацией о платеже после захвата.
+	 *
+	 * @example
+	 * ```ts
+	 * const paymentId = '123456';
+	 * const amount: Amount = {
+	 *   value: 1000,
+	 *   currency: 'RUB',
+	 * };
+	 * const paymentDetails = await this.yookassaService.capturePayment(paymentId, amount);
+	 * console.log(paymentDetails);
+	 * ```
+	 */
+	public async capturePayment(
+		paymentId: string,
+		amount: Amount
+	): Promise<PaymentDetails> {
+		const idempotenceKey = uuidv4()
+
+		const data = {
+			amount: {
+				value: amount.value,
+				currency: amount.currency
+			}
+		}
+
+		const response = await firstValueFrom(
+			this.httpService.post<PaymentDetails>(
+				`${this.apiUrl}payments/${paymentId}/capture`,
+				data,
+				{
+					headers: {
+						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
+					}
+				}
+			)
+		)
+
+		return response.data
+	}
+
+	/**
+	 * Отменяет платеж.
+	 * Этот метод используется для отмены платежа.
+	 *
+	 * @param {string} paymentId - ID платежа.
+	 * @returns {Promise<PaymentDetails>} Детали отмененного платежа.
+	 *
+	 * @example
+	 * ```ts
+	 * const paymentId = '123456';
+	 * const canceledPaymentDetails = await this.yookassaService.cancelPayment(paymentId);
+	 * console.log(canceledPaymentDetails);
+	 * ```
+	 */
+	public async cancelPayment(paymentId: string): Promise<PaymentDetails> {
+		const idempotenceKey = uuidv4()
+
+		const response = await firstValueFrom(
+			this.httpService.post<PaymentDetails>(
+				`${this.apiUrl}payments/${paymentId}/cancel`,
+				{},
+				{
+					headers: {
+						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
 					}
 				}
 			)

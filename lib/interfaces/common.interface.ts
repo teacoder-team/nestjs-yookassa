@@ -142,6 +142,9 @@ export enum CurrencyEnum {
 	ZWL = 'ZWL' // Зимбабвийский доллар
 }
 
+/**
+ * Тип, представляющий сумму и валюту для платежа.
+ */
 export interface Amount {
 	/**
 	 * Значение суммы.

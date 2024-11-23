@@ -204,6 +204,7 @@ export interface PaymentMethodB2b_sberbank {
 	 * Тип метода — B2B Сбербанк
 	 */
 	type: PaymentMethodsEnum.b2b_sberbank
+
 	/**
 	 * Назначение платежа.
 	 */
@@ -217,6 +218,7 @@ export interface PaymentMethodB2b_sberbank {
 		 * Тип НДС.
 		 */
 		type: 'mixed' | 'calculated' | 'untaxed'
+		rate: number
 
 		/**
 		 * Сумма НДС.

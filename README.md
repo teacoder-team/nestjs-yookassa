@@ -60,6 +60,8 @@ export class AppModule {}
 
 ## Методы
 
+### Работа с платежами
+
 **1. Создание платежа**
 Создает новый платеж через YooKassa. Этот метод отправляет запрос на создание нового платежа с данными из paymentData и возвращает информацию о созданном платеже.
 
@@ -172,4 +174,60 @@ const canceledPaymentDetails =
 	await this.yookassaService.cancelPayment(paymentId)
 
 return canceledPaymentDetails
+```
+
+### Работа с возвратами
+
+**1. Создание возврата**
+Создаёт возврат средств по указанному платежу. Этот метод отправляет запрос на создание возврата с данными из refundData и возвращает информацию о созданном возврате.
+
+Параметры:
+
+-   refundData (RefundCreateRequest) — Данные для создания возврата. Пример структуры данных см. ниже.
+
+Пример:
+
+```typescript
+const refundData: RefundCreateRequest = {
+	payment_id: '123456',
+	amount: {
+		value: 500,
+		currency: 'RUB'
+	},
+	description: 'Возврат за отмененный заказ'
+}
+
+const refundResponse = await this.yookassaService.createRefund(refundData)
+
+return refundResponse
+```
+
+**2. Получение списка возвратов**
+Получает список всех возвратов с возможностью фильтрации и пагинации.
+
+Пример:
+
+```typescript
+const refunds = await this.yookassaService.getRefunds()
+
+return refunds
+```
+
+**3. Получение деталей возврата**
+Получает подробную информацию о возврате по его ID, включая статус, сумму и другие данные.
+
+-   refundId (string) — Уникальный идентификатор возврата.
+
+Пример:
+
+```typescript
+const refundId = '123456'
+
+const refundDetails = await this.yookassaService.getRefundDetails(refundId)
+
+if (!refundDetails) {
+	throw new NotFoundException('Возврат не найден')
+}
+
+return refundDetails
 ```

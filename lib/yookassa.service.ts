@@ -227,6 +227,27 @@ export class YookassaService {
 		return response.data
 	}
 
+	/**
+	 * Создает возврат средств по указанному платежу.
+	 * Этот метод отправляет запрос на создание возврата с данными из `refundData`.
+	 *
+	 * @param {RefundCreateRequest} refundData - Данные для создания возврата.
+	 * @returns {Promise<RefundDetails>} Ответ от API с деталями созданного возврата.
+	 *
+	 * @example
+	 * ```ts
+	 * const refundData: RefundCreateRequest = {
+	 *   payment_id: '123456',
+	 *   amount: {
+	 *     value: 500,
+	 *     currency: 'RUB',
+	 *   },
+	 *   description: 'Возврат за отмененный заказ',
+	 * };
+	 * const refundResponse = await this.yookassaService.createRefund(refundData);
+	 * console.log(refundResponse);
+	 * ```
+	 */
 	public async createRefund(
 		refundData: RefundCreateRequest
 	): Promise<RefundDetails> {
@@ -249,6 +270,18 @@ export class YookassaService {
 		return response.data
 	}
 
+	/**
+	 * Получает список всех возвратов.
+	 * Возвращает массив объектов с информацией о возвратах.
+	 *
+	 * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
+	 *
+	 * @example
+	 * ```ts
+	 * const refunds = await this.yookassaService.getRefunds();
+	 * console.log(refunds);
+	 * ```
+	 */
 	public async getRefunds(): Promise<RefundDetails[]> {
 		const response = await firstValueFrom(
 			this.httpService.get<RefundDetails[]>(`${this.apiUrl}refunds`, {
@@ -261,6 +294,21 @@ export class YookassaService {
 		return response.data
 	}
 
+	/**
+	 * Получает детали возврата по его ID.
+	 * Этот метод возвращает подробную информацию о возврате, включая его статус и сумму.
+	 *
+	 * @param {string} refundId - Уникальный идентификатор возврата.
+	 * @returns {Promise<RefundDetails>} Объект с деталями возврата.
+	 *
+	 * @example
+	 * ```ts
+	 * const refundId = 'refund-id';
+	 * const refundDetails = await this.yookassaService.getRefundDetails(refundId);
+	 * console.log(refundDetails);
+	 * ```
+	 * @throws {NotFoundException} Если возврат с указанным ID не найден.
+	 */
 	public async getRefundDetails(refundId: string): Promise<RefundDetails> {
 		const response = await firstValueFrom(
 			this.httpService.get<RefundDetails>(

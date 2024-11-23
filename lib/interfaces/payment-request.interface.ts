@@ -1,7 +1,6 @@
 import type { Amount } from './common.interface'
 import type { Confirmation } from './confirmation.interface'
 import type { PaymentMethod } from './payment-method.interface'
-import type { Receipt } from './receipt.interface'
 
 /**
  * Тип, представляющий запрос на создание платежа.
@@ -22,7 +21,10 @@ export interface PaymentCreateRequest {
 	 * Чек, который будет прикреплен к платежу.
 	 * Необязательное поле.
 	 */
-	receipt?: Receipt
+	// receipt?: {
+	// 	customer: Customer
+	// 	items: ReceiptItem[]
+	// }
 
 	/**
 	 * Информация о получателе платежа.
@@ -63,4 +65,6 @@ export interface PaymentCreateRequest {
 	 * Необязательное поле.
 	 */
 	merchant_customer_id?: string
+
+	metadata: object
 }

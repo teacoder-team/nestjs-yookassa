@@ -1,18 +1,13 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
 		"declaration": true,
-		"noImplicitAny": false,
-		"removeComments": false,
-		"noLib": false,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"target": "es2017",
-		"sourceMap": false,
-		"rootDir": "./lib",
-		"outDir": "./dist",
-		"skipLibCheck": true
+		"declarationMap": true,
+		"module": "commonjs",
+		"target": "ES2020",
+		"outDir": "dist",
+		"rootDir": "src",
+		"strict": true
 	},
-	"include": ["lib/**/*"],
-	"exclude": ["node_modules", "**/*.spec.ts"]
+	"include": ["src"],
+	"exclude": ["node_modules", "dist"]
 }

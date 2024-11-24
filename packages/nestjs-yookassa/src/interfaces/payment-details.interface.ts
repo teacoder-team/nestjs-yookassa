@@ -1,7 +1,7 @@
 import type { Amount } from './common.interface'
 import type { Confirmation } from './confirmation.interface'
 import type { PaymentMethod } from './payment-method.interface'
-import type { ReceiptRegistrationEnum } from './receipt.interface'
+import type { ReceiptRegistrationEnum } from './receipt-details.interface'
 
 /**
  * Перечисление возможных статусов платежа.

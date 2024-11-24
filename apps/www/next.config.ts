@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
 	trailingSlash: false,
 	skipTrailingSlashRedirect: true,
 	experimental: {
-		optimizePackageImports: ['tailwindcss'],
-	},
+		optimizePackageImports: ['tailwindcss']
+	}
 }
 
 export default nextConfig

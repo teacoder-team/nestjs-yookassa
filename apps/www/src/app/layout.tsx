@@ -1,9 +1,11 @@
+import { GeistMono } from 'geist/font/mono'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { ReactNode } from 'react'
+
+import { ThemeProvider } from '../providers/theme-provider'
+import { cn } from '../utils/tw-merge'
 
 import '@/src/styles/globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -13,11 +15,21 @@ export const metadata: Metadata = {
 export default function RootLayout({
 	children
 }: Readonly<{
-	children: React.ReactNode
+	children: ReactNode
 }>) {
 	return (
-		<html lang='ru'>
-			<body className={inter.className}>{children}</body>
+		<html lang='ru' suppressHydrationWarning>
+			<body className={cn('bg-sidebar', GeistMono.variable)}>
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='system'
+					enableSystem
+					disableTransitionOnChange
+					enableColorScheme
+				>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	)
 }

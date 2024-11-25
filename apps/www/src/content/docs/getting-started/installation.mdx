@@ -1,0 +1,63 @@
+---
+title: Установка
+description: Шаги по установке и настройке
+---
+
+<Steps>
+
+### Создание NestJS приложения
+
+Для начала создайте новое приложение NestJS:
+
+```bash
+npm i -g @nestjs/cli
+```
+
+```bash
+nest new your-app-name
+```
+
+### Установка пакета
+
+Для интеграции Yookassa в ваш проект, установите необходимый пакет:
+
+```bash
+npm install nestjs-yookassa
+```
+
+Этот пакет предоставляет вам все необходимые инструменты для работы с Yookassa API в приложении NestJS.
+
+### Настройка в вашем проекте
+
+В файле .env добавьте необходимые данные для вашего аккаунта Yookassa:
+
+```env
+YOOKASSA_SHOP_ID=your_shop_id
+YOOKASSA_SECRET_KEY=your_secret_key
+```
+
+Эти значения предоставляются вам системой Yookassa после регистрации. Убедитесь, что они правильно указаны в файле, так как без них не будет возможности подключиться к сервису Yookassa.
+
+### Подключение в вашем приложении
+
+Теперь давайте подключим модуль Yookassa в ваше приложение. Есть два способа настройки — через метод forRoot и через асинхронную настройку с помощью forRootAsync.
+
+Подключение через YookassaModule.forRoot
+Самый простой способ подключения — это использование статической конфигурации через forRoot. Внесите изменения в файл app.module.ts:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { YookassaModule } from 'nestjs-yookassa';
+
+@Module({
+  imports: [
+    YookassaModule.forRoot({
+      shopId: process.env.YOOKASSA_SHOP_ID,
+      secretKey: process.env.YOOKASSA_SECRET_KEY,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+</Steps>

@@ -66,5 +66,9 @@ export interface PaymentCreateRequest {
 	 */
 	merchant_customer_id?: string
 
-	metadata: object
+	/**
+	 * Дополнительные метаданные, связанные с платежом.
+	 * Необязательное поле.
+	 */
+	metadata?: object
 }

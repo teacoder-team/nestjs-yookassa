@@ -95,92 +95,33 @@ export enum ReceiptRegistrationEnum {
 	canceled = 'canceled'
 }
 
-/**
- * Тип, представляющий информацию о клиенте.
- */
-export interface Customer {
-	/**
-	 * Полное имя клиента.
-	 */
-	full_name?: string
-
-	/**
-	 * ИНН клиента.
-	 */
-	inn?: string
-
-	/**
-	 * Электронная почта клиента.
-	 */
-	email?: string
-
-	/**
-	 * Телефонный номер клиента.
-	 */
-	phone?: string
-}
-
-/**
- * Тип, представляющий элемент чека.
- */
 export interface ReceiptItem {
-	/**
-	 * Описание товара/услуги в чеке.
-	 */
 	description: string
-
-	/**
-	 * Сумма товара/услуги.
-	 */
+	quantity: number
 	amount: Amount
-
-	/**
-	 * Код НДС для товара/услуги.
-	 */
 	vat_code: VatCodesEnum
-
-	/**
-	 * Количество товара/услуги.
-	 */
-	quantity: string
-
-	/**
-	 * Единица измерения (например, "шт.", "кг").
-	 */
-	measure?: string
-
-	/**
-	 * Дробное количество.
-	 */
-	mark_quantity?: {
-		/**
-		 * Числитель дробного количества.
-		 */
-		numerator: number
-
-		/**
-		 * Знаменатель дробного количества.
-		 */
-		denominator: number
-	}
+	payment_mode: string // Вынести в enum
+	payment_subject: string // Вынести в enum
+	country_of_origin_code?: string
 }
 
-/**
- * Тип, представляющий чек.
- */
-export interface Receipt {
-	/**
-	 * Информация о клиенте, если имеется.
-	 */
-	customer?: Customer
+export interface Settlement {
+	type: 'prepayment' | 'full_payment' | 'advance' | 'credit'
+	amount: Amount
+}
 
-	/**
-	 * Список элементов чека.
-	 */
-	items: ReceiptItem[]
-
-	/**
-	 * Код системы налогообложения, если указана.
-	 */
+export interface ReceiptDetails {
+	id: string
+	type: 'payment' | 'refund'
+	payment_id?: string
+	refund_id?: string
+	status: ReceiptRegistrationEnum
+	fiscal_document_number?: string
+	fiscal_storage_number?: string
+	fiscal_attribute?: string
+	registered_at?: string
+	fiscal_provider_id?: string
 	tax_system_code?: TaxSystemCodesEnum
+	items: ReceiptItem[]
+	settlements?: Settlement[]
 }

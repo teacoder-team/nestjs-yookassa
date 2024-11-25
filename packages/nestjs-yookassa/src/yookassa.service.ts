@@ -3,12 +3,14 @@ import { Inject, Injectable } from '@nestjs/common'
 import { firstValueFrom } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import {
-	Amount,
 	YookassaOptionsSymbol,
+	type Amount,
 	type PaymentCreateRequest,
 	type PaymentDetails,
 	type YookassaOptions
 } from './interfaces'
+import { RefundDetails } from './interfaces/refund-details.interface'
+import { RefundCreateRequest } from './interfaces/refund-request.interface'
 import { DEFAULT_URL } from './yookassa.constants'
 
 @Injectable()
@@ -33,7 +35,7 @@ export class YookassaService {
 	 * Возвращает информацию о созданном платеже.
 	 *
 	 * @param {PaymentCreateRequest} paymentData - Данные для создания платежа.
-	 * @returns {Promise<PaymentResponse>} Ответ от API с деталями платежа.
+	 * @returns {Promise<PaymentDetails>} Ответ от API с деталями платежа.
 	 *
 	 * @example
 	 * ```ts
@@ -58,11 +60,11 @@ export class YookassaService {
 	 */
 	public async createPayment(
 		paymentData: PaymentCreateRequest
-	): Promise<PaymentResponse> {
+	): Promise<PaymentDetails> {
 		const idempotenceKey = uuidv4()
 
 		const response = await firstValueFrom(
-			this.httpService.post<PaymentResponse>(
+			this.httpService.post<PaymentDetails>(
 				`${this.apiUrl}payments`,
 				paymentData,
 				{
@@ -222,6 +224,103 @@ export class YookassaService {
 				}
 			)
 		)
+		return response.data
+	}
+
+	/**
+	 * Создает возврат средств по указанному платежу.
+	 * Этот метод отправляет запрос на создание возврата с данными из `refundData`.
+	 *
+	 * @param {RefundCreateRequest} refundData - Данные для создания возврата.
+	 * @returns {Promise<RefundDetails>} Ответ от API с деталями созданного возврата.
+	 *
+	 * @example
+	 * ```ts
+	 * const refundData: RefundCreateRequest = {
+	 *   payment_id: '123456',
+	 *   amount: {
+	 *     value: 500,
+	 *     currency: 'RUB',
+	 *   },
+	 *   description: 'Возврат за отмененный заказ',
+	 * };
+	 * const refundResponse = await this.yookassaService.createRefund(refundData);
+	 * console.log(refundResponse);
+	 * ```
+	 */
+	public async createRefund(
+		refundData: RefundCreateRequest
+	): Promise<RefundDetails> {
+		const idempotenceKey = uuidv4()
+
+		const response = await firstValueFrom(
+			this.httpService.post<RefundDetails>(
+				`${this.apiUrl}refunds`,
+				refundData,
+				{
+					headers: {
+						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+						'Content-Type': 'application/json',
+						'Idempotence-Key': idempotenceKey
+					}
+				}
+			)
+		)
+
+		return response.data
+	}
+
+	/**
+	 * Получает список всех возвратов.
+	 * Возвращает массив объектов с информацией о возвратах.
+	 *
+	 * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
+	 *
+	 * @example
+	 * ```ts
+	 * const refunds = await this.yookassaService.getRefunds();
+	 * console.log(refunds);
+	 * ```
+	 */
+	public async getRefunds(): Promise<RefundDetails[]> {
+		const response = await firstValueFrom(
+			this.httpService.get<RefundDetails[]>(`${this.apiUrl}refunds`, {
+				headers: {
+					Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+				}
+			})
+		)
+
+		return response.data
+	}
+
+	/**
+	 * Получает детали возврата по его ID.
+	 * Этот метод возвращает подробную информацию о возврате, включая его статус и сумму.
+	 *
+	 * @param {string} refundId - Уникальный идентификатор возврата.
+	 * @returns {Promise<RefundDetails>} Объект с деталями возврата.
+	 *
+	 * @example
+	 * ```ts
+	 * const refundId = 'refund-id';
+	 * const refundDetails = await this.yookassaService.getRefundDetails(refundId);
+	 * console.log(refundDetails);
+	 * ```
+	 * @throws {NotFoundException} Если возврат с указанным ID не найден.
+	 */
+	public async getRefundDetails(refundId: string): Promise<RefundDetails> {
+		const response = await firstValueFrom(
+			this.httpService.get<RefundDetails>(
+				`${this.apiUrl}refunds/${refundId}`,
+				{
+					headers: {
+						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+					}
+				}
+			)
+		)
+
 		return response.data
 	}
 }

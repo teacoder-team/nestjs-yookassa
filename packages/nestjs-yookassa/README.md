@@ -136,25 +136,14 @@ return payment
 Параметры:
 
 -   paymentId (string): Уникальный идентификатор платежа, который нужно подтвердить.
--   amount (Amount): Сумма, которую необходимо захватить.
 
 Пример:
 
 ```typescript
 const paymentId = '123456'
 
-const paymentDetails = await this.yookassaService.getPaymentDetails(paymentId)
-
-if (!paymentDetails) {
-	throw new NotFoundException('Платеж не найден')
-}
-
-const amount: Amount = paymentDetails.amount
-
-const capturedPaymentDetails = await this.yookassaService.capturePayment(
-	paymentId,
-	amount
-)
+const capturedPaymentDetails =
+	await this.yookassaService.capturePayment(paymentId)
 
 return capturedPaymentDetails
 ```

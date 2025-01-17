@@ -1,0 +1,294 @@
+---
+title: Информация о платеже
+description: Шаги для получения деталей о платеже
+---
+
+В этом разделе мы рассмотрим, как получить подробную информацию о платеже по его уникальному идентификатору.
+
+<Steps>
+
+### Вызов метода для получения информации о платеже
+
+Для получения подробной информации о платеже, нужно использовать метод getPaymentDetails сервиса YookassaService, передав в него идентификатор платежа.
+
+```typescript
+import { YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class PaymentService {
+	constructor(private readonly yookassaService: YookassaService) {}
+
+	async getPaymentDetails() {
+		const paymentId = '123456'; // Уникальный ID платежа
+
+		const payment = await this.yookassaService.getPaymentDetails(paymentId);
+
+		return payment
+	}
+}
+```
+
+### Обработка ответа от API
+
+Ответ от Yookassa содержит подробную информацию о платеже, такую как его статус, сумма, метод оплаты и прочие данные. Пример ответа:
+
+```json
+{
+	"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7", // Уникальный идентификатор платежа
+	"status": "pending", // Статус платежа
+	"amount": {
+		"value": "529.00", // Сумма платежа
+		"currency": "RUB" // Валюта платежа
+	},
+	"description": "Test payment", // Описание платежа
+	"recipient": {
+		"account_id": "497037", // Идентификатор аккаунта получателя
+		"gateway_id": "2358944" // Идентификатор шлюза получателя
+	},
+	"payment_method": {
+		"type": "bank_card", // Тип метода оплаты
+		"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7", // Идентификатор метода платежа
+		"status": "inactive" // Статус метода оплаты
+	},
+	"created_at": "2025-01-17T15:58:05.278Z", // Дата и время создания платежа
+	"confirmation": {
+		"type": "redirect", // Тип подтверждения
+		"confirmation_url": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2f1c91cd-000f-5000-8000-1e9f7e4ebff7" // URL для подтверждения
+	},
+	"test": true, // Флаг, показывающий, что это тестовый платеж (не реальный).
+	"paid": false, // Статус оплаты. `false` означает, что средства еще не были списаны.
+	"refundable": false, // Флаг, указывающий, можно ли вернуть средства по данному платежу.
+	"metadata": {
+		"order_id": "12345678" // Дополнительные метаданные, предоставленные при создании платежа (например, ID заказа).
+	}
+}
+```
+
+### Возможные статусы платежа
+
+Ответ может содержать следующие статусы платежа:
+
+<ul className='my-6 ml-6 list-disc [&>li]:mt-2'>
+	<li>pending — Платеж ожидает обработки.</li>
+	<li>waiting_for_capture — Платеж ожидает захвата средств.</li>
+	<li>succeeded — Платеж успешно завершен.</li>
+	<li>canceled — Платеж был отменен.</li>
+</ul>
+
+### Пример обработки различных статусов платежа
+
+#### 1. Платеж в ожидании (статус: pending)
+
+Когда платеж находится в статусе "pending", это означает, что он еще не был обработан или принят к выполнению. Система ожидает подтверждения от клиента или процесса, который должен завершить или отклонить транзакцию. Обычно в этом случае необходимо дождаться, пока клиент не завершит подтверждение, например, через редирект на страницу оплаты.
+
+```json
+{
+	"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7",
+	"status": "pending",
+	"amount": {
+		"value": "529.00",
+		"currency": "RUB"
+	},
+	"description": "Test payment",
+	"recipient": {
+		"account_id": "497037",
+		"gateway_id": "2358944"
+	},
+	"payment_method": {
+		"type": "bank_card",
+		"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7",
+		"saved": false,
+		"status": "inactive"
+	},
+	"created_at": "2025-01-17T15:58:05.278Z",
+	"confirmation": {
+		"type": "redirect",
+		"return_url": "https://example.com/thanks",
+		"confirmation_url": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2f1c91cd-000f-5000-8000-1e9f7e4ebff7"
+	},
+	"test": true,
+	"paid": false,
+	"refundable": false,
+	"metadata": {
+		"order_id": "12345678"
+	}
+}
+```
+
+#### 2. Платеж ожидает подтверждения (статус: waiting_for_capture)
+
+Когда статус платежа "waiting_for_capture", это означает, что средства были заблокированы на счете клиента, и система ожидает завершения процедуры подтверждения и захвата средств. Обычно это происходит в случаях, когда для платежа требуется дополнительное подтверждение от пользователя или другого процесса.
+
+```json
+{
+	"id": "2f1c9181-000f-5000-a000-105cb3820b4a",
+	"status": "waiting_for_capture",
+	"amount": {
+		"value": "529.00",
+		"currency": "RUB"
+	},
+	"description": "Test payment",
+	"recipient": {
+		"account_id": "497037",
+		"gateway_id": "2358944"
+	},
+	"payment_method": {
+		"type": "bank_card",
+		"id": "2f1c9181-000f-5000-a000-105cb3820b4a",
+		"saved": false,
+		"status": "inactive",
+		"title": "Bank card *4444",
+		"card": {
+			"first6": "555555",
+			"last4": "4444",
+			"expiry_year": "2044",
+			"expiry_month": "04",
+			"card_type": "MasterCard",
+			"card_product": {
+				"code": "E"
+			},
+			"issuer_country": "US"
+		}
+	},
+	"created_at": "2025-01-17T15:56:49.489Z",
+	"expires_at": "2025-01-24T15:57:12.776Z",
+	"test": true,
+	"paid": true,
+	"refundable": false,
+	"metadata": {
+		"order_id": "12345678"
+	},
+	"authorization_details": {
+		"rrn": "464425465642653",
+		"auth_code": "680377",
+		"three_d_secure": {
+			"applied": false,
+			"method_completed": false,
+			"challenge_completed": false
+		}
+	}
+}
+```
+
+#### 3. Платеж успешно завершен (статус: succeeded)
+
+Статус "succeeded" означает, что платеж был успешно завершен и средства были списаны с карты клиента. Платеж полностью обработан, и средства переведены на счет получателя. Этот статус подтверждает, что транзакция была успешно проведена.
+
+```json
+{
+	"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7",
+	"status": "succeeded",
+	"amount": {
+		"value": "529.00",
+		"currency": "RUB"
+	},
+	"income_amount": {
+		"value": "510.48",
+		"currency": "RUB"
+	},
+	"description": "Test payment",
+	"recipient": {
+		"account_id": "497037",
+		"gateway_id": "2358944"
+	},
+	"payment_method": {
+		"type": "bank_card",
+		"id": "2f1c91cd-000f-5000-8000-1e9f7e4ebff7",
+		"saved": false,
+		"status": "inactive",
+		"title": "Bank card *4444",
+		"card": {
+			"first6": "555555",
+			"last4": "4444",
+			"expiry_year": "2044",
+			"expiry_month": "04",
+			"card_type": "MasterCard",
+			"card_product": {
+				"code": "E"
+			},
+			"issuer_country": "US"
+		}
+	},
+	"captured_at": "2025-01-17T15:59:27.119Z",
+	"created_at": "2025-01-17T15:58:05.278Z",
+	"test": true,
+	"refunded_amount": {
+		"value": "0.00",
+		"currency": "RUB"
+	},
+	"paid": true,
+	"refundable": true,
+	"metadata": {
+		"order_id": "12345678"
+	},
+	"authorization_details": {
+		"rrn": "281463796947749",
+		"auth_code": "184168",
+		"three_d_secure": {
+			"applied": false,
+			"method_completed": false,
+			"challenge_completed": false
+		}
+	}
+}
+```
+
+#### 4. Платеж был отменен (статус: canceled)
+
+Статус "canceled" означает, что платеж был отменен до завершения. Это может происходить по разным причинам, например, если клиент сам отменяет платеж, если есть проблема с обработкой, или если платеж был отклонен системой. В ответе может содержаться информация о причине отмены.
+
+```json
+{
+	"id": "2f1c9181-000f-5000-a000-105cb3820b4a",
+	"status": "canceled",
+	"amount": {
+		"value": "529.00",
+		"currency": "RUB"
+	},
+	"description": "Test payment",
+	"recipient": {
+		"account_id": "497037",
+		"gateway_id": "2358944"
+	},
+	"payment_method": {
+		"type": "bank_card",
+		"id": "2f1c9181-000f-5000-a000-105cb3820b4a",
+		"saved": false,
+		"status": "inactive",
+		"title": "Bank card *4444",
+		"card": {
+			"first6": "555555",
+			"last4": "4444",
+			"expiry_year": "2044",
+			"expiry_month": "04",
+			"card_type": "MasterCard",
+			"card_product": {
+				"code": "E"
+			},
+			"issuer_country": "US"
+		}
+	},
+	"created_at": "2025-01-17T15:56:49.489Z",
+	"test": true,
+	"paid": false,
+	"refundable": false,
+	"metadata": {
+		"order_id": "12345678"
+	},
+	"cancellation_details": {
+		"party": "merchant",
+		"reason": "canceled_by_merchant"
+	},
+	"authorization_details": {
+		"rrn": "464425465642653",
+		"auth_code": "680377",
+		"three_d_secure": {
+			"applied": false,
+			"method_completed": false,
+			"challenge_completed": false
+		}
+	}
+}
+```
+
+</Steps>

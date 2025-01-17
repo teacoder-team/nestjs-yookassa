@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { HTMLAttributes, useState } from 'react'
 
 import {
 	Collapsible,
@@ -11,7 +11,7 @@ import { Button } from '../common/button'
 
 import { cn } from '@/src/utils/tw-merge'
 
-interface CodeBlockProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CodeBlockProps extends HTMLAttributes<HTMLDivElement> {
 	expandButtonTitle?: string
 }
 
@@ -21,7 +21,7 @@ export function CodeBlockWrapper({
 	children,
 	...props
 }: CodeBlockProps) {
-	const [isOpened, setIsOpened] = React.useState(false)
+	const [isOpened, setIsOpened] = useState(false)
 
 	return (
 		<Collapsible open={isOpened} onOpenChange={setIsOpened}>

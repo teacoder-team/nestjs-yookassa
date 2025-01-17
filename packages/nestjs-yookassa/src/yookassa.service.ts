@@ -292,10 +292,14 @@ export class YookassaService {
 		const idempotenceKey = uuidv4()
 
 		try {
+			const { amount } = await this.getPaymentDetails(
+				refundData.payment_id
+			)
+
 			const response = await firstValueFrom(
 				this.httpService.post<RefundDetails>(
 					`${this.apiUrl}refunds`,
-					refundData,
+					{ refundData, amount },
 					{
 						headers: {
 							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,

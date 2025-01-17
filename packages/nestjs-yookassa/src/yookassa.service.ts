@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios'
-import { Inject, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { firstValueFrom } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -63,21 +63,30 @@ export class YookassaService {
 	): Promise<PaymentDetails> {
 		const idempotenceKey = uuidv4()
 
-		const response = await firstValueFrom(
-			this.httpService.post<PaymentDetails>(
-				`${this.apiUrl}payments`,
-				paymentData,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
+		try {
+			const response = await firstValueFrom(
+				this.httpService.post<PaymentDetails>(
+					`${this.apiUrl}payments`,
+					paymentData,
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(
+								`${this.shopId}:${this.apiKey}`
+							).toString('base64')}`,
+							'Content-Type': 'application/json',
+							'Idempotence-Key': idempotenceKey
+						}
 					}
-				}
+				)
 			)
-		)
-
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -100,19 +109,31 @@ export class YookassaService {
 		from: string = '',
 		to: string = ''
 	): Promise<PaymentDetails[]> {
-		const response = await firstValueFrom(
-			this.httpService.get<PaymentDetails[]>(`${this.apiUrl}payments`, {
-				headers: {
-					Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
-				},
-				params: {
-					limit,
-					from,
-					to
-				}
-			})
-		)
-		return response.data
+		try {
+			const response = await firstValueFrom(
+				this.httpService.get<PaymentDetails[]>(
+					`${this.apiUrl}payments`,
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+						},
+						params: {
+							limit,
+							from,
+							to
+						}
+					}
+				)
+			)
+
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -130,17 +151,26 @@ export class YookassaService {
 	 * ```
 	 */
 	public async getPaymentDetails(paymentId: string): Promise<PaymentDetails> {
-		const response = await firstValueFrom(
-			this.httpService.get<PaymentDetails>(
-				`${this.apiUrl}payments/${paymentId}`,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+		try {
+			const response = await firstValueFrom(
+				this.httpService.get<PaymentDetails>(
+					`${this.apiUrl}payments/${paymentId}`,
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+						}
 					}
-				}
+				)
 			)
-		)
-		return response.data
+
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -164,34 +194,34 @@ export class YookassaService {
 	 * console.log(paymentDetails);
 	 * ```
 	 */
-	public async capturePayment(
-		paymentId: string,
-		amount: Amount
-	): Promise<PaymentDetails> {
+	public async capturePayment(paymentId: string): Promise<PaymentDetails> {
 		const idempotenceKey = uuidv4()
 
-		const data = {
-			amount: {
-				value: amount.value,
-				currency: amount.currency
-			}
-		}
+		try {
+			const { amount } = await this.getPaymentDetails(paymentId)
 
-		const response = await firstValueFrom(
-			this.httpService.post<PaymentDetails>(
-				`${this.apiUrl}payments/${paymentId}/capture`,
-				data,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
+			const response = await firstValueFrom(
+				this.httpService.post<PaymentDetails>(
+					`${this.apiUrl}payments/${paymentId}/capture`,
+					{ amount },
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+							'Content-Type': 'application/json',
+							'Idempotence-Key': idempotenceKey
+						}
 					}
-				}
+				)
 			)
-		)
 
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -211,20 +241,28 @@ export class YookassaService {
 	public async cancelPayment(paymentId: string): Promise<PaymentDetails> {
 		const idempotenceKey = uuidv4()
 
-		const response = await firstValueFrom(
-			this.httpService.post<PaymentDetails>(
-				`${this.apiUrl}payments/${paymentId}/cancel`,
-				{},
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
+		try {
+			const response = await firstValueFrom(
+				this.httpService.post<PaymentDetails>(
+					`${this.apiUrl}payments/${paymentId}/cancel`,
+					{},
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+							'Content-Type': 'application/json',
+							'Idempotence-Key': idempotenceKey
+						}
 					}
-				}
+				)
 			)
-		)
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -253,17 +291,6 @@ export class YookassaService {
 	): Promise<RefundDetails> {
 		const idempotenceKey = uuidv4()
 
-<<<<<<< HEAD
-		const response = await firstValueFrom(
-			this.httpService.post<RefundDetails>(
-				`${this.apiUrl}refunds`,
-				refundData,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
-						'Content-Type': 'application/json',
-						'Idempotence-Key': idempotenceKey
-=======
 		try {
 			const { amount } = await this.getPaymentDetails(
 				refundData.payment_id
@@ -279,13 +306,18 @@ export class YookassaService {
 							'Content-Type': 'application/json',
 							'Idempotence-Key': idempotenceKey
 						}
->>>>>>> d32f9f1 (feat(payment): update documentation for payment methods)
 					}
-				}
+				)
 			)
-		)
 
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -301,15 +333,23 @@ export class YookassaService {
 	 * ```
 	 */
 	public async getRefunds(): Promise<RefundDetails[]> {
-		const response = await firstValueFrom(
-			this.httpService.get<RefundDetails[]>(`${this.apiUrl}refunds`, {
-				headers: {
-					Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
-				}
-			})
-		)
+		try {
+			const response = await firstValueFrom(
+				this.httpService.get<RefundDetails[]>(`${this.apiUrl}refunds`, {
+					headers: {
+						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+					}
+				})
+			)
 
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 
 	/**
@@ -328,17 +368,25 @@ export class YookassaService {
 	 * @throws {NotFoundException} Если возврат с указанным ID не найден.
 	 */
 	public async getRefundDetails(refundId: string): Promise<RefundDetails> {
-		const response = await firstValueFrom(
-			this.httpService.get<RefundDetails>(
-				`${this.apiUrl}refunds/${refundId}`,
-				{
-					headers: {
-						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+		try {
+			const response = await firstValueFrom(
+				this.httpService.get<RefundDetails>(
+					`${this.apiUrl}refunds/${refundId}`,
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+						}
 					}
-				}
+				)
 			)
-		)
 
-		return response.data
+			return response.data
+		} catch (error) {
+			throw new HttpException(
+				error.response.data.description ||
+					'Ошибка при выполнении запроса',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 	}
 }

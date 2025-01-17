@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Node } from 'unist-builder'
 
 export interface UnistNode extends Node {

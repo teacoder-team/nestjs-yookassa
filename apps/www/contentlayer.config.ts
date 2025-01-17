@@ -6,7 +6,6 @@ import {
 } from 'contentlayer2/source-files'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
-// Плагин для подсветки синтаксиса
 import rehypeSlug from 'rehype-slug'
 import { codeImport } from 'remark-code-import'
 import remarkGfm from 'remark-gfm'
@@ -35,6 +34,11 @@ export const Doc = defineDocumentType(() => ({
 		description: {
 			type: 'string',
 			required: true
+		},
+		toc: {
+			type: 'boolean',
+			default: true,
+			required: false
 		}
 	},
 	computedFields
@@ -50,21 +54,25 @@ export default makeSource({
 			[
 				rehypePrettyCode,
 				{
-					theme: 'ayu-dark',
+					theme: 'github-dark-default',
 					getHighlighter,
-					// @ts-ignore
-					onVisitLine(node) {
-						if (node.children.length === 0) {
-							node.children = [{ type: 'text', value: ' ' }]
-						}
+					onVisitHighlightedLine(node: any) {
+						node.properties.className = [
+							...(node.properties.className || []),
+							'code-line-highlight'
+						]
 					},
-					// @ts-ignore
-					onVisitHighlightedLine(node) {
-						node.properties.className.push('line--highlighted')
+					onVisitLine(node: any) {
+						node.properties.className = [
+							...(node.properties.className || []),
+							'code-line'
+						]
 					},
-					// @ts-ignore
-					onVisitHighlightedWord(node) {
-						node.properties.className = ['word--highlighted']
+					onVisitHighlightedWord(node: any) {
+						node.properties.className = [
+							...(node.properties.className || []),
+							'code-word-highlight'
+						]
 					}
 				}
 			],
@@ -109,7 +117,7 @@ export default makeSource({
 							}
 						}
 					})
-					return tree // Возвращаем обработанное дерево
+					return tree
 				}
 			},
 			[

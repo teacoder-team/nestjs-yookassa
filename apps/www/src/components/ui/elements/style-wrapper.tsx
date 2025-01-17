@@ -1,10 +1,10 @@
 'use client'
 
-import * as React from 'react'
+import { HTMLAttributes } from 'react'
 
 import { Style } from '@/src/constants/styles.constants'
 
-interface StyleWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+interface StyleWrapperProps extends HTMLAttributes<HTMLDivElement> {
 	styleName?: Style['name']
 }
 

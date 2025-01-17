@@ -1,0 +1,156 @@
+---
+title: Создание платежа
+description: Шаги для создания платежа
+---
+
+В этом разделе мы рассмотрим, как создать платеж . Мы покажем, как подготовить данные для платежа, вызвать API Yookassa для его создания и обработать ответ от сервиса.
+
+<Steps>
+
+### Подготовка данных для создания платежа
+
+Для создания платежа вам необходимо подготовить объект PaymentCreateRequest, который содержит всю необходимую информацию о платеже. Важнейшие поля включают сумму платежа.
+
+```typescript
+import { CurrencyEnum, type PaymentCreateRequest, PaymentMethodsEnum } from 'nestjs-yookassa'
+
+const paymentData: PaymentCreateRequest = {
+	amount: {
+		value: 100, // сумма
+		currency: currency: CurrencyEnum.RUB // валюта
+	},
+	description: 'Test payment', // описание платежа
+	payment_method_data: {
+		type: PaymentMethodsEnum.yoo_money // метод платежа (например, YooMoney)
+	},
+	capture: false // флаг для отложенного захвата
+	confirmation: {
+		type: 'redirect', // тип подтверждения
+		return_url: 'https://example.com/thanks' // URL для перенаправления после подтверждения
+	},
+	metadata: {
+		order_id: '12345678', // Дополнительные метаданные, предоставленные при создании платежа
+	},
+}
+```
+
+### Вызов метода для создания платежа
+
+Теперь, когда у вас есть данные для платежа, вы можете использовать метод createPayment из сервиса YookassaService для отправки данных на сервер Yookassa и получения информации о созданном платеже.
+
+```typescript
+import { CurrencyEnum, type PaymentCreateRequest, PaymentMethodsEnum, YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class PaymentService {
+  	constructor(private readonly yookassaService: YookassaService) {}
+
+ 	async createPayment() {
+		const paymentData: PaymentCreateRequest = {
+			amount: {
+				value: 100,
+				currency: CurrencyEnum.RUB
+			},
+			description: 'Test payment',
+			payment_method_data: {
+				type: PaymentMethodsEnum.yoo_money
+			},
+			capture: false,
+			confirmation: {
+				type: 'redirect',
+				return_url: 'https://example.com/thanks'
+			},
+			metadata: {
+				order_id: '12345678',
+			},
+		}
+
+		const newPayment = await this.yookassaService.createPayment(paymentData);
+
+		return newPayment;
+  	}
+}
+```
+
+### Обработка ответа от API
+
+Ответ от Yookassa содержит информацию о платеже, такую как идентификатор платежа, статус, сумму и другую информацию. Пример ответа:
+
+```json
+{
+	"id": "32f3dce3-e775-424f-a265-4e1e86e3db08", // Уникальный идентификатор платежа
+	"status": "pending", // Статус платежа
+	"amount": {
+		"value": "100.00", // Сумма платежа
+		"currency": "RUB" // Валюта платежа
+	},
+	"description": "Test payment", // Описание платежа
+	"recipient": {
+		"account_id": "1234567", // Идентификатор аккаунта получателя (магазина)
+		"gateway_id": "1234567" // Идентификатор шлюза получателя
+	},
+	"payment_method": {
+		"type": "yoo_money", // Тип метода оплаты
+		"id": "32f3dce3-e775-424f-a265-4e1e86e3db08", // Идентификатор метода платежа
+		"saved": false, // Флаг, указывающий, сохранены ли данные карты (если применимо)
+		"status": "inactive" // Статус метода оплаты
+	},
+	"created_at": "2025-01-17T10:15:35.455Z", // Дата и время создания платежа
+	"confirmation": {
+		"type": "redirect", // Тип подтверждения
+		"return_url": "https://example.com/thanks", // URL, на который пользователь будет перенаправлен после подтверждения
+		"confirmation_url": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=32f3dce3-e775-424f-a265-4e1e86e3db08" // URL для начала процесса подтверждения (например, перенаправление на сайт YooMoney для завершения платежа).
+	},
+	"test": true, // Флаг, показывающий, что это тестовый платеж (не реальный).
+	"paid": false, // Статус оплаты. `false` означает, что средства еще не были списаны.
+	"refundable": false, // Флаг, указывающий, можно ли вернуть средства по данному платежу.
+	"metadata": {
+		"order_id": "12345678" // Дополнительные метаданные, предоставленные при создании платежа (например, ID заказа).
+	}
+}
+```
+
+Если платеж успешно создан, вы получите ответ с подробной информацией о нем, включая его статус и информацию о подтверждении.
+
+#### Возможные статусы платежа
+
+<ul className='my-6 ml-6 list-disc [&>li]:mt-2'>
+	<li>pending — Платеж ожидает обработки.</li>
+	<li>waiting_for_capture — Платеж ожидает захвата средств.</li>
+	<li>succeeded — Платеж успешно завершен.</li>
+	<li>canceled — Платеж был отменен.</li>
+</ul>
+
+#### Возможные ошибки
+
+При попытке создать платеж могут возникнуть следующие ошибки:
+
+<div className='ml-6'>
+	<p className='font-medium mt-6'>1. Ошибка, связанная с недоступностью метода оплаты:</p>
+
+    ```json
+    {
+    	"statusCode": 400,
+    	"message": "Payment method is not available"
+    }
+    ```
+
+    Эта ошибка возникает, когда выбранный метод оплаты не поддерживается. В таком случае необходимо выбрать другой метод оплаты, который доступен для использования.
+
+</div>
+
+<div className='ml-6'>
+	<p className='font-medium mt-6'>2. Ошибка, связанная с некорректной валютой:</p>
+
+    ```json
+    {
+    	"statusCode": 400,
+    	"message": "Incorrect currency of payment. The value of the amount.currency parameter doesn't correspond with the settings of your store. Specify another currency value in the request or contact the YooMoney manager to change the settings"
+    }
+    ```
+
+    Эта ошибка возникает, когда выбранная валюта не поддерживается для платежей в вашем магазине. Убедитесь, что валюта, указанная в параметре amount.currency, соответствует настройкам вашего магазина. В случае необходимости можно изменить валюту запроса или обратиться к менеджеру YooMoney для изменения настроек валюты.
+
+</div>
+
+</Steps>

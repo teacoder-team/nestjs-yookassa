@@ -9,4 +9,5 @@ export * from './payment-details.interface'
 export * from './payment-method.interface'
 export * from './payment-request.interface'
 
-export * from './receipt-details.interface'
+export * from './refund-details.interface'
+export * from './refund-request.interface'

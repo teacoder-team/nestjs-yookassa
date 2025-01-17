@@ -21,7 +21,7 @@ import {
 	CollapsibleTrigger
 } from './collapsible'
 
-const data = {
+export const nav = {
 	navMain: [
 		{
 			title: 'Начало работы',
@@ -77,7 +77,7 @@ const data = {
 				},
 				{
 					title: 'Информация о возврате',
-					url: '/docs/refunds/one'
+					url: '/docs/refunds/info'
 				}
 			]
 		}
@@ -88,7 +88,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar {...props}>
 			<SidebarContent className='gap-0'>
-				{data.navMain.map(item => {
+				{nav.navMain.map(item => {
 					return (
 						<Collapsible
 							key={item.title}

@@ -12,16 +12,40 @@ description: Шаги для создания возврата по платеж
 Для создания возврата необходимо подготовить объект RefundCreateRequest, который содержит все данные для возврата. Важнейшие поля включают уникальный идентификатор платежа (payment_id), сумму возврата и описание.
 
 ```typescript
-import { CurrencyEnum, type RefundCreateRequest } from 'nestjs-yookassa'
+import type { RefundCreateRequest } from 'nestjs-yookassa'
 
 const refundData: RefundCreateRequest = {
 	payment_id: '123456', // Идентификатор платежа, по которому нужно создать возврат
-	amount: {
-		value: 500, // Сумма возврата
-		currency: 'RUB' // Валюта возврата
-	},
 	description: 'Возврат за отмененный заказ' // Описание возврата
 }
 ```
+
+### Вызов метода для создания возврата
+
+Теперь, когда у вас есть данные для возврата, вы можете использовать метод createRefund для отправки запроса на создание возврата и получения информации о созданном возврате.
+
+```typescript
+import { type RefundCreateRequest, YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class PaymentService {
+	constructor(private readonly yookassaService: YookassaService) {}
+
+	async createRefund() {
+		const refundData: RefundCreateRequest = {
+			payment_id: '123456',
+			description: 'Возврат за отмененный заказ',
+		};
+
+		const newRefund = await this.yookassaService.createRefund(refundData);
+
+		return newRefund;
+	}
+}
+```
+
+### Обработка ответа от API
+
+Ответ от Yookassa содержит информацию о возврате, такую как идентификатор возврата, статус, сумма и другие детали. Пример ответа:
 
 </Steps>

@@ -1,0 +1,133 @@
+---
+title: Установка и настройка
+description: Шаги по установке и настройке
+---
+
+В этом разделе мы разберем, как установить и настроить модуль nestjs-yookassa, а также приведем несколько примеров, как подключить его к вашему приложению на NestJS.
+
+<Steps>
+
+### Установка пакета
+
+Для начала установите необходимые пакеты. Используйте команду npm или yarn, чтобы добавить nestjs-yookassa в ваш проект.
+
+```bash
+npm install nestjs-yookassa
+```
+
+Пакет nestjs-yookassa включает в себя все необходимые зависимости для работы с ЮКасса в вашем приложении на NestJS.
+
+### Настройка переменных окружения
+
+Для корректной работы модуля вам необходимо задать несколько переменных окружения.
+
+```env
+YOOKASSA_SHOP_ID=your_shop_id
+YOOKASSA_SECRET_KEY=your_secret_key
+```
+
+#### Где взять эти данные?
+
+Shop ID и Secret Key вы найдете в личном кабинете Yookassa после
+регистрации.
+
+Убедитесь, что эти значения строго конфиденциальны. Никогда не
+публикуйте их в репозитории.
+
+Эти значения предоставляются вам системой Yookassa после регистрации. Убедитесь, что они правильно указаны в файле, так как без них не будет возможности подключиться к сервису Yookassa.
+
+### Подключение модуля
+
+После установки пакета и настройки переменных окружения, необходимо подключить модуль nestjs-yookassa к вашему приложению.
+
+#### Синхронная конфигурация
+
+Для базовой синхронной конфигурации используйте метод forRoot() для инициализации модуля с вашими настройками.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { YookassaModule } from 'nestjs-yookassa';
+
+@Module({
+    imports: [
+        YookassaModule.forRoot({
+            shopId: process.env.YOOKASSA_SHOP_ID,
+            secretKey: process.env.YOOKASSA_SECRET_KEY
+        })
+    ]
+})
+export class AppModule {}
+```
+
+В этом примере YookassaModule.forRoot() принимает объект с настройками, который вы передаете в конфигурацию модуля.
+
+#### Асинхронная конфигурация
+
+Если вам нужно загружать параметры конфигурации из других источников или использовать асинхронные операции для получения значений, можно применить метод forRootAsync(). Этот подход подходит для работы с динамически получаемыми значениями конфигурации.
+
+```typescript
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { YookassaModule } from 'nestjs-yookassa'
+
+@Module({
+    imports: [
+        ConfigModule.forRoot(),
+        YookassaModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                shopId: configService.get('YOOKASSA_SHOP_ID'),
+                secretKey: configService.get('YOOKASSA_SECRET_KEY')
+            })
+        })
+    ]
+})
+export class AppModule {}
+```
+
+В этом примере useFactory позволяет асинхронно получить значения конфигурации из ConfigService. Это полезно, если ваши параметры конфигурации могут изменяться или загружаются из внешнего источника.
+
+#### Вынесение конфигурации в отдельный файл
+
+Для более удобной работы с конфигурацией можно вынести настройки в отдельный файл. Например, создайте файл yookassa.config.ts:
+
+```typescript
+// src/config/yookassa.config.ts
+import { ConfigService } from '@nestjs/config'
+import type { YookassaOptions } from 'nestjs-yookassa'
+
+export function getYookassaConfig(
+	configService: ConfigService
+): YookassaOptions {
+	return {
+		shopId: configService.get<string>('YOOKASSA_SHOP_ID'),
+		secretKey: configService.get<string>('YOOKASSA_SECRET_KEY')
+	}
+}
+```
+
+Затем подключите его в AppModule:
+
+```typescript
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { YookassaModule } from 'nestjs-yookassa'
+import { getYookassaConfig } from './config/yookassa.config'
+
+@Module({
+    imports: [
+      ConfigModule.forRoot(),
+      YookassaModule.forRootAsync({
+          imports: [ConfigModule],
+          useFactory: getYookassaConfig,
+          inject: [ConfigService]
+      })
+    ]
+})
+export class AppModule {}
+```
+
+В этом случае конфигурация будет храниться в отдельном файле, что улучшает структуру и позволяет легче управлять параметрами окружения.
+
+</Steps>

@@ -253,6 +253,7 @@ export class YookassaService {
 	): Promise<RefundDetails> {
 		const idempotenceKey = uuidv4()
 
+<<<<<<< HEAD
 		const response = await firstValueFrom(
 			this.httpService.post<RefundDetails>(
 				`${this.apiUrl}refunds`,
@@ -262,6 +263,23 @@ export class YookassaService {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
 						'Content-Type': 'application/json',
 						'Idempotence-Key': idempotenceKey
+=======
+		try {
+			const { amount } = await this.getPaymentDetails(
+				refundData.payment_id
+			)
+
+			const response = await firstValueFrom(
+				this.httpService.post<RefundDetails>(
+					`${this.apiUrl}refunds`,
+					{ refundData, amount },
+					{
+						headers: {
+							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
+							'Content-Type': 'application/json',
+							'Idempotence-Key': idempotenceKey
+						}
+>>>>>>> d32f9f1 (feat(payment): update documentation for payment methods)
 					}
 				}
 			)

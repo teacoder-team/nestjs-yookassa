@@ -54,38 +54,6 @@ export default async function DocPage(props: { params: Params }) {
 						</p>
 					)}
 				</div>
-				{/* {doc.links ? (
-					<div className='flex items-center space-x-2 pt-4'>
-						{doc.links?.doc && (
-							<Link
-								href={doc.links.doc}
-								target='_blank'
-								rel='noreferrer'
-								className={cn(
-									badgeVariants({ variant: 'secondary' }),
-									'gap-1'
-								)}
-							>
-								Docs
-								<ExternalLink className='h-3 w-3' />
-							</Link>
-						)}
-						{doc.links?.api && (
-							<Link
-								href={doc.links.api}
-								target='_blank'
-								rel='noreferrer'
-								className={cn(
-									badgeVariants({ variant: 'secondary' }),
-									'gap-1'
-								)}
-							>
-								API Reference
-								<ExternalLink className='h-3 w-3' />
-							</Link>
-						)}
-					</div>
-				) : null}*/}
 				<div className='pb-12 pt-8'>
 					<Mdx code={doc.body.code} />
 				</div>

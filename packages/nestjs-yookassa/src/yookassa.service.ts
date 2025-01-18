@@ -297,8 +297,8 @@ export class YookassaService {
 					`${this.apiUrl}refunds`,
 					{
 						payment_id: refundData.payment_id,
-						description: refundData.description,
-						amount: amount
+						amount,
+						description: refundData.description
 					},
 					{
 						headers: {

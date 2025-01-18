@@ -216,10 +216,6 @@ let YookassaService = class YookassaService {
      * ```ts
      * const refundData: RefundCreateRequest = {
      *   payment_id: '123456',
-     *   amount: {
-     *     value: 500,
-     *     currency: 'RUB',
-     *   },
      *   description: 'Возврат за отмененный заказ',
      * };
      * const refundResponse = await this.yookassaService.createRefund(refundData);
@@ -230,7 +226,11 @@ let YookassaService = class YookassaService {
         const idempotenceKey = (0, uuid_1.v4)();
         try {
             const { amount } = await this.getPaymentDetails(refundData.payment_id);
-            const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${this.apiUrl}refunds`, { refundData, amount }, {
+            const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${this.apiUrl}refunds`, {
+                payment_id: refundData.payment_id,
+                description: refundData.description,
+                amount: amount
+            }, {
                 headers: {
                     Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
                     'Content-Type': 'application/json',

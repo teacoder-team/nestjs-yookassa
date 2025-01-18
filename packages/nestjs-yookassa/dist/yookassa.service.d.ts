@@ -118,10 +118,6 @@ export declare class YookassaService {
      * ```ts
      * const refundData: RefundCreateRequest = {
      *   payment_id: '123456',
-     *   amount: {
-     *     value: 500,
-     *     currency: 'RUB',
-     *   },
      *   description: 'Возврат за отмененный заказ',
      * };
      * const refundResponse = await this.yookassaService.createRefund(refundData);

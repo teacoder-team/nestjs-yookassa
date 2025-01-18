@@ -12,16 +12,100 @@ description: Шаги для создания возврата по платеж
 Для создания возврата необходимо подготовить объект RefundCreateRequest, который содержит все данные для возврата. Важнейшие поля включают уникальный идентификатор платежа (payment_id), сумму возврата и описание.
 
 ```typescript
-import { CurrencyEnum, type RefundCreateRequest } from 'nestjs-yookassa'
+import type { RefundCreateRequest } from 'nestjs-yookassa'
 
 const refundData: RefundCreateRequest = {
 	payment_id: '123456', // Идентификатор платежа, по которому нужно создать возврат
-	amount: {
-		value: 500, // Сумма возврата
-		currency: 'RUB' // Валюта возврата
-	},
-	description: 'Возврат за отмененный заказ' // Описание возврата
+	description: 'Возврат на заказ с ID 123456' // Описание возврата
 }
 ```
+
+### Вызов метода для создания возврата
+
+Теперь, когда у вас есть данные для возврата, вы можете использовать метод createRefund для отправки запроса на создание возврата и получения информации о созданном возврате.
+
+```typescript
+import { type RefundCreateRequest, YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class PaymentService {
+	constructor(private readonly yookassaService: YookassaService) {}
+
+	async createRefund() {
+		const refundData: RefundCreateRequest = {
+			payment_id: '123456',
+			description: 'Возврат на заказ с ID 123456',
+		};
+
+		const newRefund = await this.yookassaService.createRefund(refundData);
+
+		return newRefund;
+	}
+}
+```
+
+### Обработка ответа от API
+
+Ответ от Yookassa содержит информацию о возврате, такую как идентификатор возврата, статус, сумма и другие детали. Пример ответа:
+
+```json
+{
+	"id": "2f1d2280-0015-5000-b000-1c02972ec0ef",
+	"payment_id": "123456",
+	"status": "succeeded",
+	"created_at": "2025-01-18T02:15:28.461Z",
+	"amount": {
+		"value": "529.00",
+		"currency": "RUB"
+	},
+	"description": "Возврат на заказ с ID 123456"
+}
+```
+
+#### Возможные ошибки
+
+При попытке создать возврат могут возникать ошибки, если платеж находится в неподобающем статусе. Вот несколько примеров ошибок и объяснение их причин:
+
+<div className='ml-6'>
+	<p className='font-medium mt-6'>1. Платеж в статусе pending</p>
+
+    ```json
+    {
+    	"statusCode": 400,
+    	"message": "You can't make a refund since the payment from customer hasn't been received yet. Wait until the payment status changes to succeeded and repeat your request for making the refund. If you are making a two-stage payment, wait until the payment status changes to waiting_for_capture and cancel the payment"
+    }
+    ```
+
+    Эта ошибка возникает, когда вы пытаетесь создать возврат по платежу, который еще не был завершен, и находится в статусе pending (ожидается подтверждение).
+
+</div>
+
+<div className='ml-6'>
+	<p className='font-medium mt-6'>2. Платеж в статусе waiting_for_capture</p>
+
+    ```json
+    {
+    	"statusCode": 400,
+    	"message": "You can't refund this payment as it's still being processed. Wait until the payment status changes to succeeded"
+    }
+    ```
+
+    Эта ошибка возникает, когда платеж находится в статусе waiting_for_capture, что означает, что он еще не был захвачен и обработан.
+
+</div>
+
+<div className='ml-6'>
+	<p className='font-medium mt-6'>3. Платеж был отменен</p>
+
+    ```json
+    {
+    	"statusCode": 400,
+    	"message": "You can't refund this payment as it's been canceled. You can only refund payments with the succeeded status"
+    }
+    ```
+
+    Эта ошибка возникает, когда платеж был отменен и теперь имеет статус canceled.
+
+</div>
 
 </Steps>

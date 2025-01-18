@@ -38,7 +38,7 @@ export class PaymentService {
   	async getPaymentsList() {
 		const limit = 2; // Ограничение на количество платежей
 		const from = '2025-01-01'; // Начальная дата фильтра
-		const to = '2025-12-31'; // Конечная дата фильтра
+		const to = '2025-01-31'; // Конечная дата фильтра
 
 		const payments = await this.yookassaService.getPayments(limit, from, to);
 

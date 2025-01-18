@@ -299,7 +299,11 @@ export class YookassaService {
 			const response = await firstValueFrom(
 				this.httpService.post<RefundDetails>(
 					`${this.apiUrl}refunds`,
-					{ refundData, amount },
+					{
+						payment_id: refundData.payment_id,
+						amount,
+						description: refundData.description
+					},
 					{
 						headers: {
 							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,

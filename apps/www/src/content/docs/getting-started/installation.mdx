@@ -52,7 +52,7 @@ import { YookassaModule } from 'nestjs-yookassa';
     imports: [
         YookassaModule.forRoot({
             shopId: process.env.YOOKASSA_SHOP_ID,
-            secretKey: process.env.YOOKASSA_SECRET_KEY
+            apiKey: process.env.YOOKASSA_SECRET_KEY
         })
     ]
 })
@@ -78,7 +78,7 @@ import { YookassaModule } from 'nestjs-yookassa'
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
                 shopId: configService.get('YOOKASSA_SHOP_ID'),
-                secretKey: configService.get('YOOKASSA_SECRET_KEY')
+                apiKey: configService.get('YOOKASSA_SECRET_KEY')
             })
         })
     ]
@@ -102,7 +102,7 @@ export function getYookassaConfig(
 ): YookassaOptions {
 	return {
 		shopId: configService.get<string>('YOOKASSA_SHOP_ID'),
-		secretKey: configService.get<string>('YOOKASSA_SECRET_KEY')
+		apiKey: configService.get<string>('YOOKASSA_SECRET_KEY')
 	}
 }
 ```

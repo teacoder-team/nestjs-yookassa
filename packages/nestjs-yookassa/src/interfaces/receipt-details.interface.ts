@@ -95,14 +95,28 @@ export enum ReceiptRegistrationEnum {
 	canceled = 'canceled'
 }
 
+export interface ICustomer {
+	/** Для юрлица — название организации, для ИП и физического лица — ФИО.
+	 * Если у физлица отсутствует ИНН, в этом же параметре передаются паспортные данные.
+	 * Не более 256 символов.
+	 * Онлайн-кассы, которые поддерживают этот параметр: Orange Data, Атол Онлайн.
+	 **/
+	full_name?: string
+	/** ИНН пользователя (10 или 12 цифр). Если у физического лица отсутствует ИНН, необходимо передать паспортные данные в параметре full_name.
+	 * Онлайн-кассы, которые поддерживают этот параметр: Orange Data, Атол Онлайн.
+	 * */
+	inn?: string
+	/** Электронная почта пользователя для отправки чека. Обязательный параметр, если не передан phone. */
+	email?: string
+	/** Телефон пользователя для отправки чека. Указывается в формате ITU-T E.164, например 79000000000. Обязательный параметр, если не передан email. */
+	phone?: string
+}
+
 export interface ReceiptItem {
 	description: string
-	quantity: number
 	amount: Amount
 	vat_code: VatCodesEnum
-	payment_mode: string // Вынести в enum
-	payment_subject: string // Вынести в enum
-	country_of_origin_code?: string
+	quantity: number
 }
 
 export interface Settlement {
@@ -110,18 +124,8 @@ export interface Settlement {
 	amount: Amount
 }
 
-export interface ReceiptDetails {
-	id: string
-	type: 'payment' | 'refund'
-	payment_id?: string
-	refund_id?: string
-	status: ReceiptRegistrationEnum
-	fiscal_document_number?: string
-	fiscal_storage_number?: string
-	fiscal_attribute?: string
-	registered_at?: string
-	fiscal_provider_id?: string
-	tax_system_code?: TaxSystemCodesEnum
+export interface Receipt {
+	customer?: ICustomer
 	items: ReceiptItem[]
-	settlements?: Settlement[]
+	tax_system_code?: TaxSystemCodesEnum
 }

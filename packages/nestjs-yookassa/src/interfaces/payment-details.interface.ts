@@ -9,24 +9,19 @@ import type { ReceiptRegistrationEnum } from './receipt-details.interface'
  */
 export enum PaymentStatusEnum {
 	/**
-	 * Платеж ожидает обработки.
-	 */
-	PENDING = 'pending',
-
-	/**
 	 * Платеж ожидает захвата.
 	 */
-	WAITING_FOR_CAPTURE = 'waiting_for_capture',
+	WAITING_FOR_CAPTURE = 'payment.waiting_for_capture',
 
 	/**
 	 * Платеж успешно завершен.
 	 */
-	SUCCEEDED = 'succeeded',
+	SUCCEEDED = 'payment.succeeded',
 
 	/**
 	 * Платеж отменен.
 	 */
-	CANCELED = 'canceled'
+	CANCELED = 'payment.canceled'
 }
 
 /**

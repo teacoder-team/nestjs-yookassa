@@ -38,7 +38,22 @@ jobs:
             - name: 🛠️ Build packages
               run: pnpm build:packages
 
+            - name: 🕵️‍♂️ Check if version exists on npm
+              id: check_version
+              run: |
+                  VERSION=$(jq -r '.version' packages/nestjs-yookassa/package.json)
+                  echo "Current package version: $VERSION"
+
+                  if npm view nestjs-yookassa@$VERSION version > /dev/null 2>&1; then
+                    echo "Version $VERSION already exists on npm. Skipping publish."
+                    echo "should_publish=false" >> $GITHUB_OUTPUT
+                  else
+                    echo "Version $VERSION does not exist. Will publish."
+                    echo "should_publish=true" >> $GITHUB_OUTPUT
+                  fi
+
             - name: 🚀 Publish to NPM
+              if: steps.check_version.outputs.should_publish == 'true'
               working-directory: packages/nestjs-yookassa
               run: pnpm publish --access public
               env:

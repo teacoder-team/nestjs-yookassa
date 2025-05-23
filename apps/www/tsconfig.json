@@ -14,8 +14,8 @@
 		"incremental": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./*"],
-			"contentlayer/generated": ["./.contentlayer/generated"]
+			"@/*": ["./src/*"],
+			"@/source": ["./.source/index.ts"]
 		},
 		"plugins": [
 			{

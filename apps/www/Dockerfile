@@ -2,14 +2,17 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json ./
+RUN npm install -g pnpm
 
-RUN npm install --legacy-peer-deps
+COPY pnpm-lock.yaml ./
+COPY package.json ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
-EXPOSE 3000
+EXPOSE 5000
 
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]

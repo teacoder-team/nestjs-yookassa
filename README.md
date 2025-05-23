@@ -4,7 +4,7 @@
 
 ## Документация
 
-Основная документация по использованию библиотеки находится в [packages/nestjs-yookassa/README.md](packages/nestjs-yookassa/README.md).
+Основная документация по использованию библиотеки находится в (https://nestjs-yookassa.ru).
 
 ## Поддержка
 

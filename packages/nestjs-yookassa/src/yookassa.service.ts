@@ -100,7 +100,7 @@ export class YookassaService {
 	 *
 	 * @example
 	 * ```ts
-	 * const payments = await this.yookassaService.getPayments(10, '2024-01-01', '2024-12-31');
+	 * const payments = await this.yookassaService.getPayments(10, '2025-01-01', '2025-01-17');
 	 * console.log(payments);
 	 * ```
 	 */
@@ -276,10 +276,6 @@ export class YookassaService {
 	 * ```ts
 	 * const refundData: RefundCreateRequest = {
 	 *   payment_id: '123456',
-	 *   amount: {
-	 *     value: 500,
-	 *     currency: 'RUB',
-	 *   },
 	 *   description: 'Возврат за отмененный заказ',
 	 * };
 	 * const refundResponse = await this.yookassaService.createRefund(refundData);
@@ -299,7 +295,11 @@ export class YookassaService {
 			const response = await firstValueFrom(
 				this.httpService.post<RefundDetails>(
 					`${this.apiUrl}refunds`,
-					{ refundData, amount },
+					{
+						payment_id: refundData.payment_id,
+						amount,
+						description: refundData.description
+					},
 					{
 						headers: {
 							Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
@@ -324,20 +324,32 @@ export class YookassaService {
 	 * Получает список всех возвратов.
 	 * Возвращает массив объектов с информацией о возвратах.
 	 *
+	 * @param {number} limit - Максимальное количество платежей на страницу.
+	 * @param {string} from - Начальная дата для фильтрации.
+	 * @param {string} to - Конечная дата для фильтрации.
 	 * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
 	 *
 	 * @example
 	 * ```ts
-	 * const refunds = await this.yookassaService.getRefunds();
+	 * const refunds = await this.yookassaService.getRefunds(10, '2025-01-01', '2025-01-17');
 	 * console.log(refunds);
 	 * ```
 	 */
-	public async getRefunds(): Promise<RefundDetails[]> {
+	public async getRefunds(
+		limit: number = 10,
+		from: string = '',
+		to: string = ''
+	): Promise<RefundDetails[]> {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<RefundDetails[]>(`${this.apiUrl}refunds`, {
 					headers: {
 						Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+					},
+					params: {
+						limit,
+						from,
+						to
 					}
 				})
 			)

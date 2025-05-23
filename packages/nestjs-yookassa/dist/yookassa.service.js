@@ -84,7 +84,7 @@ let YookassaService = class YookassaService {
      *
      * @example
      * ```ts
-     * const payments = await this.yookassaService.getPayments(10, '2024-01-01', '2024-12-31');
+     * const payments = await this.yookassaService.getPayments(10, '2025-01-01', '2025-01-17');
      * console.log(payments);
      * ```
      */
@@ -228,8 +228,8 @@ let YookassaService = class YookassaService {
             const { amount } = await this.getPaymentDetails(refundData.payment_id);
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${this.apiUrl}refunds`, {
                 payment_id: refundData.payment_id,
-                description: refundData.description,
-                amount: amount
+                amount,
+                description: refundData.description
             }, {
                 headers: {
                     Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`,
@@ -248,19 +248,27 @@ let YookassaService = class YookassaService {
      * Получает список всех возвратов.
      * Возвращает массив объектов с информацией о возвратах.
      *
+     * @param {number} limit - Максимальное количество платежей на страницу.
+     * @param {string} from - Начальная дата для фильтрации.
+     * @param {string} to - Конечная дата для фильтрации.
      * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
      *
      * @example
      * ```ts
-     * const refunds = await this.yookassaService.getRefunds();
+     * const refunds = await this.yookassaService.getRefunds(10, '2025-01-01', '2025-01-17');
      * console.log(refunds);
      * ```
      */
-    async getRefunds() {
+    async getRefunds(limit = 10, from = '', to = '') {
         try {
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.get(`${this.apiUrl}refunds`, {
                 headers: {
                     Authorization: `Basic ${Buffer.from(`${this.shopId}:${this.apiKey}`).toString('base64')}`
+                },
+                params: {
+                    limit,
+                    from,
+                    to
                 }
             }));
             return response.data;

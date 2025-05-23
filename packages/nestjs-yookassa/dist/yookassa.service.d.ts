@@ -50,7 +50,7 @@ export declare class YookassaService {
      *
      * @example
      * ```ts
-     * const payments = await this.yookassaService.getPayments(10, '2024-01-01', '2024-12-31');
+     * const payments = await this.yookassaService.getPayments(10, '2025-01-01', '2025-01-17');
      * console.log(payments);
      * ```
      */
@@ -129,15 +129,18 @@ export declare class YookassaService {
      * Получает список всех возвратов.
      * Возвращает массив объектов с информацией о возвратах.
      *
+     * @param {number} limit - Максимальное количество платежей на страницу.
+     * @param {string} from - Начальная дата для фильтрации.
+     * @param {string} to - Конечная дата для фильтрации.
      * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
      *
      * @example
      * ```ts
-     * const refunds = await this.yookassaService.getRefunds();
+     * const refunds = await this.yookassaService.getRefunds(10, '2025-01-01', '2025-01-17');
      * console.log(refunds);
      * ```
      */
-    getRefunds(): Promise<RefundDetails[]>;
+    getRefunds(limit?: number, from?: string, to?: string): Promise<RefundDetails[]>;
     /**
      * Получает детали возврата по его ID.
      * Этот метод возвращает подробную информацию о возврате, включая его статус и сумму.

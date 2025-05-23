@@ -1,0 +1,49 @@
+---
+title: Информация о возврате
+description: Шаги для получения деталей о возврате
+---
+
+В этом разделе мы рассмотрим, как получить подробную информацию о возврате по его уникальному идентификатору.
+
+<Steps>
+
+### Вызов метода для получения информации о возврате
+
+Для получения подробной информации о возврате, нужно использовать метод getRefundDetails, передав в него идентификатор возврата.
+
+```typescript
+import { YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class RefundService {
+	constructor(private readonly yookassaService: YookassaService) {}
+
+	async getRefundDetails() {
+		const refundId = '123456'; // Уникальный ID возврата
+
+		const refund = await this.yookassaService.getRefundDetails(refundId);
+
+		return refund;
+	}
+}
+```
+
+### Обработка ответа от API
+
+Ответ от Yookassa содержит подробную информацию о возврате, такую как его статус, сумма и описание. Пример ответа:
+
+```json
+{
+	"id": "2f1d2280-0015-5000-b000-1c02972ec0ef", // Уникальный идентификатор возврата
+	"payment_id": "123456", // Идентификатор платежа, к которому привязан возврат
+	"status": "succeeded", // Статус возврата
+	"created_at": "2025-01-18T02:15:28.461Z", // Дата и время создания возврата
+	"amount": {
+		"value": "529.00", // Сумма возврата
+		"currency": "RUB" // Валюта возврата
+	},
+	"description": "Возврат на заказ с ID 123456" // Описание возврата
+}
+```
+
+</Steps>

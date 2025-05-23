@@ -1,11 +1,10 @@
-import { GeistMono } from 'geist/font/mono'
+import { RootProvider } from 'fumadocs-ui/provider'
+import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 
-import { ThemeProvider } from '../providers/theme-provider'
-import { cn } from '../utils/tw-merge'
-
-import '@/src/styles/globals.css'
+import { cn } from '@/lib/utils'
+import '@/styles/globals.css'
 
 export const metadata: Metadata = {
 	title: 'NestJS Yookassa by TeaCoder',
@@ -19,16 +18,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='ru' suppressHydrationWarning>
-			<body className={cn('bg-sidebar', GeistMono.variable)}>
-				<ThemeProvider
-					attribute='class'
-					defaultTheme='system'
-					enableSystem
-					disableTransitionOnChange
-					enableColorScheme
-				>
-					{children}
-				</ThemeProvider>
+			<body className={cn(GeistSans.variable)}>
+				<RootProvider>{children}</RootProvider>
 			</body>
 		</html>
 	)

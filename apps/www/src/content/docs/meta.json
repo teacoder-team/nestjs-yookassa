@@ -1,0 +1,18 @@
+{
+	"title": "Name of Folder",
+	"pages": [
+		"---Начало---",
+		"getting-started/installation",
+		"getting-started/introduction",
+		"---Платежи---",
+		"payments/create",
+		"payments/list",
+		"payments/info",
+		"payments/confirm",
+		"payments/cancel",
+		"---Возвраты---",
+		"refunds/create",
+		"refunds/list",
+		"refunds/info"
+	]
+}

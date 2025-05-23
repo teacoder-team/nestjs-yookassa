@@ -1,9 +1,11 @@
 'use strict'
 
+import { createMDX } from 'fumadocs-mdx/next'
 import type { NextConfig } from 'next'
-import { createContentlayerPlugin } from 'next-contentlayer2'
 
-const nextConfig: NextConfig = {
+const withMDX = createMDX()
+
+const config: NextConfig = {
 	reactStrictMode: true,
 	output: 'standalone',
 	trailingSlash: false,
@@ -13,8 +15,4 @@ const nextConfig: NextConfig = {
 	}
 }
 
-const withContentlayer = createContentlayerPlugin({
-	// Additional Contentlayer config options
-})
-
-export default withContentlayer(nextConfig)
+export default withMDX(config)

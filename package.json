@@ -18,12 +18,14 @@
 		"build:www": "turbo run build --filter=www",
 		"build:packages": "turbo run build --filter=packages/*",
 		"publish:packages": "npm run build:packages && lerna publish",
-		"install": "npm install --legacy-peer-deps",
 		"update": "npm update",
 		"upgrade:all": "npm i -g npm-check-updates && ncu -u && npm install"
 	},
 	"devDependencies": {
 		"turbo": "^2.3.1"
 	},
-	"packageManager": "pnpm@9.14.4"
+	"packageManager": "pnpm@9.14.4",
+	"engines": {
+		"node": ">= 18.17.0"
+	}
 }

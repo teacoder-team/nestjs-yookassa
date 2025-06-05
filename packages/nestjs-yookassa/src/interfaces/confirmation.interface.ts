@@ -70,7 +70,7 @@ export interface ConfirmationRedirect {
  * Тип для подтверждения через встроенную форму.
  * Используется при встроенном подтверждении внутри текущего приложения.
  */
-export interface ConfirmationEmbedded {
+export interface ConfirmationEmbeddedRequest {
 	/**
 	 * Тип подтверждения — встроенная форма.
 	 */
@@ -129,12 +129,40 @@ export interface ConfirmationMobileApp {
 }
 
 /**
- * Тип подтверждения, который может быть одним из нескольких типов.
- * @type {ConfirmationRedirect | ConfirmationEmbedded | ConfirmationQR | ConfirmationExternal | ConfirmationMobileApp}
+ * Тип для подтверждения через встроенную форму.
+ * Используется при встроенном подтверждении внутри текущего приложения.
  */
-export type Confirmation =
+export interface ConfirmationEmbeddedResponse {
+	/**
+	 * Тип подтверждения — встроенная форма.
+	 */
+	type: ConfirmationTypesEnum.embedded
+
+	/**
+	 * Токен для инициализации виджета на клиенте.
+	 */
+	confirmation_token: string
+}
+
+/**
+ * Тип подтверждения используемый в запросе, который может быть одним из нескольких типов.
+ * @type {ConfirmationRedirect | ConfirmationEmbeddedRequest | ConfirmationQR | ConfirmationExternal | ConfirmationMobileApp}
+ */
+export type ConfirmationRequest =
 	| ConfirmationRedirect
-	| ConfirmationEmbedded
+	| ConfirmationEmbeddedRequest
+	| ConfirmationQR
+	| ConfirmationExternal
+	| ConfirmationMobileApp
+
+
+/**
+ * Тип подтверждения, который может быть одним из нескольких типов.
+ * @type {ConfirmationRedirect | ConfirmationEmbeddedResponse | ConfirmationQR | ConfirmationExternal | ConfirmationMobileApp}
+ */
+export type ConfirmationResponse =
+	| ConfirmationRedirect
+	| ConfirmationEmbeddedResponse
 	| ConfirmationQR
 	| ConfirmationExternal
 	| ConfirmationMobileApp

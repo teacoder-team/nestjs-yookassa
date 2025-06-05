@@ -1,5 +1,5 @@
 import type { Amount } from './common.interface'
-import type { Confirmation } from './confirmation.interface'
+import type { ConfirmationRequest } from './confirmation.interface'
 import type { PaymentMethod } from './payment-method.interface'
 
 /**
@@ -52,7 +52,7 @@ export interface PaymentCreateRequest {
 	/**
 	 * Тип подтверждения для платежа.
 	 */
-	confirmation: Confirmation
+	confirmation: ConfirmationRequest
 
 	/**
 	 * Нужно ли сохранять метод платежа для будущих платежей.

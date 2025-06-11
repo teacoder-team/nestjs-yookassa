@@ -12,6 +12,8 @@ const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const yookassa_options_interface_1 = require("./interfaces/yookassa-options.interface");
 const yookassa_service_1 = require("./yookassa.service");
+const payment_service_1 = require("./services/payment.service");
+const refund_service_1 = require("./services/refund.service");
 let YookassaModule = YookassaModule_1 = class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.
@@ -36,6 +38,8 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     provide: yookassa_options_interface_1.YookassaOptionsSymbol,
                     useValue: options
                 },
+                payment_service_1.PaymentService,
+                refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],
@@ -70,6 +74,8 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     useFactory: options.useFactory,
                     inject: options.inject || []
                 },
+                payment_service_1.PaymentService,
+                refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],

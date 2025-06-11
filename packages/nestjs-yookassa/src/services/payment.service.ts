@@ -8,6 +8,7 @@ import {
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
+import { YOOKASSA_API_URL } from '../yookassa.constants'
 
 @Injectable()
 export class PaymentService {

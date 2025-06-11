@@ -9,17 +9,37 @@ exports.PaymentMethodsEnum = void 0;
 var PaymentMethodsEnum;
 (function (PaymentMethodsEnum) {
     /**
+     * «Покупки в кредит» от СберБанка
+     */
+    PaymentMethodsEnum["sber_loan"] = "sber_loan";
+    /**
+     * Баланс мобильного телефона
+     */
+    PaymentMethodsEnum["mobile_balance"] = "mobile_balance";
+    /**
      * Банковская карта
      */
     PaymentMethodsEnum["bank_card"] = "bank_card";
     /**
-     * YooMoney (бывший Яндекс.Деньги)
+     * Наличные
+     */
+    PaymentMethodsEnum["cash"] = "cash";
+    /**
+     * Система быстрых платежей
+     */
+    PaymentMethodsEnum["sbp"] = "sbp";
+    /**
+     * B2B Сбербанк
+     */
+    PaymentMethodsEnum["b2b_sberbank"] = "b2b_sberbank";
+    /**
+     * Электронный сертификат
+     */
+    PaymentMethodsEnum["electronic_certificate"] = "electronic_certificate";
+    /**
+     * YooMoney
      */
     PaymentMethodsEnum["yoo_money"] = "yoo_money";
-    /**
-     * Qiwi кошелек
-     */
-    PaymentMethodsEnum["qiwi"] = "qiwi";
     /**
      * Сбербанк
      */
@@ -32,24 +52,4 @@ var PaymentMethodsEnum;
      * Тинькофф Банк
      */
     PaymentMethodsEnum["tinkoff_bank"] = "tinkoff_bank";
-    /**
-     * B2B Сбербанк
-     */
-    PaymentMethodsEnum["b2b_sberbank"] = "b2b_sberbank";
-    /**
-     * Система быстрых платежей
-     */
-    PaymentMethodsEnum["sbp"] = "sbp";
-    /**
-     * Баланс мобильного телефона
-     */
-    PaymentMethodsEnum["mobile_balance"] = "mobile_balance";
-    /**
-     * Наличные
-     */
-    PaymentMethodsEnum["cash"] = "cash";
-    /**
-     * Рассрочка
-     */
-    PaymentMethodsEnum["installments"] = "installments";
 })(PaymentMethodsEnum || (exports.PaymentMethodsEnum = PaymentMethodsEnum = {}));

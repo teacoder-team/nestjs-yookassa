@@ -6,6 +6,8 @@ import {
 	YookassaOptionsSymbol
 } from './interfaces/yookassa-options.interface'
 import { YookassaService } from './yookassa.service'
+import { PaymentService } from './services/payment.service'
+import { RefundService } from './services/refund.service'
 
 @Global()
 @Module({})
@@ -33,6 +35,8 @@ export class YookassaModule {
 					provide: YookassaOptionsSymbol,
 					useValue: options
 				},
+				PaymentService,
+				RefundService,
 				YookassaService
 			],
 			exports: [YookassaService],
@@ -68,6 +72,8 @@ export class YookassaModule {
 					useFactory: options.useFactory,
 					inject: options.inject || []
 				},
+				PaymentService,
+				RefundService,
 				YookassaService
 			],
 			exports: [YookassaService],

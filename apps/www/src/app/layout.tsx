@@ -19,7 +19,18 @@ export default function RootLayout({
 	return (
 		<html lang='ru' suppressHydrationWarning>
 			<body className={cn(GeistSans.variable)}>
-				<RootProvider>{children}</RootProvider>
+				<RootProvider
+					i18n={{
+						locale: 'ru',
+						translations: {
+							search: 'Поиск',
+							searchNoResult: 'Нечего не найдено',
+							toc: 'На этой странице'
+						}
+					}}
+				>
+					{children}
+				</RootProvider>
 			</body>
 		</html>
 	)

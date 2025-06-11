@@ -32,11 +32,14 @@ var source_config_default = defineConfig({
       parseMdx: true
     },
     remarkPlugins: [
-      [remarkInstall, {
-        persist: {
-          id: "package-manager"
+      [
+        remarkInstall,
+        {
+          persist: {
+            id: "package-manager"
+          }
         }
-      }]
+      ]
     ],
     rehypePlugins: (v) => [rehypeKatex, ...v]
   }

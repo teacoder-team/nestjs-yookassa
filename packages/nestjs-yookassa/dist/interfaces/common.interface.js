@@ -9,11 +9,11 @@ exports.CurrencyEnum = exports.LocaleEnum = void 0;
 var LocaleEnum;
 (function (LocaleEnum) {
     /**
-     * Русский язык, Россия.
+     * Русский язык.
      */
     LocaleEnum["ru_RU"] = "ru_RU";
     /**
-     * Английский язык, США.
+     * Английский язык.
      */
     LocaleEnum["en_US"] = "en_US";
 })(LocaleEnum || (exports.LocaleEnum = LocaleEnum = {}));

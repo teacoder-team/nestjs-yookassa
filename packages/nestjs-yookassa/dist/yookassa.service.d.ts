@@ -1,14 +1,10 @@
-import { HttpService } from '@nestjs/axios';
-import { type PaymentCreateRequest, type PaymentDetails, type YookassaOptions } from './interfaces';
-import { RefundDetails } from './interfaces/refund-details.interface';
-import { RefundCreateRequest } from './interfaces/refund-request.interface';
+import { PaymentService } from './services/payment.service';
+import { RefundService } from './services/refund.service';
+import { PaymentCreateRequest, RefundCreateRequest } from './interfaces';
 export declare class YookassaService {
-    private readonly options;
-    private readonly httpService;
-    private readonly shopId;
-    private readonly apiKey;
-    private readonly apiUrl;
-    constructor(options: YookassaOptions, httpService: HttpService);
+    private readonly paymentService;
+    private readonly refundService;
+    constructor(paymentService: PaymentService, refundService: RefundService);
     /**
      * Создает платеж через YooKassa.
      * Этот метод отправляет запрос на создание нового платежа с данными из `paymentData`.
@@ -38,7 +34,7 @@ export declare class YookassaService {
      * console.log(paymentResponse);
      * ```
      */
-    createPayment(paymentData: PaymentCreateRequest): Promise<PaymentDetails>;
+    createPayment(paymentData: PaymentCreateRequest): Promise<import("./interfaces").PaymentDetails>;
     /**
      * Получает список платежей.
      * Этот метод используется для получения списка всех платежей с возможностью пагинации.
@@ -50,11 +46,11 @@ export declare class YookassaService {
      *
      * @example
      * ```ts
-     * const payments = await this.yookassaService.getPayments(10, '2024-01-01', '2024-12-31');
+     * const payments = await this.yookassaService.getPayments(10, '2025-01-01', '2025-01-17');
      * console.log(payments);
      * ```
      */
-    getPayments(limit?: number, from?: string, to?: string): Promise<PaymentDetails[]>;
+    getPayments(limit?: number, from?: string, to?: string): Promise<import("./interfaces").PaymentDetails[]>;
     /**
      * Получает детали платежа по его ID.
      * Этот метод позволяет получить подробную информацию о платеже, включая его статус, сумму и другие данные.
@@ -69,7 +65,7 @@ export declare class YookassaService {
      * console.log(paymentDetails);
      * ```
      */
-    getPaymentDetails(paymentId: string): Promise<PaymentDetails>;
+    getPaymentDetails(paymentId: string): Promise<import("./interfaces").PaymentDetails>;
     /**
      * Выполняет захват платежа.
      * Этот метод используется для захвата средств с карты клиента после того, как был создан платеж.
@@ -91,7 +87,7 @@ export declare class YookassaService {
      * console.log(paymentDetails);
      * ```
      */
-    capturePayment(paymentId: string): Promise<PaymentDetails>;
+    capturePayment(paymentId: string): Promise<import("./interfaces").PaymentDetails>;
     /**
      * Отменяет платеж.
      * Этот метод используется для отмены платежа.
@@ -106,7 +102,7 @@ export declare class YookassaService {
      * console.log(canceledPaymentDetails);
      * ```
      */
-    cancelPayment(paymentId: string): Promise<PaymentDetails>;
+    cancelPayment(paymentId: string): Promise<import("./interfaces").PaymentDetails>;
     /**
      * Создает возврат средств по указанному платежу.
      * Этот метод отправляет запрос на создание возврата с данными из `refundData`.
@@ -124,20 +120,23 @@ export declare class YookassaService {
      * console.log(refundResponse);
      * ```
      */
-    createRefund(refundData: RefundCreateRequest): Promise<RefundDetails>;
+    createRefund(refundData: RefundCreateRequest): Promise<import("./interfaces").RefundDetails>;
     /**
      * Получает список всех возвратов.
      * Возвращает массив объектов с информацией о возвратах.
      *
+     * @param {number} limit - Максимальное количество платежей на страницу.
+     * @param {string} from - Начальная дата для фильтрации.
+     * @param {string} to - Конечная дата для фильтрации.
      * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
      *
      * @example
      * ```ts
-     * const refunds = await this.yookassaService.getRefunds();
+     * const refunds = await this.yookassaService.getRefunds(10, '2025-01-01', '2025-01-17');
      * console.log(refunds);
      * ```
      */
-    getRefunds(): Promise<RefundDetails[]>;
+    getRefunds(limit?: number, from?: string, to?: string): Promise<import("./interfaces").RefundDetails[]>;
     /**
      * Получает детали возврата по его ID.
      * Этот метод возвращает подробную информацию о возврате, включая его статус и сумму.
@@ -153,5 +152,5 @@ export declare class YookassaService {
      * ```
      * @throws {NotFoundException} Если возврат с указанным ID не найден.
      */
-    getRefundDetails(refundId: string): Promise<RefundDetails>;
+    getRefundDetails(refundId: string): Promise<import("./interfaces").RefundDetails>;
 }

@@ -1,31 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfirmationTypesEnum = void 0;
+exports.ConfirmationEnum = void 0;
 /**
  * Перечисление типов подтверждений платежа.
  * Эти типы могут быть использованы для различных способов подтверждения транзакций.
  * @enum {string}
  */
-var ConfirmationTypesEnum;
-(function (ConfirmationTypesEnum) {
+var ConfirmationEnum;
+(function (ConfirmationEnum) {
     /**
      * Встроенная форма подтверждения.
      */
-    ConfirmationTypesEnum["embedded"] = "embedded";
+    ConfirmationEnum["embedded"] = "embedded";
     /**
      * Внешняя форма подтверждения.
      */
-    ConfirmationTypesEnum["external"] = "external";
+    ConfirmationEnum["external"] = "external";
     /**
      * Подтверждение через мобильное приложение.
      */
-    ConfirmationTypesEnum["mobile_application"] = "mobile_application";
+    ConfirmationEnum["mobile_application"] = "mobile_application";
     /**
      * Подтверждение через QR код.
      */
-    ConfirmationTypesEnum["qr"] = "qr";
+    ConfirmationEnum["qr"] = "qr";
     /**
      * Подтверждение через редирект на внешний сайт.
      */
-    ConfirmationTypesEnum["redirect"] = "redirect";
-})(ConfirmationTypesEnum || (exports.ConfirmationTypesEnum = ConfirmationTypesEnum = {}));
+    ConfirmationEnum["redirect"] = "redirect";
+})(ConfirmationEnum || (exports.ConfirmationEnum = ConfirmationEnum = {}));

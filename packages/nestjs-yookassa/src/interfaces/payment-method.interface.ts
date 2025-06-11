@@ -2,19 +2,19 @@ import type { Amount } from './common.interface'
 
 /**
  * Тип для метода оплаты, который может быть одним из нескольких типов.
+ * @type {PaymentMethodSberLoan | PaymentMethodMobileBalance | PaymentMethodCard | PaymentMethodCash | PaymentMethodSbp | PaymentMethodB2bSberbank | PaymentMethodElectronicСertificate | PaymentMethodYooMoney | PaymentMethodSberbank | PaymentMethodTinkoffBank}
  */
 export type PaymentMethod =
-	| PaymentMethodAlfabank
+	| PaymentMethodSberLoan
 	| PaymentMethodMobileBalance
 	| PaymentMethodCard
-	| PaymentMethodInstallments
 	| PaymentMethodCash
 	| PaymentMethodSbp
-	| PaymentMethodB2b_sberbank
-	| PaymentMethodTinkoff_bank
+	| PaymentMethodB2bSberbank
+	| PaymentMethodElectronicСertificate
 	| PaymentMethodYooMoney
-	| PaymentMethodQiwi
 	| PaymentMethodSberbank
+	| PaymentMethodTinkoffBank
 
 /**
  * Перечисление возможных методов оплаты.
@@ -23,19 +23,44 @@ export type PaymentMethod =
  */
 export enum PaymentMethodsEnum {
 	/**
+	 * «Покупки в кредит» от СберБанка
+	 */
+	sber_loan = 'sber_loan',
+
+	/**
+	 * Баланс мобильного телефона
+	 */
+	mobile_balance = 'mobile_balance',
+
+	/**
 	 * Банковская карта
 	 */
 	bank_card = 'bank_card',
 
 	/**
-	 * YooMoney (бывший Яндекс.Деньги)
+	 * Наличные
 	 */
-	yoo_money = 'yoo_money',
+	cash = 'cash',
 
 	/**
-	 * Qiwi кошелек
+	 * Система быстрых платежей
 	 */
-	qiwi = 'qiwi',
+	sbp = 'sbp',
+
+	/**
+	 * B2B Сбербанк
+	 */
+	b2b_sberbank = 'b2b_sberbank',
+
+	/**
+	 * Электронный сертификат
+	 */
+	electronic_certificate = 'electronic_certificate',
+
+	/**
+	 * YooMoney
+	 */
+	yoo_money = 'yoo_money',
 
 	/**
 	 * Сбербанк
@@ -50,32 +75,29 @@ export enum PaymentMethodsEnum {
 	/**
 	 * Тинькофф Банк
 	 */
-	tinkoff_bank = 'tinkoff_bank',
+	tinkoff_bank = 'tinkoff_bank'
+}
 
+export interface PaymentMethodSberLoan {
 	/**
-	 * B2B Сбербанк
+	 * Тип метода — «Покупки в кредит» от СберБанка
 	 */
-	b2b_sberbank = 'b2b_sberbank',
+	type: PaymentMethodsEnum.sber_loan
+}
 
+/**
+ * Тип, представляющий способ оплаты через баланс мобильного телефона.
+ */
+export interface PaymentMethodMobileBalance {
 	/**
-	 * Система быстрых платежей
+	 * Тип метода — мобильный баланс
 	 */
-	sbp = 'sbp',
-
+	type: PaymentMethodsEnum.mobile_balance
 	/**
-	 * Баланс мобильного телефона
+	 * Номер телефона, с которого будет списана сумма.
+	 * Указывается в формате ITU-T E.164, например 79000000000.
 	 */
-	mobile_balance = 'mobile_balance',
-
-	/**
-	 * Наличные
-	 */
-	cash = 'cash',
-
-	/**
-	 * Рассрочка
-	 */
-	installments = 'installments'
+	phone: string
 }
 
 /**
@@ -86,6 +108,10 @@ export interface PaymentMethodCard {
 	 * Тип метода — банковская карта
 	 */
 	type: PaymentMethodsEnum.bank_card
+
+	/**
+	 * Данные банковской карты (необходимы, если вы собираете данные карты пользователей на своей стороне).
+	 */
 	card?: {
 		/**
 		 * Номер карты.
@@ -104,102 +130,48 @@ export interface PaymentMethodCard {
 		expiry_month: string
 
 		/**
-		 * Код безопасности карты (CVC).
-		 * Необязательное поле.
-		 */
-		csc?: string
-
-		/**
 		 * Имя владельца карты.
 		 * Необязательное поле.
 		 */
 		cardholder?: string
+
+		/**
+		 * Код безопасности карты (CVC).
+		 * Необязательное поле.
+		 */
+		csc?: string
 	}
 }
 
 /**
- * Тип, представляющий способ оплаты через баланс мобильного телефона.
+ * Тип для подтверждения через наличные.
  */
-export interface PaymentMethodMobileBalance {
+export interface PaymentMethodCash {
 	/**
-	 * Тип метода — мобильный баланс
+	 * Тип метода — Наличные
 	 */
-	type: PaymentMethodsEnum.mobile_balance
+	type: PaymentMethodsEnum.cash
 	/**
-	 * Номер телефона, с которого будет списана сумма.
-	 */
-	phone: string
-}
-
-/**
- * Тип для подтверждения с использованием YooMoney.
- */
-export interface PaymentMethodYooMoney {
-	/**
-	 * Тип метода — YooMoney
-	 */
-	type: PaymentMethodsEnum.yoo_money
-}
-
-/**
- * Тип для подтверждения через Qiwi кошелек.
- */
-export interface PaymentMethodQiwi {
-	/**
-	 * Тип метода — Qiwi
-	 */
-	type: PaymentMethodsEnum.qiwi
-	/**
-	 * Номер телефона в Qiwi.
+	 * Номер телефона для подтверждения наличных платежей.
 	 * Необязательное поле.
 	 */
 	phone?: string
 }
 
 /**
- * Тип для подтверждения через Сбербанк.
+ * Тип для подтверждения через СБП (Система быстрых платежей).
  */
-export interface PaymentMethodSberbank {
+export interface PaymentMethodSbp {
 	/**
-	 * Тип метода — Сбербанк
+	 * Тип метода — Система быстрых платежей
 	 */
-	type: PaymentMethodsEnum.sberbank
-	/**
-	 * Номер телефона в Сбербанке.
-	 * Необязательное поле.
-	 */
-	phone?: string
-}
-
-/**
- * Тип для подтверждения через Альфа-Банк.
- */
-export interface PaymentMethodAlfabank {
-	/**
-	 * Тип метода — Альфа-Банк
-	 */
-	type: PaymentMethodsEnum.alfabank
-	/**
-	 * Логин пользователя в Альфа-Банке.
-	 * Необязательное поле.
-	 */
-	login?: string
-}
-
-/**
- * Тип для подтверждения через Тинькофф Банк.
- */
-export interface PaymentMethodTinkoff_bank {
-	/**
-	 * Тип метода — Тинькофф Банк
-	 */
-	type: PaymentMethodsEnum.tinkoff_bank
+	type: PaymentMethodsEnum.sbp
 }
 
 /**
  * Тип для подтверждения через B2B Сбербанк.
  */
-export interface PaymentMethodB2b_sberbank {
+export interface PaymentMethodB2bSberbank {
 	/**
 	 * Тип метода — B2B Сбербанк
 	 */
@@ -229,36 +201,154 @@ export interface PaymentMethodB2b_sberbank {
 }
 
 /**
- * Тип для подтверждения через систему быстрых платежей (СБП).
+ * Тип для подтверждения с использованием электронного сертификата (ФЭС НСПК).
  */
-export interface PaymentMethodSbp {
+export interface PaymentMethodElectronicСertificate {
 	/**
-	 * Тип метода — Система быстрых платежей
+	 * Тип метода оплаты — электронный сертификат.
+	 * Значение: `electronic_certificate`.
 	 */
-	type: PaymentMethodsEnum.sbp
+	type: PaymentMethodsEnum.electronic_certificate
+
+	/**
+	 * Корзина покупки — список товаров, которые можно оплатить по сертификату.
+	 * Необходимо передавать только при оплате на готовой странице ЮKassa.
+	 */
+	articles?: {
+		/**
+		 * Порядковый номер товара в корзине (от 1 до 999 включительно).
+		 */
+		article_number: number
+
+		/**
+		 * Код ТРУ. Формат: NNNNNNNNN.NNNNNNNNNYYYYMMMMZZZ
+		 * Пример: 329921120.06001010200080001643
+		 */
+		tru_code: string
+
+		/**
+		 * Код товара в вашей системе.
+		 * Максимум 128 символов.
+		 */
+		article_code?: string
+
+		/**
+		 * Название товара в вашей системе.
+		 * Отображается на форме ЮKassa.
+		 * Максимум 128 символов.
+		 */
+		article_name: string
+
+		/**
+		 * Количество единиц товара. Целое положительное число.
+		 */
+		quantity: number
+
+		/**
+		 * Цена за единицу товара.
+		 */
+		price: {
+			/**
+			 * Сумма в валюте. Дробное значение с точкой в качестве разделителя.
+			 * Пример: "1000.00"
+			 */
+			value: string
+
+			/**
+			 * Трехбуквенный код валюты по ISO-4217.
+			 * Пример: "RUB"
+			 */
+			currency: string
+		}
+	}[]
+
+	/**
+	 * Произвольные дополнительные данные.
+	 * Максимум 16 ключей, имя ключа — до 32 символов, значение — до 512 символов.
+	 */
+	metadata?: Record<string, string>
+
+	/**
+	 * Данные банковской карты (если вы собираете данные карты на своей стороне).
+	 */
+	card?: {
+		/**
+		 * Номер банковской карты.
+		 */
+		number: string
+
+		/**
+		 * Год окончания срока действия карты (формат: YYYY).
+		 */
+		expiry_year: string
+
+		/**
+		 * Месяц окончания срока действия карты (формат: MM).
+		 */
+		expiry_month: string
+
+		/**
+		 * Имя владельца карты.
+		 */
+		cardholder?: string
+
+		/**
+		 * CVC/CVV код (3–4 цифры).
+		 */
+		csc?: string
+	}
+
+	/**
+	 * Данные от ФЭС НСПК для оплаты по электронному сертификату.
+	 * Обязательное поле при оплате со сбором данных на вашей стороне.
+	 */
+	electronic_certificate?: {
+		/**
+		 * Сумма, которую необходимо списать с электронного сертификата.
+		 * Значение из поля `totalCertAmount`, полученного при предварительном одобрении (Pre-Auth).
+		 */
+		amount: Amount
+
+		/**
+		 * Идентификатор корзины покупки в НСПК.
+		 * Значение `purchaseBasketId`, полученное в ответе от ФЭС НСПК при Pre-Auth.
+		 */
+		basket_id: string
+	}
 }
 
 /**
- * Тип для подтверждения через наличные.
+ * Тип для подтверждения с использованием YooMoney.
  */
-export interface PaymentMethodCash {
+export interface PaymentMethodYooMoney {
 	/**
-	 * Тип метода — Наличные
+	 * Тип метода — YooMoney
 	 */
-	type: PaymentMethodsEnum.cash
+	type: PaymentMethodsEnum.yoo_money
+}
+
+/**
+ * Тип для подтверждения через Сбербанк.
+ */
+export interface PaymentMethodSberbank {
 	/**
-	 * Номер телефона для подтверждения наличных платежей.
+	 * Тип метода — Сбербанк
+	 */
+	type: PaymentMethodsEnum.sberbank
+
+	/**
+	 * Номер телефона в Сбербанке.
 	 * Необязательное поле.
 	 */
 	phone?: string
 }
 
 /**
- * Тип для подтверждения через рассрочку.
+ * Тип для подтверждения через Тинькофф Банк.
  */
-export interface PaymentMethodInstallments {
+export interface PaymentMethodTinkoffBank {
 	/**
-	 * Тип метода — Рассрочка
+	 * Тип метода — Тинькофф Банк
 	 */
-	type: PaymentMethodsEnum.installments
+	type: PaymentMethodsEnum.tinkoff_bank
 }

@@ -1,6 +1,6 @@
 {
 	"name": "nestjs-yookassa",
-	"version": "1.1.19",
+	"version": "1.1.20",
 	"description": "A NestJS library for integrating with YooKassa API",
 	"keywords": [
 		"nest",
@@ -24,6 +24,9 @@
 	],
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"precommit": "lint-staged",

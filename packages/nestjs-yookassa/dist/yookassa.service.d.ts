@@ -1,5 +1,4 @@
-import { PaymentService } from './services/payment.service';
-import { RefundService } from './services/refund.service';
+import { PaymentService, RefundService } from './services';
 import { PaymentCreateRequest, RefundCreateRequest } from './interfaces';
 export declare class YookassaService {
     private readonly paymentService;

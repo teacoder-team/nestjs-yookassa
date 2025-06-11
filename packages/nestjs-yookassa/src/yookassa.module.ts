@@ -4,7 +4,7 @@ import {
 	type YookassaAsyncOptions,
 	type YookassaOptions,
 	YookassaOptionsSymbol
-} from './interfaces/yookassa-options.interface'
+} from './interfaces'
 import { YookassaService } from './yookassa.service'
 import { PaymentService } from './services/payment.service'
 import { RefundService } from './services/refund.service'

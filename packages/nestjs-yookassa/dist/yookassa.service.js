@@ -11,8 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaService = void 0;
 const common_1 = require("@nestjs/common");
-const payment_service_1 = require("./services/payment.service");
-const refund_service_1 = require("./services/refund.service");
+const services_1 = require("./services");
 let YookassaService = class YookassaService {
     constructor(paymentService, refundService) {
         this.paymentService = paymentService;
@@ -186,6 +185,6 @@ let YookassaService = class YookassaService {
 exports.YookassaService = YookassaService;
 exports.YookassaService = YookassaService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [payment_service_1.PaymentService,
-        refund_service_1.RefundService])
+    __metadata("design:paramtypes", [services_1.PaymentService,
+        services_1.RefundService])
 ], YookassaService);

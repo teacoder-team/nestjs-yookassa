@@ -1,5 +1,5 @@
 import { type DynamicModule } from '@nestjs/common';
-import { type YookassaAsyncOptions, type YookassaOptions } from './interfaces/yookassa-options.interface';
+import { type YookassaAsyncOptions, type YookassaOptions } from './interfaces';
 export declare class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.

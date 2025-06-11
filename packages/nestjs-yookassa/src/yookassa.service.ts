@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { PaymentService } from './services/payment.service'
-import { RefundService } from './services/refund.service'
+import { PaymentService, RefundService } from './services'
 import { PaymentCreateRequest, RefundCreateRequest } from './interfaces'
 
 @Injectable()

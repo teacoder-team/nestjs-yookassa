@@ -21,17 +21,6 @@ export interface Customer {
 }
 
 /**
- * Цена товара (amount).
- */
-export interface ReceiptItemAmount {
-	/** Сумма в валюте (дробное число, строкой). */
-	value: string
-
-	/** Валюта ISO-4217, например "RUB". */
-	currency: string
-}
-
-/**
  * Дробное количество маркированного товара (mark_quantity).
  */
 export interface MarkQuantity {
@@ -50,7 +39,7 @@ export interface ReceiptItem {
 	description: string
 
 	/** Цена единицы товара. */
-	amount: ReceiptItemAmount
+	amount: Amount
 
 	/** Количество товара. */
 	quantity: number

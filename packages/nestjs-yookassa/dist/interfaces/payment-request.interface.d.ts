@@ -175,7 +175,7 @@ export interface PaymentCreateRequest {
     /**
      * Тип подтверждения для платежа.
      */
-    confirmation: Confirmation;
+    confirmation?: Confirmation;
     /**
      * Нужно ли сохранять метод платежа для будущих платежей.
      * Необязательное поле.

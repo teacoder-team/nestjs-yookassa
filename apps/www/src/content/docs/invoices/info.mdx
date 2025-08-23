@@ -1,0 +1,60 @@
+---
+title: Информация о счёте
+description: Шаги для получения деталей о счёте
+---
+
+<Steps>
+
+### Вызов метода для получения информации о счёте
+
+Для получения подробной информации о счёте используйте метод getInvoiceDetails, передав в него идентификатор счёта.
+
+```typescript
+import { YookassaService } from 'nestjs-yookassa';
+
+@Injectable()
+export class InvoiceService {
+  constructor(private readonly yookassaService: YookassaService) {}
+
+  async getInvoiceDetails() {
+    const invoiceId = '123456'; // Уникальный идентификатор счёта
+
+    const invoice = await this.yookassaService.getInvoice(invoiceId);
+
+    return invoice;
+  }
+}
+```
+
+### Обработка ответа от API
+
+Ответ содержит подробную информацию о счёте, включая его статус, корзину товаров, дату создания и срок действия. Пример ответа:
+
+```json
+{
+	"id": "3f2d2280-0015-5000-b000-1c02972ec0ef",
+	"status": "pending",
+	"cart": [
+		{
+			"description": "Товар 1",
+			"price": { "value": "1000.00", "currency": "RUB" },
+			"quantity": 1
+		}
+	],
+	"delivery_method": {
+		"type": "self",
+		"url": "https://example.com/invoice/3f2d2280"
+	},
+	"created_at": "2025-08-23T10:00:00.000Z",
+	"expires_at": "2025-08-30T10:00:00.000Z",
+	"description": "Счёт на оплату по заказу 123456",
+	"metadata": { "order_id": "123456" },
+	"payment_details": {
+		"id": "1a2b3c4d-0015-5000-b000-1c02972ec0ef",
+		"status": "succeeded",
+		"amount": { "value": "1000.00", "currency": "RUB" }
+	}
+}
+```
+
+</Steps>

@@ -187,17 +187,6 @@ interface Deal {
 }
 
 /**
- * Данные о счете, в рамках которого проведен платеж.
- */
-export interface InvoiceDetails {
-	/**
-	 * Идентификатор счета в ЮKassa.
-	 * Необязательное поле.
-	 */
-	id?: string
-}
-
-/**
  * Данные о распределении денег — сколько и в какой магазин нужно перевести.
  */
 export interface Transfer {
@@ -292,7 +281,13 @@ export interface AuthorizationDetails {
 	 * Данные о выставленном счете, в рамках которого проведен платеж.
 	 * Необязательное поле.
 	 */
-	invoice_details?: InvoiceDetails
+	invoice_details?: {
+		/**
+		 * Идентификатор счета в ЮKassa.
+		 * Необязательное поле.
+		 */
+		id?: string
+	}
 }
 
 /**

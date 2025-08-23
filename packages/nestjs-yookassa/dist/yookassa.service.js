@@ -13,8 +13,9 @@ exports.YookassaService = void 0;
 const common_1 = require("@nestjs/common");
 const services_1 = require("./services");
 let YookassaService = class YookassaService {
-    constructor(paymentService, refundService) {
+    constructor(paymentService, invoiceService, refundService) {
         this.paymentService = paymentService;
+        this.invoiceService = invoiceService;
         this.refundService = refundService;
     }
     /**
@@ -76,7 +77,7 @@ let YookassaService = class YookassaService {
      *
      * @example
      * ```ts
-     * const paymentId = '123456';
+     * const paymentId = 'payment-id';
      * const paymentDetails = await this.yookassaService.getPaymentDetails(paymentId);
      * console.log(paymentDetails);
      * ```
@@ -124,6 +125,48 @@ let YookassaService = class YookassaService {
      */
     async cancelPayment(paymentId) {
         return await this.paymentService.cancel(paymentId);
+    }
+    /**
+     * Создает счет.
+     * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.
+     * Возвращает информацию о созданном счете.
+     *
+     * @param {InvoiceCreateRequest} invoiceData - Данные для создания счета.
+     * @returns {Promise<InvoiceDetails>} Ответ от API с деталями созданного счета.
+     *
+     * @example
+     * ```ts
+     * const invoiceData: InvoiceCreateRequest = {
+     *   amount: { value: '1000.00', currency: 'RUB' },
+     *   gateway_id: 'subaccount-id',
+     *   cart: [
+     *     { description: 'Товар 1', price: { value: '1000.00', currency: 'RUB' }, quantity: 1 }
+     *   ],
+     *   expires_at: '2025-08-30T10:00:00.000Z'
+     * };
+     * const invoice = await this.yookassaService.createInvoice(invoiceData);
+     * console.log(invoice);
+     * ```
+     */
+    async createInvoice(invoiceData) {
+        return await this.invoiceService.create(invoiceData);
+    }
+    /**
+     * Получает детали счета по его ID.
+     * Этот метод позволяет получить подробную информацию о счете, включая статус, корзину и платежи.
+     *
+     * @param {string} invoiceId - Уникальный идентификатор счета.
+     * @returns {Promise<InvoiceDetails>} Объект с деталями счета.
+     *
+     * @example
+     * ```ts
+     * const invoiceId = 'invoice-id';
+     * const invoiceDetails = await this.yookassaService.getInvoiceDetails(invoiceId);
+     * console.log(invoiceDetails);
+     * ```
+     */
+    async getInvoiceDetails(invoiceId) {
+        return await this.invoiceService.getOne(invoiceId);
     }
     /**
      * Создает возврат средств по указанному платежу.
@@ -186,5 +229,6 @@ exports.YookassaService = YookassaService;
 exports.YookassaService = YookassaService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [services_1.PaymentService,
+        services_1.InvoiceService,
         services_1.RefundService])
 ], YookassaService);

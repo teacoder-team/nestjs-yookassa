@@ -14,6 +14,7 @@ const interfaces_1 = require("./interfaces");
 const yookassa_service_1 = require("./yookassa.service");
 const payment_service_1 = require("./services/payment.service");
 const refund_service_1 = require("./services/refund.service");
+const services_1 = require("./services");
 let YookassaModule = YookassaModule_1 = class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.
@@ -39,6 +40,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     useValue: options
                 },
                 payment_service_1.PaymentService,
+                services_1.InvoiceService,
                 refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
@@ -75,6 +77,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     inject: options.inject || []
                 },
                 payment_service_1.PaymentService,
+                services_1.InvoiceService,
                 refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],

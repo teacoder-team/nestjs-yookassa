@@ -34,24 +34,27 @@ export interface DeliveryMethodData {
  * Основной объект для создания счета
  */
 export interface InvoiceCreateRequest {
-	/** Данные о сумме платежа */
-	amount: Amount
-	/** Идентификатор субаккаунта */
-	gateway_id: string
-	/** Данные для формирования чека */
-	receipt?: Receipt
-	/** Информация о получателе платежа */
-	recipient?: Recipient
-	/** Сохранение платежного метода для автоплатежей */
-	save_payment_method?: boolean
-	/** Автоматический прием платежа */
-	capture?: boolean
-	/** IP-адрес пользователя */
-	client_ip?: string
-	/** Описание счета */
-	description?: string
-	/** Дополнительные метаданные */
-	metadata?: Record<string, string>
+	/**
+	 * Данные для проведения платежа по выставленному счету.
+	 */
+	payment_data: {
+		/** Данные о сумме платежа */
+		amount: Amount
+		/** Данные для формирования чека */
+		receipt?: Receipt
+		/** Информация о получателе платежа */
+		recipient?: Recipient
+		/** Сохранение платежного метода для автоплатежей */
+		save_payment_method?: boolean
+		/** Автоматический прием платежа */
+		capture?: boolean
+		/** IP-адрес пользователя */
+		client_ip?: string
+		/** Описание счета */
+		description?: string
+		/** Дополнительные метаданные */
+		metadata?: Record<string, string>
+	}
 	/** Корзина заказа */
 	cart: CartItem[]
 	/** Данные о способе доставки счета */

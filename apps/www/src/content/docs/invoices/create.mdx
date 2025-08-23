@@ -1,0 +1,89 @@
+---
+title: Создание счета
+description: Шаги для создания счета
+---
+
+В этом разделе мы рассмотрим, как создать счет для оплаты. Мы покажем, как подготовить данные для счета, вызвать метод сервиса и обработать ответ от API.
+
+<Steps>
+
+### Подготовка данных для создания счета
+
+Для создания счета необходимо подготовить объект InvoiceCreateRequest, который содержит все данные для счета. Основные поля включают сумму (amount), идентификатор субаккаунта (gateway_id), корзину (cart) и срок действия счета (expires_at).
+
+```typescript
+import type { InvoiceCreateRequest } from 'nestjs-yookassa'
+
+const invoiceData: InvoiceCreateRequest = {
+	amount: { value: '1000.00', currency: 'RUB' },
+	gateway_id: 'subaccount-id',
+	cart: [
+		{
+			description: 'Товар 1',
+			price: { value: '1000.00', currency: 'RUB' },
+			quantity: 1
+		}
+	],
+	expires_at: '2025-08-30T10:00:00.000Z'
+}
+```
+
+### Вызов метода для создания счета
+
+Используйте метод createInvoice сервиса для отправки запроса на создание счета и получения информации о нем.
+
+```typescript
+import { type InvoiceCreateRequest, YookassaService } from 'nestjs-yookassa'
+
+@Injectable()
+export class InvoiceService {
+  constructor(private readonly yookassaService: YookassaService) {}
+
+  async createInvoice() {
+    const invoiceData: InvoiceCreateRequest = {
+      amount: { value: '1000.00', currency: 'RUB' },
+      gateway_id: 'subaccount-id',
+      cart: [
+        {
+          description: 'Товар 1',
+          price: { value: '1000.00', currency: 'RUB' },
+          quantity: 1
+        }
+      ],
+      expires_at: '2025-08-30T10:00:00.000Z'
+    }
+
+    const invoice = await this.yookassaService.createInvoice(invoiceData)
+
+    return invoice
+  }
+}
+```
+
+### Обработка ответа от API
+
+Ответ содержит информацию о созданном счете, включая идентификатор, статус, корзину и дату истечения счета. Пример ответа:
+
+```json
+{
+	"id": "3f2d2280-0015-5000-b000-1c02972ec0ef",
+	"status": "pending",
+	"cart": [
+		{
+			"description": "Товар 1",
+			"price": { "value": "1000.00", "currency": "RUB" },
+			"quantity": 1
+		}
+	],
+	"delivery_method": {
+		"type": "self",
+		"url": "https://example.com/invoice/3f2d2280"
+	},
+	"created_at": "2025-08-23T10:00:00.000Z",
+	"expires_at": "2025-08-30T10:00:00.000Z",
+	"description": "Счет на оплату по заказу 123456",
+	"metadata": { "order_id": "123456" }
+}
+```
+
+</Steps>

@@ -18,6 +18,8 @@ __exportStar(require("./common.interface"), exports);
 __exportStar(require("./yookassa-options.interface"), exports);
 // export * from './receipt-details.interface'
 // export * from './receipt-request.interface'
+__exportStar(require("./invoice-details.interface"), exports);
+__exportStar(require("./invoice-request.interface"), exports);
 __exportStar(require("./confirmation.interface"), exports);
 __exportStar(require("./payment-details.interface"), exports);
 __exportStar(require("./payment-method.interface"), exports);

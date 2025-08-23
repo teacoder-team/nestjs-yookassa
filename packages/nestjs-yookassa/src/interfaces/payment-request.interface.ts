@@ -1,7 +1,18 @@
 import type { Amount } from './common.interface'
 import type { Confirmation } from './confirmation.interface'
 import type { PaymentMethod } from './payment-method.interface'
-import { TaxSystemCodesEnum, VatCodesEnum } from './receipt-details.interface'
+import type {
+	TaxSystemCodesEnum,
+	VatCodesEnum
+} from './receipt-details.interface'
+
+/**
+ * Данные о получателе платежа
+ */
+export interface Recipient {
+	/** Идентификатор получателя в платежной системе */
+	gateway_id: string
+}
 
 /**
  * Данные о пользователе (customer).
@@ -189,12 +200,7 @@ export interface PaymentCreateRequest {
 	 * Информация о получателе платежа.
 	 * Необязательное поле.
 	 */
-	recipient?: {
-		/**
-		 * Идентификатор получателя в платежной системе.
-		 */
-		gateway_id: string
-	}
+	recipient?: Recipient
 
 	/**
 	 * Одноразовый токен для проведения оплаты, сформированный с помощью Checkout.js или мобильного SDK

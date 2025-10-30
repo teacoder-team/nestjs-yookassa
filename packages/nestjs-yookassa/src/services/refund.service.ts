@@ -8,7 +8,7 @@ import {
 import { HttpService } from '@nestjs/axios'
 import { PaymentService } from './payment.service'
 import { firstValueFrom } from 'rxjs'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { YOOKASSA_API_URL } from '../yookassa.constants'
 
 @Injectable()
@@ -23,7 +23,7 @@ export class RefundService {
 	public async create(
 		refundData: RefundCreateRequest
 	): Promise<RefundDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const { amount } = await this.paymentService.getOne(

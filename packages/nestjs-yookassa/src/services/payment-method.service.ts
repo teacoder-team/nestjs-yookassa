@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
-import { v4 as uuidv4 } from 'uuid'
 import { YOOKASSA_API_URL } from '../yookassa.constants'
 import { YookassaOptions, YookassaOptionsSymbol } from '../interfaces'
 import {
 	CreatePaymentMethodRequest,
 	PaymentMethodDetails
 } from '../interfaces/payment-method.interfaces'
+import { randomUUID } from 'node:crypto'
 
 @Injectable()
 export class PaymentMethodService {
@@ -20,7 +20,7 @@ export class PaymentMethodService {
 	public async create(
 		data: CreatePaymentMethodRequest
 	): Promise<PaymentMethodDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const res = await firstValueFrom(

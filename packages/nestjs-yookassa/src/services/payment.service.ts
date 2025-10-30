@@ -7,8 +7,8 @@ import {
 } from '../interfaces'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
-import { v4 as uuidv4 } from 'uuid'
 import { YOOKASSA_API_URL } from '../yookassa.constants'
+import { randomUUID } from 'node:crypto'
 
 @Injectable()
 export class PaymentService {
@@ -21,7 +21,7 @@ export class PaymentService {
 	public async create(
 		paymentData: PaymentCreateRequest
 	): Promise<PaymentDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const response = await firstValueFrom(
@@ -103,7 +103,7 @@ export class PaymentService {
 	}
 
 	public async capture(paymentId: string): Promise<PaymentDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const { amount } = await this.getOne(paymentId)
@@ -133,7 +133,7 @@ export class PaymentService {
 	}
 
 	public async cancel(paymentId: string): Promise<PaymentDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const response = await firstValueFrom(

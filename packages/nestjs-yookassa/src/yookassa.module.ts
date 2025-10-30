@@ -8,7 +8,7 @@ import {
 import { YookassaService } from './yookassa.service'
 import { PaymentService } from './services/payment.service'
 import { RefundService } from './services/refund.service'
-import { InvoiceService } from './services'
+import { InvoiceService, PaymentMethodService } from './services'
 
 @Global()
 @Module({})
@@ -37,6 +37,7 @@ export class YookassaModule {
 					useValue: options
 				},
 				PaymentService,
+				PaymentMethodService,
 				InvoiceService,
 				RefundService,
 				YookassaService
@@ -75,6 +76,7 @@ export class YookassaModule {
 					inject: options.inject || []
 				},
 				PaymentService,
+				PaymentMethodService,
 				InvoiceService,
 				RefundService,
 				YookassaService

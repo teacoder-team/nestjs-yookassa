@@ -40,6 +40,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     useValue: options
                 },
                 payment_service_1.PaymentService,
+                services_1.PaymentMethodService,
                 services_1.InvoiceService,
                 refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
@@ -77,6 +78,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                     inject: options.inject || []
                 },
                 payment_service_1.PaymentService,
+                services_1.PaymentMethodService,
                 services_1.InvoiceService,
                 refund_service_1.RefundService,
                 yookassa_service_1.YookassaService

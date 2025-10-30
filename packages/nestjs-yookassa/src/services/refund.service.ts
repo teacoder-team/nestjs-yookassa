@@ -9,6 +9,7 @@ import { HttpService } from '@nestjs/axios'
 import { PaymentService } from './payment.service'
 import { firstValueFrom } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
+import { YOOKASSA_API_URL } from '../yookassa.constants'
 
 @Injectable()
 export class RefundService {
@@ -19,23 +20,6 @@ export class RefundService {
 		private readonly paymentService: PaymentService
 	) {}
 
-	/**
-	 * Создает возврат средств по указанному платежу.
-	 * Этот метод отправляет запрос на создание возврата с данными из `refundData`.
-	 *
-	 * @param {RefundCreateRequest} refundData - Данные для создания возврата.
-	 * @returns {Promise<RefundDetails>} Ответ от API с деталями созданного возврата.
-	 *
-	 * @example
-	 * ```ts
-	 * const refundData: RefundCreateRequest = {
-	 *   payment_id: '123456',
-	 *   description: 'Возврат за отмененный заказ',
-	 * };
-	 * const refundResponse = await this.yookassaService.createRefund(refundData);
-	 * console.log(refundResponse);
-	 * ```
-	 */
 	public async create(
 		refundData: RefundCreateRequest
 	): Promise<RefundDetails> {
@@ -73,21 +57,6 @@ export class RefundService {
 		}
 	}
 
-	/**
-	 * Получает список всех возвратов.
-	 * Возвращает массив объектов с информацией о возвратах.
-	 *
-	 * @param {number} limit - Максимальное количество платежей на страницу.
-	 * @param {string} from - Начальная дата для фильтрации.
-	 * @param {string} to - Конечная дата для фильтрации.
-	 * @returns {Promise<RefundDetails[]>} Массив объектов с деталями возвратов.
-	 *
-	 * @example
-	 * ```ts
-	 * const refunds = await this.yookassaService.getRefunds(10, '2025-01-01', '2025-01-17');
-	 * console.log(refunds);
-	 * ```
-	 */
 	public async getAll(
 		limit: number = 10,
 		from: string = '',
@@ -120,21 +89,6 @@ export class RefundService {
 		}
 	}
 
-	/**
-	 * Получает детали возврата по его ID.
-	 * Этот метод возвращает подробную информацию о возврате, включая его статус и сумму.
-	 *
-	 * @param {string} refundId - Уникальный идентификатор возврата.
-	 * @returns {Promise<RefundDetails>} Объект с деталями возврата.
-	 *
-	 * @example
-	 * ```ts
-	 * const refundId = 'refund-id';
-	 * const refundDetails = await this.yookassaService.getRefundDetails(refundId);
-	 * console.log(refundDetails);
-	 * ```
-	 * @throws {NotFoundException} Если возврат с указанным ID не найден.
-	 */
 	public async getOne(refundId: string): Promise<RefundDetails> {
 		try {
 			const response = await firstValueFrom(

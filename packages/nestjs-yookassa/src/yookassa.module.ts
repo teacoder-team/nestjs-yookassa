@@ -4,10 +4,11 @@ import {
 	type YookassaAsyncOptions,
 	type YookassaOptions,
 	YookassaOptionsSymbol
-} from './interfaces/yookassa-options.interface'
+} from './interfaces'
 import { YookassaService } from './yookassa.service'
 import { PaymentService } from './services/payment.service'
 import { RefundService } from './services/refund.service'
+import { InvoiceService } from './services'
 
 @Global()
 @Module({})
@@ -36,6 +37,7 @@ export class YookassaModule {
 					useValue: options
 				},
 				PaymentService,
+				InvoiceService,
 				RefundService,
 				YookassaService
 			],
@@ -73,6 +75,7 @@ export class YookassaModule {
 					inject: options.inject || []
 				},
 				PaymentService,
+				InvoiceService,
 				RefundService,
 				YookassaService
 			],

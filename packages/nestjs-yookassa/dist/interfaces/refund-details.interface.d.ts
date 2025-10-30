@@ -17,7 +17,7 @@ export declare enum RefundStatusEnum {
 /**
  * Детали отмены платежа.
  */
-export interface CancellationDetails {
+interface CancellationDetails {
     /**
      * Сторона, инициировавшая отмену.
      */
@@ -30,7 +30,7 @@ export interface CancellationDetails {
 /**
  * Источник, с которого был произведен возврат.
  */
-export interface Source {
+interface Source {
     /**
      * Идентификатор счета.
      */
@@ -43,7 +43,7 @@ export interface Source {
 /**
  * Сумма, удержанная в качестве комиссии платформы.
  */
-export interface PlatformFeeAmount {
+interface PlatformFeeAmount {
     /**
      * Значение комиссии.
      */
@@ -56,7 +56,7 @@ export interface PlatformFeeAmount {
 /**
  * Сделка, для которой был выполнен возврат.
  */
-export interface Deal {
+interface Deal {
     /**
      * Идентификатор сделки.
      */
@@ -129,3 +129,4 @@ export interface RefundDetails {
      */
     refund_method?: RefundMethod;
 }
+export {};

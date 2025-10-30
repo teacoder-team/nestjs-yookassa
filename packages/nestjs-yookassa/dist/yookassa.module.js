@@ -10,8 +10,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaModule = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
-const yookassa_options_interface_1 = require("./interfaces/yookassa-options.interface");
+const interfaces_1 = require("./interfaces");
 const yookassa_service_1 = require("./yookassa.service");
+const payment_service_1 = require("./services/payment.service");
+const refund_service_1 = require("./services/refund.service");
+const services_1 = require("./services");
 let YookassaModule = YookassaModule_1 = class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.
@@ -33,9 +36,12 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
             imports: [axios_1.HttpModule],
             providers: [
                 {
-                    provide: yookassa_options_interface_1.YookassaOptionsSymbol,
+                    provide: interfaces_1.YookassaOptionsSymbol,
                     useValue: options
                 },
+                payment_service_1.PaymentService,
+                services_1.InvoiceService,
+                refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],
@@ -66,10 +72,13 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
             imports: [axios_1.HttpModule, ...(options.imports || [])],
             providers: [
                 {
-                    provide: yookassa_options_interface_1.YookassaOptionsSymbol,
+                    provide: interfaces_1.YookassaOptionsSymbol,
                     useFactory: options.useFactory,
                     inject: options.inject || []
                 },
+                payment_service_1.PaymentService,
+                services_1.InvoiceService,
+                refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],

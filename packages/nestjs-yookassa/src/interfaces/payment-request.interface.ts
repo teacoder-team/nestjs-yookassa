@@ -1,5 +1,5 @@
 import type { Amount } from './common.interface'
-import type { Confirmation } from './confirmation.interface'
+import type { ConfirmationRequest } from './confirmation.interface'
 import type { PaymentMethod } from './payment-method.interface'
 import type {
 	TaxSystemCodesEnum,

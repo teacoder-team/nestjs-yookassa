@@ -13,8 +13,9 @@ exports.YookassaService = void 0;
 const common_1 = require("@nestjs/common");
 const services_1 = require("./services");
 let YookassaService = class YookassaService {
-    constructor(paymentService, invoiceService, refundService) {
+    constructor(paymentService, paymentMethodService, invoiceService, refundService) {
         this.paymentService = paymentService;
+        this.paymentMethodService = paymentMethodService;
         this.invoiceService = invoiceService;
         this.refundService = refundService;
     }
@@ -126,6 +127,9 @@ let YookassaService = class YookassaService {
     async cancelPayment(paymentId) {
         return await this.paymentService.cancel(paymentId);
     }
+    async createPaymentMethod(data) {
+        return this.paymentMethodService.create(data);
+    }
     /**
      * Создает счет.
      * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.
@@ -229,6 +233,7 @@ exports.YookassaService = YookassaService;
 exports.YookassaService = YookassaService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [services_1.PaymentService,
+        services_1.PaymentMethodService,
         services_1.InvoiceService,
         services_1.RefundService])
 ], YookassaService);

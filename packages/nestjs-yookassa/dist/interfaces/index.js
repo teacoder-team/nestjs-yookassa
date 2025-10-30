@@ -24,5 +24,6 @@ __exportStar(require("./confirmation.interface"), exports);
 __exportStar(require("./payment-details.interface"), exports);
 __exportStar(require("./payment-method.interface"), exports);
 __exportStar(require("./payment-request.interface"), exports);
+__exportStar(require("./payment-method.interfaces"), exports);
 __exportStar(require("./refund-details.interface"), exports);
 __exportStar(require("./refund-request.interface"), exports);

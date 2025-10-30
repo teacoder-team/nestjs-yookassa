@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const interfaces_1 = require("../interfaces");
 const axios_1 = require("@nestjs/axios");
 const rxjs_1 = require("rxjs");
-const uuid_1 = require("uuid");
 const yookassa_constants_1 = require("../yookassa.constants");
+const node_crypto_1 = require("node:crypto");
 let PaymentService = class PaymentService {
     constructor(options, httpService) {
         this.options = options;
@@ -26,7 +26,7 @@ let PaymentService = class PaymentService {
     }
     async create(paymentData) {
         var _a, _b;
-        const idempotenceKey = (0, uuid_1.v4)();
+        const idempotenceKey = (0, node_crypto_1.randomUUID)();
         try {
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${yookassa_constants_1.YOOKASSA_API_URL}payments`, paymentData, {
                 headers: {
@@ -76,7 +76,7 @@ let PaymentService = class PaymentService {
         }
     }
     async capture(paymentId) {
-        const idempotenceKey = (0, uuid_1.v4)();
+        const idempotenceKey = (0, node_crypto_1.randomUUID)();
         try {
             const { amount } = await this.getOne(paymentId);
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${yookassa_constants_1.YOOKASSA_API_URL}payments/${paymentId}/capture`, { amount }, {
@@ -94,7 +94,7 @@ let PaymentService = class PaymentService {
         }
     }
     async cancel(paymentId) {
-        const idempotenceKey = (0, uuid_1.v4)();
+        const idempotenceKey = (0, node_crypto_1.randomUUID)();
         try {
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${yookassa_constants_1.YOOKASSA_API_URL}payments/${paymentId}/cancel`, {}, {
                 headers: {

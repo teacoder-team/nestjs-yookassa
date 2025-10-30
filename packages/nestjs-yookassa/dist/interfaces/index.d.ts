@@ -6,5 +6,6 @@ export * from './confirmation.interface';
 export * from './payment-details.interface';
 export * from './payment-method.interface';
 export * from './payment-request.interface';
+export * from './payment-method.interfaces';
 export * from './refund-details.interface';
 export * from './refund-request.interface';

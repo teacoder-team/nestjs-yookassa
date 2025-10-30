@@ -1,10 +1,11 @@
-import { InvoiceService, PaymentService, RefundService } from './services';
-import { InvoiceCreateRequest, InvoiceDetails, PaymentCreateRequest, RefundCreateRequest } from './interfaces';
+import { InvoiceService, PaymentService, PaymentMethodService, RefundService } from './services';
+import { CreatePaymentMethodRequest, InvoiceCreateRequest, InvoiceDetails, PaymentCreateRequest, PaymentMethodDetails, RefundCreateRequest } from './interfaces';
 export declare class YookassaService {
     private readonly paymentService;
+    private readonly paymentMethodService;
     private readonly invoiceService;
     private readonly refundService;
-    constructor(paymentService: PaymentService, invoiceService: InvoiceService, refundService: RefundService);
+    constructor(paymentService: PaymentService, paymentMethodService: PaymentMethodService, invoiceService: InvoiceService, refundService: RefundService);
     /**
      * Создает платеж через YooKassa.
      * Этот метод отправляет запрос на создание нового платежа с данными из `paymentData`.
@@ -103,6 +104,7 @@ export declare class YookassaService {
      * ```
      */
     cancelPayment(paymentId: string): Promise<import("./interfaces").PaymentDetails>;
+    createPaymentMethod(data: CreatePaymentMethodRequest): Promise<PaymentMethodDetails>;
     /**
      * Создает счет.
      * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.

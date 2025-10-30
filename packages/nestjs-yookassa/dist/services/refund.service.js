@@ -18,7 +18,7 @@ const interfaces_1 = require("../interfaces");
 const axios_1 = require("@nestjs/axios");
 const payment_service_1 = require("./payment.service");
 const rxjs_1 = require("rxjs");
-const uuid_1 = require("uuid");
+const node_crypto_1 = require("node:crypto");
 const yookassa_constants_1 = require("../yookassa.constants");
 let RefundService = class RefundService {
     constructor(options, httpService, paymentService) {
@@ -28,7 +28,7 @@ let RefundService = class RefundService {
     }
     async create(refundData) {
         var _a, _b;
-        const idempotenceKey = (0, uuid_1.v4)();
+        const idempotenceKey = (0, node_crypto_1.randomUUID)();
         try {
             const { amount } = await this.paymentService.getOne(refundData.payment_id);
             const response = await (0, rxjs_1.firstValueFrom)(this.httpService.post(`${yookassa_constants_1.YOOKASSA_API_URL}refunds`, {

@@ -15,5 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./invoice.service"), exports);
+__exportStar(require("./payment-method.service"), exports);
 __exportStar(require("./payment.service"), exports);
 __exportStar(require("./refund.service"), exports);

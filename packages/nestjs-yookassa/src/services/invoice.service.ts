@@ -7,8 +7,8 @@ import {
 } from '../interfaces'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
-import { v4 as uuidv4 } from 'uuid'
 import { YOOKASSA_API_URL } from '../yookassa.constants'
+import { randomUUID } from 'node:crypto'
 
 @Injectable()
 export class InvoiceService {
@@ -21,7 +21,7 @@ export class InvoiceService {
 	public async create(
 		invoiceData: InvoiceCreateRequest
 	): Promise<InvoiceDetails> {
-		const idempotenceKey = uuidv4()
+		const idempotenceKey = randomUUID()
 
 		try {
 			const response = await firstValueFrom(

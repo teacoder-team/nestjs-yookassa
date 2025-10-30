@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common'
-import { InvoiceService, PaymentService, RefundService } from './services'
 import {
+	InvoiceService,
+	PaymentService,
+	PaymentMethodService,
+	RefundService
+} from './services'
+import {
+	CreatePaymentMethodRequest,
 	InvoiceCreateRequest,
 	InvoiceDetails,
 	PaymentCreateRequest,
+	PaymentMethodDetails,
 	RefundCreateRequest
 } from './interfaces'
 
@@ -11,6 +18,7 @@ import {
 export class YookassaService {
 	public constructor(
 		private readonly paymentService: PaymentService,
+		private readonly paymentMethodService: PaymentMethodService,
 		private readonly invoiceService: InvoiceService,
 		private readonly refundService: RefundService
 	) {}
@@ -126,6 +134,12 @@ export class YookassaService {
 	 */
 	public async cancelPayment(paymentId: string) {
 		return await this.paymentService.cancel(paymentId)
+	}
+
+	public async createPaymentMethod(
+		data: CreatePaymentMethodRequest
+	): Promise<PaymentMethodDetails> {
+		return this.paymentMethodService.create(data)
 	}
 
 	/**

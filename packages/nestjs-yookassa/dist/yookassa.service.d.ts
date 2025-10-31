@@ -105,6 +105,7 @@ export declare class YookassaService {
      */
     cancelPayment(paymentId: string): Promise<import("./interfaces").PaymentDetails>;
     createPaymentMethod(data: CreatePaymentMethodRequest): Promise<PaymentMethodDetails>;
+    getPaymentMethod(id: string): Promise<PaymentMethodDetails>;
     /**
      * Создает счет.
      * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.

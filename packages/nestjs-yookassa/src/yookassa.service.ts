@@ -142,6 +142,10 @@ export class YookassaService {
 		return this.paymentMethodService.create(data)
 	}
 
+	public async getPaymentMethod(id: string): Promise<PaymentMethodDetails> {
+		return this.paymentMethodService.get(id)
+	}
+
 	/**
 	 * Создает счет.
 	 * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.

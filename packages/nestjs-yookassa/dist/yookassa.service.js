@@ -130,6 +130,9 @@ let YookassaService = class YookassaService {
     async createPaymentMethod(data) {
         return this.paymentMethodService.create(data);
     }
+    async getPaymentMethod(id) {
+        return this.paymentMethodService.get(id);
+    }
     /**
      * Создает счет.
      * Этот метод отправляет запрос на создание нового счета с данными из `invoiceData`.

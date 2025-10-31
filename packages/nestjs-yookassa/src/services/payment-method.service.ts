@@ -11,11 +11,34 @@ import { randomUUID } from 'node:crypto'
 
 @Injectable()
 export class PaymentMethodService {
-	constructor(
+	public constructor(
 		@Inject(YookassaOptionsSymbol)
 		private readonly options: YookassaOptions,
 		private readonly httpService: HttpService
 	) {}
+
+	public async get(id: string): Promise<PaymentMethodDetails> {
+		try {
+			const res = await firstValueFrom(
+				this.httpService.get<PaymentMethodDetails>(
+					`${YOOKASSA_API_URL}/payment_methods/${id}`,
+					{
+						headers: {
+							Authorization: this.getAuthHeader(),
+							'Content-Type': 'application/json'
+						}
+					}
+				)
+			)
+			return res.data
+		} catch (err) {
+			throw new HttpException(
+				err.response?.data?.description ||
+					'Ошибка получения способа оплаты',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+	}
 
 	public async create(
 		data: CreatePaymentMethodRequest

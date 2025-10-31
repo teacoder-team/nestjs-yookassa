@@ -24,6 +24,22 @@ let PaymentMethodService = class PaymentMethodService {
         this.options = options;
         this.httpService = httpService;
     }
+    async get(id) {
+        var _a, _b;
+        try {
+            const res = await (0, rxjs_1.firstValueFrom)(this.httpService.get(`${yookassa_constants_1.YOOKASSA_API_URL}/payment_methods/${id}`, {
+                headers: {
+                    Authorization: this.getAuthHeader(),
+                    'Content-Type': 'application/json'
+                }
+            }));
+            return res.data;
+        }
+        catch (err) {
+            throw new common_1.HttpException(((_b = (_a = err.response) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.description) ||
+                'Ошибка получения способа оплаты', common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
     async create(data) {
         var _a, _b;
         const idempotenceKey = (0, node_crypto_1.randomUUID)();

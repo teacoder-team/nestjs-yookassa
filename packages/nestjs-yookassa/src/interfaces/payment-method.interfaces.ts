@@ -1,27 +1,51 @@
 import { PaymentMethodsEnum } from './payment-method.interface'
 
+export interface PaymentMethodCardProduct {
+	code: string
+	name?: string
+}
+
+interface PaymentMethodCard {
+	first6?: string
+	last4: string
+	expiry_year: string
+	expiry_month: string
+	card_type: string
+	card_product?: PaymentMethodCardProduct
+	issuer_country?: string
+	issuer_name?: string
+	source?: 'mir_pay' | 'apple_pay' | 'google_pay' | string
+}
+
+export interface PaymentMethodHolder {
+	account_id: string
+	gateway_id?: string
+}
+
+export interface PaymentMethodConfirmation {
+	type: 'redirect'
+	confirmation_url: string
+	enforce?: boolean
+	return_url?: string
+}
+
+export type PaymentMethodStatus = 'pending' | 'active' | 'inactive'
+
+export interface PaymentMethodDetails {
+	id: string
+	type: 'bank_card'
+	saved: boolean
+	status: PaymentMethodStatus
+	holder: PaymentMethodHolder
+	card?: PaymentMethodCard
+	title?: string
+	confirmation?: PaymentMethodConfirmation
+}
+
 export interface CreatePaymentMethodRequest {
 	type: PaymentMethodsEnum
 	confirmation: {
 		type: 'redirect'
 		return_url: string
 	}
-}
-
-export interface PaymentMethodDetails {
-	id: string
-	type: string
-	saved: boolean
-	status: string
-	confirmation?: {
-		type: string
-		confirmation_url: string
-	}
-	card?: {
-		first6: string
-		last4: string
-		expiry_month: string
-		expiry_year: string
-	}
-	metadata?: Record<string, any>
 }

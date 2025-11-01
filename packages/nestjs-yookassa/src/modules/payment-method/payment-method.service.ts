@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import type {
 	CreatePaymentMethodRequest,
 	CreatePaymentMethodResponse,
-	PaymentMethod
+	PaymentMethodDetails
 } from './interfaces'
 import { YookassaHttpClient } from '../../core/http/yookassa.http-client'
 
@@ -57,7 +57,7 @@ export class PaymentMethodService {
 	 * Получает сохраненный способ оплаты по ID.
 	 *
 	 * @param {string} id — Идентификатор способа оплаты.
-	 * @returns {Promise<PaymentMethod>} Объект с деталями метода оплаты.
+	 * @returns {Promise<PaymentMethodDetails>} Объект с деталями метода оплаты.
 	 *
 	 * @example
 	 * ```ts
@@ -67,7 +67,7 @@ export class PaymentMethodService {
 	 *
 	 * @see https://yookassa.ru/developers/api#get_payment_method
 	 */
-	public async getById(id: string): Promise<PaymentMethod> {
+	public async getById(id: string): Promise<PaymentMethodDetails> {
 		return this.http.get(`/payment_methods/${id}`)
 	}
 }

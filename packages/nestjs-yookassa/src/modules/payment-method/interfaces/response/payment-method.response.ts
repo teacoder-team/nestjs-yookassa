@@ -1,6 +1,6 @@
 import type { PaymentMethodStatusEnum } from '../../enums'
 
-export interface PaymentMethodCardProduct {
+interface PaymentMethodCardProduct {
 	code: string
 	name?: string
 }
@@ -17,19 +17,19 @@ interface PaymentMethodCard {
 	source?: 'mir_pay' | 'apple_pay' | 'google_pay' | string
 }
 
-export interface PaymentMethodHolder {
+interface PaymentMethodHolder {
 	account_id: string
 	gateway_id?: string
 }
 
-export interface PaymentMethodConfirmation {
+interface PaymentMethodConfirmation {
 	type: 'redirect'
 	confirmation_url: string
 	enforce?: boolean
 	return_url?: string
 }
 
-export interface PaymentMethod {
+export interface PaymentMethodDetails {
 	id: string
 	type: 'bank_card'
 	saved: boolean

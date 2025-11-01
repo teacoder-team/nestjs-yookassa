@@ -8,8 +8,8 @@ import { PaymentService } from './modules/payment/payment.service'
 export class YookassaService {
 	public constructor(
 		public payments: PaymentService,
-		public paymentMethodService: PaymentMethodService,
-		public invoiceService: InvoiceService,
-		public refundService: RefundService
+		public paymentMethods: PaymentMethodService,
+		public invoices: InvoiceService,
+		public refunds: RefundService
 	) {}
 }

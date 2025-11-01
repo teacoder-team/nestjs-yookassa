@@ -1,5 +1,6 @@
 import type { Amount } from '../../../../common/interfaces';
 import type { TaxSystemCodesEnum, VatCodesEnum } from '../../../receipt/enums';
+import type { Customer } from '../../../receipt/interfaces/requests';
 import type { PaymentMethod } from '../payment-method.interface';
 import type { ConfirmationRequest } from './confirmation.request';
 /**
@@ -8,19 +9,6 @@ import type { ConfirmationRequest } from './confirmation.request';
 export interface Recipient {
     /** Идентификатор получателя в платежной системе */
     gateway_id: string;
-}
-/**
- * Данные о пользователе (customer).
- */
-export interface Customer {
-    /** ФИО или название организации (если ИП/юрлицо). */
-    full_name?: string;
-    /** ИНН (10 или 12 цифр). */
-    inn?: string;
-    /** Email для отправки чека (обязателен, если нет phone). */
-    email?: string;
-    /** Телефон для отправки чека (в формате E.164, напр. 79001234567). */
-    phone?: string;
 }
 /**
  * Дробное количество маркированного товара (mark_quantity).
@@ -34,7 +22,7 @@ export interface MarkQuantity {
 /**
  * Товар/услуга в чеке.
  */
-export interface ReceiptItem {
+interface ReceiptItem {
     /** Название товара (1–128 символов). */
     description: string;
     /** Цена единицы товара. */
@@ -209,3 +197,4 @@ export interface CreatePaymentRequest {
      */
     merchant_customer_id?: string;
 }
+export {};

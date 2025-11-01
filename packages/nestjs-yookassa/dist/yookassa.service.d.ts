@@ -4,8 +4,8 @@ import { PaymentMethodService } from './modules/payment-method/payment-method.se
 import { PaymentService } from './modules/payment/payment.service';
 export declare class YookassaService {
     payments: PaymentService;
-    paymentMethodService: PaymentMethodService;
-    invoiceService: InvoiceService;
-    refundService: RefundService;
-    constructor(payments: PaymentService, paymentMethodService: PaymentMethodService, invoiceService: InvoiceService, refundService: RefundService);
+    paymentMethods: PaymentMethodService;
+    invoices: InvoiceService;
+    refunds: RefundService;
+    constructor(payments: PaymentService, paymentMethods: PaymentMethodService, invoices: InvoiceService, refunds: RefundService);
 }

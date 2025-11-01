@@ -16,11 +16,11 @@ const invoice_service_1 = require("./modules/invoice/invoice.service");
 const payment_method_service_1 = require("./modules/payment-method/payment-method.service");
 const payment_service_1 = require("./modules/payment/payment.service");
 let YookassaService = class YookassaService {
-    constructor(payments, paymentMethodService, invoiceService, refundService) {
+    constructor(payments, paymentMethods, invoices, refunds) {
         this.payments = payments;
-        this.paymentMethodService = paymentMethodService;
-        this.invoiceService = invoiceService;
-        this.refundService = refundService;
+        this.paymentMethods = paymentMethods;
+        this.invoices = invoices;
+        this.refunds = refunds;
     }
 };
 exports.YookassaService = YookassaService;

@@ -1,4 +1,4 @@
-import { PaymentMethodsEnum } from '../../../payment/enums';
+import type { PaymentMethodsEnum } from '../../../payment/enums';
 export interface CreatePaymentMethodRequest {
     type: PaymentMethodsEnum;
     confirmation: {

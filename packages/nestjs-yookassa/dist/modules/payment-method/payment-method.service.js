@@ -60,7 +60,7 @@ let PaymentMethodService = class PaymentMethodService {
      * Получает сохраненный способ оплаты по ID.
      *
      * @param {string} id — Идентификатор способа оплаты.
-     * @returns {Promise<PaymentMethod>} Объект с деталями метода оплаты.
+     * @returns {Promise<PaymentMethodDetails>} Объект с деталями метода оплаты.
      *
      * @example
      * ```ts

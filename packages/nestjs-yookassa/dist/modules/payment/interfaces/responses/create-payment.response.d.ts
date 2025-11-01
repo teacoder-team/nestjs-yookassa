@@ -33,7 +33,7 @@ export declare enum TransferStatusEnum {
 /**
  * Операция распределения платежа — перечисление денег магазину.
  */
-export interface Settlement {
+interface Settlement {
     /**
      * Тип операции. Всегда "payout".
      */

@@ -1,4 +1,4 @@
-import type { CreatePaymentMethodRequest, CreatePaymentMethodResponse, PaymentMethod } from './interfaces';
+import type { CreatePaymentMethodRequest, CreatePaymentMethodResponse, PaymentMethodDetails } from './interfaces';
 import { YookassaHttpClient } from '../../core/http/yookassa.http-client';
 export declare class PaymentMethodService {
     private readonly http;
@@ -45,7 +45,7 @@ export declare class PaymentMethodService {
      * Получает сохраненный способ оплаты по ID.
      *
      * @param {string} id — Идентификатор способа оплаты.
-     * @returns {Promise<PaymentMethod>} Объект с деталями метода оплаты.
+     * @returns {Promise<PaymentMethodDetails>} Объект с деталями метода оплаты.
      *
      * @example
      * ```ts
@@ -55,5 +55,5 @@ export declare class PaymentMethodService {
      *
      * @see https://yookassa.ru/developers/api#get_payment_method
      */
-    getById(id: string): Promise<PaymentMethod>;
+    getById(id: string): Promise<PaymentMethodDetails>;
 }

@@ -1,3 +1,3 @@
-import type { PaymentMethod } from './payment-method.response'
+import type { PaymentMethodDetails } from './payment-method.response'
 
-export interface CreatePaymentMethodResponse extends PaymentMethod {}
+export interface CreatePaymentMethodResponse extends PaymentMethodDetails {}

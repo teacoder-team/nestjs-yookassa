@@ -10,16 +10,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaModule = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
-const interfaces_1 = require("./interfaces");
 const yookassa_service_1 = require("./yookassa.service");
-const payment_service_1 = require("./services/payment.service");
-const refund_service_1 = require("./services/refund.service");
-const services_1 = require("./services");
+const payment_module_1 = require("./modules/payment/payment.module");
+const refund_module_1 = require("./modules/refund/refund.module");
+const yookassa_http_client_1 = require("./core/http/yookassa.http-client");
+const interfaces_1 = require("./common/interfaces");
+const invoice_module_1 = require("./modules/invoice/invoice.module");
+const payment_method_module_1 = require("./modules/payment-method/payment-method.module");
 let YookassaModule = YookassaModule_1 = class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.
      * Этот метод используется для конфигурации модуля с заранее заданными параметрами.
-     * @param {YookassaOptions} options - Настройки для конфигурации YooKassa.
+     * @param {YookassaModuleOptions} options - Настройки для конфигурации YooKassa.
      * @returns {DynamicModule} Возвращает динамический модуль с необходимыми провайдерами и импортами.
      *
      * @example
@@ -33,16 +35,20 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
     static forRoot(options) {
         return {
             module: YookassaModule_1,
-            imports: [axios_1.HttpModule],
+            imports: [
+                axios_1.HttpModule,
+                payment_module_1.PaymentModule,
+                refund_module_1.RefundModule,
+                invoice_module_1.InvoiceModule,
+                payment_method_module_1.PaymentMethodModule
+            ],
             providers: [
+                { provide: interfaces_1.YookassaOptionsSymbol, useValue: options },
                 {
-                    provide: interfaces_1.YookassaOptionsSymbol,
-                    useValue: options
+                    provide: yookassa_http_client_1.YookassaHttpClient,
+                    useFactory: (cfg, http) => new yookassa_http_client_1.YookassaHttpClient(cfg, http),
+                    inject: [interfaces_1.YookassaOptionsSymbol, axios_1.HttpService]
                 },
-                payment_service_1.PaymentService,
-                services_1.PaymentMethodService,
-                services_1.InvoiceService,
-                refund_service_1.RefundService,
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],
@@ -52,7 +58,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
     /**
      * Метод для регистрации модуля с асинхронной конфигурацией.
      * Этот метод используется для конфигурации модуля с параметрами, которые будут переданы через фабричную функцию.
-     * @param {YookassaAsyncOptions} options - Асинхронные параметры для конфигурации YooKassa.
+     * @param {YookassaModuleAsyncOptions} options - Асинхронные параметры для конфигурации YooKassa.
      * @returns {DynamicModule} Возвращает динамический модуль с необходимыми провайдерами и импортами.
      *
      * @example
@@ -70,17 +76,25 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
     static forRootAsync(options) {
         return {
             module: YookassaModule_1,
-            imports: [axios_1.HttpModule, ...(options.imports || [])],
+            imports: [
+                axios_1.HttpModule,
+                ...(options.imports || []),
+                payment_module_1.PaymentModule,
+                refund_module_1.RefundModule,
+                invoice_module_1.InvoiceModule,
+                payment_method_module_1.PaymentMethodModule
+            ],
             providers: [
                 {
                     provide: interfaces_1.YookassaOptionsSymbol,
                     useFactory: options.useFactory,
                     inject: options.inject || []
                 },
-                payment_service_1.PaymentService,
-                services_1.PaymentMethodService,
-                services_1.InvoiceService,
-                refund_service_1.RefundService,
+                {
+                    provide: yookassa_http_client_1.YookassaHttpClient,
+                    useFactory: (cfg, http) => new yookassa_http_client_1.YookassaHttpClient(cfg, http),
+                    inject: [interfaces_1.YookassaOptionsSymbol, axios_1.HttpService]
+                },
                 yookassa_service_1.YookassaService
             ],
             exports: [yookassa_service_1.YookassaService],

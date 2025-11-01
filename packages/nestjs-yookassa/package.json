@@ -19,7 +19,11 @@
 	"contributors": [
 		{
 			"name": "Vadim Nechaev",
-			"email": "help@teacoder.ru"
+			"email": "admin@teacoder.ru"
+		},
+		{
+			"name": "Roman Tatarinov",
+			"url": "https://github.com/rtatarinov"
 		}
 	],
 	"main": "./dist/index.js",

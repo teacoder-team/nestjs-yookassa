@@ -10,9 +10,7 @@
 
 Если у вас возникли вопросы или проблемы, не стесняйтесь обращаться к автору или создавать issues в репозитории.
 
-- Автор: [TeaCoder](https://teacoder.ru)
-- Контрибьюторы:
-  - Vadim Nechaev (help@teacoder.ru)
+- Автор: [TeaCoder](https://github.com/TeaCoder52)
 
 ## Лицензия
 

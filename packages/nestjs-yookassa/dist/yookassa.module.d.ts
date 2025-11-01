@@ -1,10 +1,10 @@
 import { type DynamicModule } from '@nestjs/common';
-import { type YookassaAsyncOptions, type YookassaOptions } from './interfaces';
+import { type YookassaModuleAsyncOptions, type YookassaModuleOptions } from './common/interfaces';
 export declare class YookassaModule {
     /**
      * Метод для регистрации модуля с синхронными параметрами.
      * Этот метод используется для конфигурации модуля с заранее заданными параметрами.
-     * @param {YookassaOptions} options - Настройки для конфигурации YooKassa.
+     * @param {YookassaModuleOptions} options - Настройки для конфигурации YooKassa.
      * @returns {DynamicModule} Возвращает динамический модуль с необходимыми провайдерами и импортами.
      *
      * @example
@@ -15,11 +15,11 @@ export declare class YookassaModule {
      * });
      * ```
      */
-    static forRoot(options: YookassaOptions): DynamicModule;
+    static forRoot(options: YookassaModuleOptions): DynamicModule;
     /**
      * Метод для регистрации модуля с асинхронной конфигурацией.
      * Этот метод используется для конфигурации модуля с параметрами, которые будут переданы через фабричную функцию.
-     * @param {YookassaAsyncOptions} options - Асинхронные параметры для конфигурации YooKassa.
+     * @param {YookassaModuleAsyncOptions} options - Асинхронные параметры для конфигурации YooKassa.
      * @returns {DynamicModule} Возвращает динамический модуль с необходимыми провайдерами и импортами.
      *
      * @example
@@ -34,5 +34,5 @@ export declare class YookassaModule {
      * });
      * ```
      */
-    static forRootAsync(options: YookassaAsyncOptions): DynamicModule;
+    static forRootAsync(options: YookassaModuleAsyncOptions): DynamicModule;
 }

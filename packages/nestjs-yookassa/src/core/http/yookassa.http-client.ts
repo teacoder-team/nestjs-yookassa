@@ -26,11 +26,15 @@ export class YookassaHttpClient {
 			password: this.config.apiKey
 		}
 		client.defaults.headers.common['Content-Type'] = 'application/json'
-		client.defaults.headers.common['Idempotence-Key'] = randomUUID()
 	}
 
 	public async request<T = any>(options: AxiosRequestConfig): Promise<T> {
 		try {
+			options.headers = {
+				...options.headers,
+				'Idempotence-Key': randomUUID()
+			}
+
 			const $res = this.httpService.request(options)
 			const res = await firstValueFrom($res)
 

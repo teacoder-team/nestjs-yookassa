@@ -32,11 +32,11 @@ let YookassaHttpClient = class YookassaHttpClient {
             password: this.config.apiKey
         };
         client.defaults.headers.common['Content-Type'] = 'application/json';
-        client.defaults.headers.common['Idempotence-Key'] = (0, crypto_1.randomUUID)();
     }
     async request(options) {
         var _a, _b, _c, _d, _e;
         try {
+            options.headers = Object.assign(Object.assign({}, options.headers), { 'Idempotence-Key': (0, crypto_1.randomUUID)() });
             const $res = this.httpService.request(options);
             const res = await (0, rxjs_1.firstValueFrom)($res);
             return res.data;

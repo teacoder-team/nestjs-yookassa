@@ -4,12 +4,13 @@ import type { AxiosRequestConfig } from 'axios'
 import { YookassaError } from './yookassa.error'
 import { YOOKASSA_API_URL } from '../config/yookassa.constants'
 import { randomUUID } from 'crypto'
-import { Inject } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import {
 	type YookassaModuleOptions,
 	YookassaOptionsSymbol
 } from '../../common/interfaces'
 
+@Injectable()
 export class YookassaHttpClient {
 	public constructor(
 		@Inject(YookassaOptionsSymbol)

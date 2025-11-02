@@ -51,7 +51,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                 },
                 yookassa_service_1.YookassaService
             ],
-            exports: [yookassa_service_1.YookassaService],
+            exports: [yookassa_service_1.YookassaService, yookassa_http_client_1.YookassaHttpClient],
             global: true
         };
     }
@@ -97,7 +97,7 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                 },
                 yookassa_service_1.YookassaService
             ],
-            exports: [yookassa_service_1.YookassaService],
+            exports: [yookassa_service_1.YookassaService, yookassa_http_client_1.YookassaHttpClient],
             global: true
         };
     }

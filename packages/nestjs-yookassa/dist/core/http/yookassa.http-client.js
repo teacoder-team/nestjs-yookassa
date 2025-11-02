@@ -54,6 +54,7 @@ let YookassaHttpClient = class YookassaHttpClient {
 };
 exports.YookassaHttpClient = YookassaHttpClient;
 exports.YookassaHttpClient = YookassaHttpClient = __decorate([
+    (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(interfaces_1.YookassaOptionsSymbol)),
     __metadata("design:paramtypes", [Object, axios_1.HttpService])
 ], YookassaHttpClient);

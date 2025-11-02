@@ -54,7 +54,7 @@ export class YookassaModule {
 
 				YookassaService
 			],
-			exports: [YookassaService],
+			exports: [YookassaService, YookassaHttpClient],
 			global: true
 		}
 	}
@@ -108,7 +108,7 @@ export class YookassaModule {
 
 				YookassaService
 			],
-			exports: [YookassaService],
+			exports: [YookassaService, YookassaHttpClient],
 			global: true
 		}
 	}

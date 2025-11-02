@@ -1,6 +1,6 @@
 import type { FactoryProvider, ModuleMetadata } from '@nestjs/common'
 
-export const YookassaOptionsSymbol = Symbol()
+export const YookassaOptionsSymbol = Symbol('YookassaOptionsSymbol')
 
 /**
  * Тип, представляющий параметры для настройки YooKassa.

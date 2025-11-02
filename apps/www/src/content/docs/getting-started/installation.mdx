@@ -95,11 +95,11 @@ export class AppModule {}
 ```typescript
 // src/config/yookassa.config.ts
 import { ConfigService } from '@nestjs/config'
-import type { YookassaOptions } from 'nestjs-yookassa'
+import type { YookassaModuleOptions } from 'nestjs-yookassa'
 
 export function getYookassaConfig(
 	configService: ConfigService
-): YookassaOptions {
+): YookassaModuleOptions {
 	return {
 		shopId: configService.get<string>('YOOKASSA_SHOP_ID'),
 		apiKey: configService.get<string>('YOOKASSA_SECRET_KEY')

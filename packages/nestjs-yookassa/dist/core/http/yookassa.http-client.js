@@ -14,45 +14,48 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaHttpClient = void 0;
 const axios_1 = require("@nestjs/axios");
-const rxjs_1 = require("rxjs");
 const yookassa_error_1 = require("./yookassa.error");
 const yookassa_constants_1 = require("../config/yookassa.constants");
 const crypto_1 = require("crypto");
 const common_1 = require("@nestjs/common");
 const interfaces_1 = require("../../common/interfaces");
+const undici_1 = require("undici");
 let YookassaHttpClient = class YookassaHttpClient {
     constructor(config, httpService) {
         this.config = config;
         this.httpService = httpService;
-        const client = this.httpService.axiosRef;
-        client.defaults.baseURL = yookassa_constants_1.YOOKASSA_API_URL;
-        client.defaults.timeout = 15000;
-        client.defaults.auth = {
-            username: this.config.shopId,
-            password: this.config.apiKey
-        };
-        client.defaults.headers.common['Content-Type'] = 'application/json';
-        client.defaults.proxy = false;
         if (this.config.agent) {
-            client.defaults.httpAgent = this.config.agent;
-            client.defaults.httpsAgent = this.config.agent;
-            console.log(`[YooKassa] Proxy agent enabled`);
+            const proxyUrl = this.extractProxyFromAgent();
+            this.dispatcher = new undici_1.ProxyAgent(proxyUrl);
+            console.log('[YooKassa] ProxyAgent enabled:', proxyUrl);
+        }
+        else {
+            this.dispatcher = undefined;
         }
     }
     async request(options) {
-        var _a, _b, _c, _d, _e;
+        const url = this.buildUrl(options.url, options.params);
         try {
-            options.headers = Object.assign(Object.assign({}, options.headers), { 'Idempotence-Key': (0, crypto_1.randomUUID)() });
-            if (this.config.agent) {
-                options.httpAgent = this.config.agent;
-                options.httpsAgent = this.config.agent;
-                options.proxy = false;
+            const res = await (0, undici_1.request)(url, {
+                method: options.method,
+                dispatcher: this.dispatcher,
+                headersTimeout: 15000,
+                bodyTimeout: 15000,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Idempotence-Key': (0, crypto_1.randomUUID)(),
+                    Authorization: this.buildAuthHeader()
+                },
+                body: options.data ? JSON.stringify(options.data) : undefined
+            });
+            if (res.statusCode >= 400) {
+                const text = await res.body.text();
+                throw new yookassa_error_1.YookassaError('yookassa_error', text, text);
             }
-            const res = await (0, rxjs_1.firstValueFrom)(this.httpService.request(options));
-            return res.data;
+            return (await res.body.json());
         }
         catch (error) {
-            throw new yookassa_error_1.YookassaError(((_b = (_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.type) || 'yookassa_error', ((_d = (_c = error === null || error === void 0 ? void 0 : error.response) === null || _c === void 0 ? void 0 : _c.data) === null || _d === void 0 ? void 0 : _d.description) || error.message, (_e = error === null || error === void 0 ? void 0 : error.response) === null || _e === void 0 ? void 0 : _e.data);
+            throw new yookassa_error_1.YookassaError((error === null || error === void 0 ? void 0 : error.type) || 'yookassa_error', (error === null || error === void 0 ? void 0 : error.message) || 'Unknown Yookassa error', error);
         }
     }
     get(url, params) {
@@ -60,6 +63,26 @@ let YookassaHttpClient = class YookassaHttpClient {
     }
     post(url, data) {
         return this.request({ method: 'POST', url, data });
+    }
+    buildAuthHeader() {
+        const creds = Buffer.from(`${this.config.shopId}:${this.config.apiKey}`).toString('base64');
+        return `Basic ${creds}`;
+    }
+    buildUrl(url, params) {
+        let full = `${yookassa_constants_1.YOOKASSA_API_URL}${url}`;
+        if (params && typeof params === 'object') {
+            const qp = new URLSearchParams(params);
+            full += `?${qp.toString()}`;
+        }
+        return full;
+    }
+    extractProxyFromAgent() {
+        var _a, _b;
+        const proxy = (_b = (_a = this.config.agent) === null || _a === void 0 ? void 0 : _a.proxy) === null || _b === void 0 ? void 0 : _b.href;
+        if (!proxy) {
+            throw new Error('[YooKassa] Unable to extract proxy URL from HttpsProxyAgent');
+        }
+        return proxy;
     }
 };
 exports.YookassaHttpClient = YookassaHttpClient;

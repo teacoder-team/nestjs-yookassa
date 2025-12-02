@@ -46,6 +46,12 @@ export class YookassaHttpClient {
 				'Idempotence-Key': randomUUID()
 			}
 
+			if (this.config.agent) {
+				options.httpAgent = this.config.agent
+				options.httpsAgent = this.config.agent
+				options.proxy = false
+			}
+
 			const res = await firstValueFrom(this.httpService.request(options))
 
 			return res.data

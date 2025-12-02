@@ -22,6 +22,7 @@ const common_1 = require("@nestjs/common");
 const interfaces_1 = require("../../common/interfaces");
 let YookassaHttpClient = class YookassaHttpClient {
     constructor(config, httpService) {
+        var _a;
         this.config = config;
         this.httpService = httpService;
         const client = this.httpService.axiosRef;
@@ -32,13 +33,21 @@ let YookassaHttpClient = class YookassaHttpClient {
             password: this.config.apiKey
         };
         client.defaults.headers.common['Content-Type'] = 'application/json';
+        if (this.config.proxy) {
+            client.defaults.proxy = {
+                host: this.config.proxy.host,
+                port: this.config.proxy.port,
+                protocol: (_a = this.config.proxy.protocol) !== null && _a !== void 0 ? _a : 'http',
+                auth: this.config.proxy.auth
+            };
+            console.log(`[YooKassa] Proxy enabled → ${this.config.proxy.host}:${this.config.proxy.port}`);
+        }
     }
     async request(options) {
         var _a, _b, _c, _d, _e;
         try {
             options.headers = Object.assign(Object.assign({}, options.headers), { 'Idempotence-Key': (0, crypto_1.randomUUID)() });
-            const $res = this.httpService.request(options);
-            const res = await (0, rxjs_1.firstValueFrom)($res);
+            const res = await (0, rxjs_1.firstValueFrom)(this.httpService.request(options));
             return res.data;
         }
         catch (error) {

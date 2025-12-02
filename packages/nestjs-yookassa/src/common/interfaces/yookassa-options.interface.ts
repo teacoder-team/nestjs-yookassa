@@ -1,70 +1,37 @@
 import type { FactoryProvider, ModuleMetadata } from '@nestjs/common'
+import type { HttpsProxyAgent } from 'https-proxy-agent'
 
 export const YookassaOptionsSymbol = Symbol('YookassaOptionsSymbol')
 
 /**
- * Тип, представляющий параметры для настройки YooKassa.
+ * Настройки модуля YooKassa.
  */
 export type YookassaModuleOptions = {
 	/**
-	 * Идентификатор магазина в YooKassa.
+	 * Идентификатор магазина YooKassa.
 	 */
 	shopId: string
+
 	/**
-	 * Ключ API для аутентификации в YooKassa.
+	 * Секретный ключ API.
 	 */
 	apiKey: string
 
 	/**
-	 * Настройки HTTP-прокси для отправки запросов.
+	 * Агент для отправки HTTPS-запросов через прокси.
 	 *
-	 * Используется в случаях, когда запросы к YooKassa должны идти
-	 * через российский IP — например, если сервер находится за границей.
+	 * Обычно HttpsProxyAgent, созданный так:
 	 *
-	 * Пример простого подключения:
-	 * {
-	 *   host: '192.168.1.10',
-	 *   port: 8888,
-	 *   protocol: 'http'
-	 * }
+	 *   new HttpsProxyAgent("http://IP:PORT")
+	 *
+	 * Если передан agent — axios прекратит использовать встроенный proxy-режим,
+	 * и весь трафик к YooKassa *гарантированно пойдёт через прокси*.
 	 */
-	proxy?: {
-		/**
-		 * Хост или IPv4-адрес прокси-сервера.
-		 * Например: "91.218.114.206"
-		 */
-		host: string
-
-		/**
-		 * Порт, на котором работает прокси.
-		 * Для tinyproxy обычно 8888.
-		 */
-		port: number
-
-		/**
-		 * Протокол для подключения к прокси.
-		 * Почти всегда "http", т.к. tinyproxy не использует HTTPS.
-		 */
-		protocol?: 'http' | 'https'
-
-		/**
-		 * Данные для авторизации на прокси (необязательно).
-		 *
-		 * Используется ТОЛЬКО если прокси защищён логином и паролем.
-		 * В tinyproxy по умолчанию не нужно.
-		 *
-		 * Пример:
-		 * auth: { username: "user", password: "pass" }
-		 */
-		auth?: {
-			username: string
-			password: string
-		}
-	}
+	agent?: HttpsProxyAgent<any>
 }
 
 /**
- * Тип для асинхронной настройки YooKassa.
+ * Асинхронная конфигурация модуля.
  */
 export type YookassaModuleAsyncOptions = Pick<ModuleMetadata, 'imports'> &
 	Pick<FactoryProvider<YookassaModuleOptions>, 'useFactory' | 'inject'>

@@ -21,6 +21,7 @@ export class YookassaHttpClient {
 
 		client.defaults.baseURL = YOOKASSA_API_URL
 		client.defaults.timeout = 15000
+
 		client.defaults.auth = {
 			username: this.config.shopId,
 			password: this.config.apiKey
@@ -28,16 +29,13 @@ export class YookassaHttpClient {
 
 		client.defaults.headers.common['Content-Type'] = 'application/json'
 
-		if (this.config.proxy) {
-			client.defaults.proxy = {
-				host: this.config.proxy.host,
-				port: this.config.proxy.port,
-				protocol: this.config.proxy.protocol ?? 'http',
-				auth: this.config.proxy.auth
-			}
-			console.log(
-				`[YooKassa] Proxy enabled → ${this.config.proxy.host}:${this.config.proxy.port}`
-			)
+		client.defaults.proxy = false
+
+		if (this.config.agent) {
+			client.defaults.httpAgent = this.config.agent
+			client.defaults.httpsAgent = this.config.agent
+
+			console.log(`[YooKassa] Proxy agent enabled`)
 		}
 	}
 

@@ -25,7 +25,20 @@ export class YookassaHttpClient {
 			username: this.config.shopId,
 			password: this.config.apiKey
 		}
+
 		client.defaults.headers.common['Content-Type'] = 'application/json'
+
+		if (this.config.proxy) {
+			client.defaults.proxy = {
+				host: this.config.proxy.host,
+				port: this.config.proxy.port,
+				protocol: this.config.proxy.protocol ?? 'http',
+				auth: this.config.proxy.auth
+			}
+			console.log(
+				`[YooKassa] Proxy enabled → ${this.config.proxy.host}:${this.config.proxy.port}`
+			)
+		}
 	}
 
 	public async request<T = any>(options: AxiosRequestConfig): Promise<T> {
@@ -35,8 +48,7 @@ export class YookassaHttpClient {
 				'Idempotence-Key': randomUUID()
 			}
 
-			const $res = this.httpService.request(options)
-			const res = await firstValueFrom($res)
+			const res = await firstValueFrom(this.httpService.request(options))
 
 			return res.data
 		} catch (error: any) {

@@ -1,6 +1,3 @@
-import { HttpService } from '@nestjs/axios'
-import { firstValueFrom } from 'rxjs'
-import type { AxiosRequestConfig } from 'axios'
 import { YookassaError } from './yookassa.error'
 import { YOOKASSA_API_URL } from '../config/yookassa.constants'
 import { randomUUID } from 'crypto'
@@ -9,25 +6,22 @@ import {
 	type YookassaModuleOptions,
 	YookassaOptionsSymbol
 } from '../../common/interfaces'
-import { request, Agent, ProxyAgent } from 'undici'
+import { request, ProxyAgent } from 'undici'
 
 @Injectable()
 export class YookassaHttpClient {
-	private readonly dispatcher: any
+	private readonly dispatcher: ProxyAgent | undefined
 
 	public constructor(
 		@Inject(YookassaOptionsSymbol)
-		private readonly config: YookassaModuleOptions,
-		private readonly httpService: HttpService
+		private readonly config: YookassaModuleOptions
 	) {
-		if (this.config.agent) {
-			const proxyUrl = this.extractProxyFromAgent()
-
-			this.dispatcher = new ProxyAgent(proxyUrl)
-
-			console.log('[YooKassa] ProxyAgent enabled:', proxyUrl)
+		if (this.config.proxyUrl) {
+			this.dispatcher = new ProxyAgent(this.config.proxyUrl)
+			console.log('[YooKassa] ProxyAgent enabled:', this.config.proxyUrl)
 		} else {
 			this.dispatcher = undefined
+			console.log('[YooKassa] Proxy not configured, direct connection')
 		}
 	}
 
@@ -93,17 +87,5 @@ export class YookassaHttpClient {
 		}
 
 		return full
-	}
-
-	private extractProxyFromAgent(): string {
-		const proxy = this.config.agent?.proxy?.href
-
-		if (!proxy) {
-			throw new Error(
-				'[YooKassa] Unable to extract proxy URL from HttpsProxyAgent'
-			)
-		}
-
-		return proxy
 	}
 }

@@ -1,10 +1,8 @@
-import { HttpService } from '@nestjs/axios';
 import { type YookassaModuleOptions } from '../../common/interfaces';
 export declare class YookassaHttpClient {
     private readonly config;
-    private readonly httpService;
     private readonly dispatcher;
-    constructor(config: YookassaModuleOptions, httpService: HttpService);
+    constructor(config: YookassaModuleOptions);
     request<T = any>(options: {
         method: string;
         url: string;
@@ -15,5 +13,4 @@ export declare class YookassaHttpClient {
     post<T>(url: string, data?: any): Promise<T>;
     private buildAuthHeader;
     private buildUrl;
-    private extractProxyFromAgent;
 }

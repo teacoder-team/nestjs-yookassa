@@ -9,57 +9,61 @@ import {
 	type YookassaModuleOptions,
 	YookassaOptionsSymbol
 } from '../../common/interfaces'
+import { request, Agent, ProxyAgent } from 'undici'
 
 @Injectable()
 export class YookassaHttpClient {
+	private readonly dispatcher: any
+
 	public constructor(
 		@Inject(YookassaOptionsSymbol)
 		private readonly config: YookassaModuleOptions,
 		private readonly httpService: HttpService
 	) {
-		const client = this.httpService.axiosRef
-
-		client.defaults.baseURL = YOOKASSA_API_URL
-		client.defaults.timeout = 15000
-
-		client.defaults.auth = {
-			username: this.config.shopId,
-			password: this.config.apiKey
-		}
-
-		client.defaults.headers.common['Content-Type'] = 'application/json'
-
-		client.defaults.proxy = false
-
 		if (this.config.agent) {
-			client.defaults.httpAgent = this.config.agent
-			client.defaults.httpsAgent = this.config.agent
+			const proxyUrl = this.extractProxyFromAgent()
 
-			console.log(`[YooKassa] Proxy agent enabled`)
+			this.dispatcher = new ProxyAgent(proxyUrl)
+
+			console.log('[YooKassa] ProxyAgent enabled:', proxyUrl)
+		} else {
+			this.dispatcher = undefined
 		}
 	}
 
-	public async request<T = any>(options: AxiosRequestConfig): Promise<T> {
+	public async request<T = any>(options: {
+		method: string
+		url: string
+		data?: any
+		params?: any
+	}): Promise<T> {
+		const url = this.buildUrl(options.url, options.params)
+
 		try {
-			options.headers = {
-				...options.headers,
-				'Idempotence-Key': randomUUID()
+			const res = await request(url, {
+				method: options.method,
+				dispatcher: this.dispatcher,
+				headersTimeout: 15000,
+				bodyTimeout: 15000,
+				headers: {
+					'Content-Type': 'application/json',
+					'Idempotence-Key': randomUUID(),
+					Authorization: this.buildAuthHeader()
+				},
+				body: options.data ? JSON.stringify(options.data) : undefined
+			})
+
+			if (res.statusCode >= 400) {
+				const text = await res.body.text()
+				throw new YookassaError('yookassa_error', text, text)
 			}
 
-			if (this.config.agent) {
-				options.httpAgent = this.config.agent
-				options.httpsAgent = this.config.agent
-				options.proxy = false
-			}
-
-			const res = await firstValueFrom(this.httpService.request(options))
-
-			return res.data
+			return (await res.body.json()) as T
 		} catch (error: any) {
 			throw new YookassaError(
-				error?.response?.data?.type || 'yookassa_error',
-				error?.response?.data?.description || error.message,
-				error?.response?.data
+				error?.type || 'yookassa_error',
+				error?.message || 'Unknown Yookassa error',
+				error
 			)
 		}
 	}
@@ -70,5 +74,36 @@ export class YookassaHttpClient {
 
 	public post<T>(url: string, data?: any) {
 		return this.request<T>({ method: 'POST', url, data })
+	}
+
+	private buildAuthHeader() {
+		const creds = Buffer.from(
+			`${this.config.shopId}:${this.config.apiKey}`
+		).toString('base64')
+
+		return `Basic ${creds}`
+	}
+
+	private buildUrl(url: string, params?: any): string {
+		let full = `${YOOKASSA_API_URL}${url}`
+
+		if (params && typeof params === 'object') {
+			const qp = new URLSearchParams(params)
+			full += `?${qp.toString()}`
+		}
+
+		return full
+	}
+
+	private extractProxyFromAgent(): string {
+		const proxy = this.config.agent?.proxy?.href
+
+		if (!proxy) {
+			throw new Error(
+				'[YooKassa] Unable to extract proxy URL from HttpsProxyAgent'
+			)
+		}
+
+		return proxy
 	}
 }

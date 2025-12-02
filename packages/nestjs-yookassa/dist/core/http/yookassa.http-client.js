@@ -43,6 +43,11 @@ let YookassaHttpClient = class YookassaHttpClient {
         var _a, _b, _c, _d, _e;
         try {
             options.headers = Object.assign(Object.assign({}, options.headers), { 'Idempotence-Key': (0, crypto_1.randomUUID)() });
+            if (this.config.agent) {
+                options.httpAgent = this.config.agent;
+                options.httpsAgent = this.config.agent;
+                options.proxy = false;
+            }
             const res = await (0, rxjs_1.firstValueFrom)(this.httpService.request(options));
             return res.data;
         }

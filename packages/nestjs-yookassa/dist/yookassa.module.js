@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var YookassaModule_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaModule = void 0;
-const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const yookassa_service_1 = require("./yookassa.service");
 const payment_module_1 = require("./modules/payment/payment.module");
@@ -36,7 +35,6 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
         return {
             module: YookassaModule_1,
             imports: [
-                axios_1.HttpModule,
                 payment_module_1.PaymentModule,
                 refund_module_1.RefundModule,
                 invoice_module_1.InvoiceModule,
@@ -46,8 +44,8 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                 { provide: interfaces_1.YookassaOptionsSymbol, useValue: options },
                 {
                     provide: yookassa_http_client_1.YookassaHttpClient,
-                    useFactory: (cfg, http) => new yookassa_http_client_1.YookassaHttpClient(cfg, http),
-                    inject: [interfaces_1.YookassaOptionsSymbol, axios_1.HttpService]
+                    useFactory: (cfg) => new yookassa_http_client_1.YookassaHttpClient(cfg),
+                    inject: [interfaces_1.YookassaOptionsSymbol]
                 },
                 yookassa_service_1.YookassaService
             ],
@@ -77,7 +75,6 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
         return {
             module: YookassaModule_1,
             imports: [
-                axios_1.HttpModule,
                 ...(options.imports || []),
                 payment_module_1.PaymentModule,
                 refund_module_1.RefundModule,
@@ -92,8 +89,8 @@ let YookassaModule = YookassaModule_1 = class YookassaModule {
                 },
                 {
                     provide: yookassa_http_client_1.YookassaHttpClient,
-                    useFactory: (cfg, http) => new yookassa_http_client_1.YookassaHttpClient(cfg, http),
-                    inject: [interfaces_1.YookassaOptionsSymbol, axios_1.HttpService]
+                    useFactory: (cfg) => new yookassa_http_client_1.YookassaHttpClient(cfg),
+                    inject: [interfaces_1.YookassaOptionsSymbol]
                 },
                 yookassa_service_1.YookassaService
             ],

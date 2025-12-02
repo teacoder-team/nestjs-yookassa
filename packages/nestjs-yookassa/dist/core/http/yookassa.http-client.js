@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YookassaHttpClient = void 0;
-const axios_1 = require("@nestjs/axios");
 const yookassa_error_1 = require("./yookassa.error");
 const yookassa_constants_1 = require("../config/yookassa.constants");
 const crypto_1 = require("crypto");
@@ -21,16 +20,15 @@ const common_1 = require("@nestjs/common");
 const interfaces_1 = require("../../common/interfaces");
 const undici_1 = require("undici");
 let YookassaHttpClient = class YookassaHttpClient {
-    constructor(config, httpService) {
+    constructor(config) {
         this.config = config;
-        this.httpService = httpService;
-        if (this.config.agent) {
-            const proxyUrl = this.extractProxyFromAgent();
-            this.dispatcher = new undici_1.ProxyAgent(proxyUrl);
-            console.log('[YooKassa] ProxyAgent enabled:', proxyUrl);
+        if (this.config.proxyUrl) {
+            this.dispatcher = new undici_1.ProxyAgent(this.config.proxyUrl);
+            console.log('[YooKassa] ProxyAgent enabled:', this.config.proxyUrl);
         }
         else {
             this.dispatcher = undefined;
+            console.log('[YooKassa] Proxy not configured, direct connection');
         }
     }
     async request(options) {
@@ -76,18 +74,10 @@ let YookassaHttpClient = class YookassaHttpClient {
         }
         return full;
     }
-    extractProxyFromAgent() {
-        var _a, _b;
-        const proxy = (_b = (_a = this.config.agent) === null || _a === void 0 ? void 0 : _a.proxy) === null || _b === void 0 ? void 0 : _b.href;
-        if (!proxy) {
-            throw new Error('[YooKassa] Unable to extract proxy URL from HttpsProxyAgent');
-        }
-        return proxy;
-    }
 };
 exports.YookassaHttpClient = YookassaHttpClient;
 exports.YookassaHttpClient = YookassaHttpClient = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(interfaces_1.YookassaOptionsSymbol)),
-    __metadata("design:paramtypes", [Object, axios_1.HttpService])
+    __metadata("design:paramtypes", [Object])
 ], YookassaHttpClient);

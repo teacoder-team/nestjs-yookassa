@@ -1,5 +1,4 @@
 import type { FactoryProvider, ModuleMetadata } from '@nestjs/common';
-import type { HttpsProxyAgent } from 'https-proxy-agent';
 export declare const YookassaOptionsSymbol: unique symbol;
 /**
  * Настройки модуля YooKassa.
@@ -13,17 +12,7 @@ export type YookassaModuleOptions = {
      * Секретный ключ API.
      */
     apiKey: string;
-    /**
-     * Агент для отправки HTTPS-запросов через прокси.
-     *
-     * Обычно HttpsProxyAgent, созданный так:
-     *
-     *   new HttpsProxyAgent("http://IP:PORT")
-     *
-     * Если передан agent — axios прекратит использовать встроенный proxy-режим,
-     * и весь трафик к YooKassa *гарантированно пойдёт через прокси*.
-     */
-    agent?: HttpsProxyAgent<any>;
+    proxyUrl?: string;
 };
 /**
  * Асинхронная конфигурация модуля.

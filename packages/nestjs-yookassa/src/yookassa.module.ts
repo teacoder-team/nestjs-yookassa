@@ -1,4 +1,3 @@
-import { HttpModule, HttpService } from '@nestjs/axios'
 import { type DynamicModule, Global, Module } from '@nestjs/common'
 
 import { YookassaService } from './yookassa.service'
@@ -34,7 +33,6 @@ export class YookassaModule {
 		return {
 			module: YookassaModule,
 			imports: [
-				HttpModule,
 				PaymentModule,
 				RefundModule,
 				InvoiceModule,
@@ -45,11 +43,9 @@ export class YookassaModule {
 
 				{
 					provide: YookassaHttpClient,
-					useFactory: (
-						cfg: YookassaModuleOptions,
-						http: HttpService
-					) => new YookassaHttpClient(cfg, http),
-					inject: [YookassaOptionsSymbol, HttpService]
+					useFactory: (cfg: YookassaModuleOptions) =>
+						new YookassaHttpClient(cfg),
+					inject: [YookassaOptionsSymbol]
 				},
 
 				YookassaService
@@ -83,7 +79,6 @@ export class YookassaModule {
 		return {
 			module: YookassaModule,
 			imports: [
-				HttpModule,
 				...(options.imports || []),
 				PaymentModule,
 				RefundModule,
@@ -99,11 +94,9 @@ export class YookassaModule {
 
 				{
 					provide: YookassaHttpClient,
-					useFactory: (
-						cfg: YookassaModuleOptions,
-						http: HttpService
-					) => new YookassaHttpClient(cfg, http),
-					inject: [YookassaOptionsSymbol, HttpService]
+					useFactory: (cfg: YookassaModuleOptions) =>
+						new YookassaHttpClient(cfg),
+					inject: [YookassaOptionsSymbol]
 				},
 
 				YookassaService

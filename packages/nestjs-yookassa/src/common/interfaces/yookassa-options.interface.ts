@@ -17,17 +17,7 @@ export type YookassaModuleOptions = {
 	 */
 	apiKey: string
 
-	/**
-	 * Агент для отправки HTTPS-запросов через прокси.
-	 *
-	 * Обычно HttpsProxyAgent, созданный так:
-	 *
-	 *   new HttpsProxyAgent("http://IP:PORT")
-	 *
-	 * Если передан agent — axios прекратит использовать встроенный proxy-режим,
-	 * и весь трафик к YooKassa *гарантированно пойдёт через прокси*.
-	 */
-	agent?: HttpsProxyAgent<any>
+	proxyUrl?: string
 }
 
 /**

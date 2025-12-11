@@ -130,4 +130,54 @@ export class AppModule {}
 
 В этом случае конфигурация будет храниться в отдельном файле, что улучшает структуру и позволяет легче управлять параметрами окружения.
 
+### Работа через прокси
+
+Некоторым приложениям требуется отправлять запросы к API YooKassa через прокси-сервер. Данные модуль поддерживает такой сценарий с помощью параметра `proxyUrl`.
+
+#### Когда нужен прокси?
+
+Используйте proxyUrl, если:
+
+сервер работает за корпоративным прокси;
+нужно логировать / инспектировать трафик;
+есть ограничения на исходящие запросы;
+требуется скрыть исходящий IP;
+
+Поддерживаются HTTP и HTTPS прокси:
+
+```
+http://127.0.0.1:8080
+https://proxy.example.com:443
+```
+
+#### Переменная окружения
+
+Добавьте значение в `.env`:
+
+```bash
+YOOKASSA_PROXY_URL=http://127.0.0.1:8080
+```
+
+#### Использование в синхронной конфигурации
+
+```typescript
+import { YookassaModule } from 'nestjs-yookassa'
+
+YookassaModule.forRoot({
+	shopId: process.env.YOOKASSA_SHOP_ID,
+	apiKey: process.env.YOOKASSA_SECRET_KEY,
+	proxyUrl: process.env.YOOKASSA_PROXY_URL // прокси активируется при наличии
+})
+```
+
+#### Использование в асинхронной конфигурации
+
+```typescript
+useFactory: config => ({
+	shopId: config.get('YOOKASSA_SHOP_ID'),
+	apiKey: config.get('YOOKASSA_SECRET_KEY'),
+	proxyUrl: config.get('YOOKASSA_PROXY_URL')
+})
+```
+
 </Steps>

@@ -19,7 +19,7 @@ export class InvoiceService {
   async getInvoiceDetails() {
     const invoiceId = '123456'; // Уникальный идентификатор счёта
 
-    const invoice = await this.yookassaService.getInvoice(invoiceId);
+    const invoice = await this.yookassaService.invoices.getById(invoiceId);
 
     return invoice;
   }

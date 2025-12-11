@@ -40,7 +40,7 @@ export class PaymentService {
 		const from = '2025-01-01'; // Начальная дата фильтра
 		const to = '2025-01-31'; // Конечная дата фильтра
 
-		const payments = await this.yookassaService.getPayments(limit, from, to);
+		const payments = await this.yookassaService.payments.getAll(limit, from, to);
 
 		return payments
  	}

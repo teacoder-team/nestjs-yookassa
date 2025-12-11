@@ -21,7 +21,7 @@ export class RefundService {
 	async getRefundDetails() {
 		const refundId = '123456'; // Уникальный ID возврата
 
-		const refund = await this.yookassaService.getRefundDetails(refundId);
+		const refund = await this.yookassaService.refunds.getById(refundId);
 
 		return refund;
 	}

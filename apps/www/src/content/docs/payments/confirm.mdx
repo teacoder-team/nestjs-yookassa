@@ -23,7 +23,7 @@ export class PaymentService {
 	async capturePayment() {
 		const paymentId = '123456'
 
-		const capturedPayment = await this.yookassaService.capturePayment(paymentId);
+		const capturedPayment = await this.yookassaService.payments.capture(paymentId);
 
 		return capturedPayment
 	}

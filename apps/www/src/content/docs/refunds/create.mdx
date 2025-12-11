@@ -37,7 +37,7 @@ export class PaymentService {
 			description: 'Возврат на заказ с ID 123456',
 		};
 
-		const newRefund = await this.yookassaService.createRefund(refundData);
+		const newRefund = await this.yookassaService.refunds.create(refundData);
 
 		return newRefund;
 	}

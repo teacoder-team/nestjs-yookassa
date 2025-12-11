@@ -65,7 +65,7 @@ export class PaymentService {
 			},
 		}
 
-		const newPayment = await this.yookassaService.createPayment(paymentData);
+		const newPayment = await this.yookassaService.payments.create(paymentData);
 
 		return newPayment;
   	}

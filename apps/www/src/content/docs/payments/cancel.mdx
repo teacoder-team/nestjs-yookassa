@@ -23,7 +23,7 @@ export class PaymentService {
 	async cancelPayment() {
 		const paymentId = '123456'
 
-		const canceledPayment = await this.yookassaService.cancelPayment(paymentId);
+		const canceledPayment = await this.yookassaService.payments.cancel(paymentId);
 
 		return canceledPayment
 	}

@@ -21,7 +21,7 @@ export class PaymentService {
 	async getPaymentDetails() {
 		const paymentId = '123456'; // Уникальный ID платежа
 
-		const payment = await this.yookassaService.getPaymentDetails(paymentId);
+		const payment = await this.yookassaService.payments.getById(paymentId);
 
 		return payment
 	}

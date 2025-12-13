@@ -1,18 +1,19 @@
 import { Amount } from '../../../common/interfaces'
 import { PaymentMethodsEnum } from '../enums'
+import type { YookassaMetadata } from '../../../common/types/metadata.type'
 
 /**
  * Тип для метода оплаты, который может быть одним из нескольких типов.
- * @type {PaymentMethodSberLoan | PaymentMethodMobileBalance | PaymentMethodCard | PaymentMethodCash | PaymentMethodSbp | PaymentMethodB2bSberbank | PaymentMethodElectronicСertificate | PaymentMethodYooMoney | PaymentMethodSberbank | PaymentMethodTinkoffBank}
+ * @type {PaymentMethodSberLoan | PaymentMethodMobileBalance | PaymentMethodCard | PaymentMethodCash | PaymentMethodSbp | PaymentMethodB2bSberbank | PaymentMethodElectronicCertificate | PaymentMethodYooMoney | PaymentMethodSberbank | PaymentMethodTinkoffBank}
  */
-export type PaymentMethod =
+export type PaymentMethod<T extends YookassaMetadata = YookassaMetadata> =
 	| PaymentMethodSberLoan
 	| PaymentMethodMobileBalance
 	| PaymentMethodCard
 	| PaymentMethodCash
 	| PaymentMethodSbp
 	| PaymentMethodB2bSberbank
-	| PaymentMethodElectronicСertificate
+	| PaymentMethodElectronicCertificate<T>
 	| PaymentMethodYooMoney
 	| PaymentMethodSberbank
 	| PaymentMethodTinkoffBank
@@ -142,7 +143,7 @@ export interface PaymentMethodB2bSberbank {
 /**
  * Тип для подтверждения с использованием электронного сертификата (ФЭС НСПК).
  */
-export interface PaymentMethodElectronicСertificate {
+export interface PaymentMethodElectronicCertificate<T extends YookassaMetadata = YookassaMetadata> {
 	/**
 	 * Тип метода оплаты — электронный сертификат.
 	 * Значение: `electronic_certificate`.
@@ -205,7 +206,7 @@ export interface PaymentMethodElectronicСertificate {
 	 * Произвольные дополнительные данные.
 	 * Максимум 16 ключей, имя ключа — до 32 символов, значение — до 512 символов.
 	 */
-	metadata?: Record<string, string>
+	metadata?: T
 
 	/**
 	 * Данные банковской карты (если вы собираете данные карты на своей стороне).

@@ -1,6 +1,6 @@
 {
 	"name": "nestjs-yookassa",
-	"version": "2.1.5",
+	"version": "2.2.0",
 	"description": "A NestJS library for integrating with YooKassa API",
 	"keywords": [
 		"nest",
@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@nestjs/axios": "^4.0.1",
 		"axios": "^1.11.0",
+		"cidr-matcher": "^2.1.1",
 		"https-proxy-agent": "^7.0.6",
 		"rxjs": "^7.8.2",
 		"undici": "^7.16.0"

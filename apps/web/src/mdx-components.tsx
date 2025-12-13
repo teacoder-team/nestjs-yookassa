@@ -10,6 +10,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		Step,
 		Tab,
 		Tabs,
-		...components
+		...components,
 	}
 }

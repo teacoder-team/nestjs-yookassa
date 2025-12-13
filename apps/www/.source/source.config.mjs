@@ -2,18 +2,20 @@
 import { transformerRemoveNotationEscape } from "@shikijs/transformers";
 import { rehypeCodeDefaultOptions } from "fumadocs-core/mdx-plugins";
 import { remarkInstall } from "fumadocs-docgen";
-import { defineConfig, defineDocs } from "fumadocs-mdx/config";
+import { defineConfig, defineDocs, metaSchema } from "fumadocs-mdx/config";
 import { transformerTwoslash } from "fumadocs-twoslash";
 import { createFileSystemTypesCache } from "fumadocs-twoslash/cache-fs";
 import rehypeKatex from "rehype-katex";
 var { docs, meta } = defineDocs({
-  dir: "src/content/docs"
+  dir: "src/content/docs",
+  meta: {
+    schema: metaSchema
+  }
 });
 var source_config_default = defineConfig({
   mdxOptions: {
     rehypeCodeOptions: {
       lazy: true,
-      experimentalJSEngine: true,
       langs: ["ts", "js", "html", "tsx", "mdx"],
       inline: "tailing-curly-colon",
       themes: {

@@ -1,12 +1,13 @@
 <div align="center">
-    # NestJS YooKassa
 
-    <p>
-    	<img src="https://img.shields.io/npm/v/nestjs-yookassa" />
-    	<img src="https://img.shields.io/npm/dm/nestjs-yookassa" />
-    	<img src="https://img.shields.io/github/license/teacoder-team/nestjs-yookassa" />
-    	<img src="https://img.shields.io/github/stars/teacoder-team/nestjs-yookassa?style=social" />
-    </p>
+<h1>NestJS YooKassa</h1>
+
+<p>
+  <img src="https://img.shields.io/npm/v/nestjs-yookassa" />
+  <img src="https://img.shields.io/npm/dm/nestjs-yookassa" />
+  <img src="https://img.shields.io/github/license/teacoder-team/nestjs-yookassa" />
+  <img src="https://img.shields.io/github/stars/teacoder-team/nestjs-yookassa?style=social" />
+</p>
 
 </div>
 

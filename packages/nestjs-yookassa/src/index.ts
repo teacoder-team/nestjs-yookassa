@@ -27,5 +27,8 @@ export * from './modules/receipt/enums'
 export * from './modules/refund/interfaces'
 export * from './modules/refund/enums'
 
-// Webhook
-export * from './webhook'
+// Webhook domain
+export * from './webhook/enums'
+export * from './webhook/interfaces'
+export * from './webhook/decorators'
+export * from './webhook/guards/yookassa-webhook.guard'

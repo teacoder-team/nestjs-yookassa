@@ -1,6 +1,6 @@
 {
 	"name": "nestjs-yookassa",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "A NestJS library for integrating with YooKassa API",
 	"keywords": [
 		"nest",
@@ -24,6 +24,10 @@
 		{
 			"name": "Roman Tatarinov",
 			"url": "https://github.com/rtatarinov"
+		},
+		{
+			"name": "Rogov Vladislav",
+			"url": "https://github.com/Color-Kat"
 		}
 	],
 	"main": "./dist/index.js",

@@ -1,6 +1,7 @@
 import type { Amount } from '../../../../common/interfaces'
 import type { TaxSystemCodesEnum, VatCodesEnum } from '../../../receipt/enums'
 import type { Customer } from '../../../receipt/interfaces/requests'
+import type { YookassaMetadata } from '../../../../common/types/metadata.type'
 
 import type { PaymentMethod } from '../payment-method.interface'
 import type { ConfirmationRequest } from './confirmation.request'
@@ -157,7 +158,7 @@ export interface AirlineInfo {
 /**
  * Тип, представляющий запрос на создание платежа.
  */
-export interface CreatePaymentRequest {
+export interface CreatePaymentRequest<T extends YookassaMetadata = YookassaMetadata> {
 	/**
 	 * Сумма платежа.
 	 */
@@ -200,7 +201,7 @@ export interface CreatePaymentRequest {
 	 * Метод платежа.
 	 * Необязательное поле.
 	 */
-	payment_method_data?: PaymentMethod
+	payment_method_data?: PaymentMethod<T>
 
 	/**
 	 * Тип подтверждения для платежа.
@@ -228,7 +229,7 @@ export interface CreatePaymentRequest {
 	 * Дополнительные метаданные, связанные с платежом.
 	 * Необязательное поле.
 	 */
-	metadata?: object
+	metadata?: T
 
 	/**
 	 * Объект с данными для продажи авиабилетов.

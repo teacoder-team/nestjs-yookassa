@@ -1,8 +1,9 @@
 import type { Payment } from './payment.response';
+import type { YookassaMetadata } from '../../../../common/types/metadata.type';
 /**
  * Ответ API YooKassa на запрос списка платежей
  */
-export interface GetPaymentsResponse {
+export interface GetPaymentsResponse<T extends YookassaMetadata = YookassaMetadata> {
     /**
      * Тип ответа — всегда 'list'
      */
@@ -10,7 +11,7 @@ export interface GetPaymentsResponse {
     /**
      * Список платежей
      */
-    items: Payment[];
+    items: Payment<T>[];
     /**
      * Курсор следующей страницы
      * Если отсутствует — значит данных больше нет

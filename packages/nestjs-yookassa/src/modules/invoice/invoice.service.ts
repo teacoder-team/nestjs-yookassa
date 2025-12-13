@@ -5,6 +5,7 @@ import type {
 	Invoice
 } from './interfaces'
 import { YookassaHttpClient } from '../../core/http/yookassa.http-client'
+import type { YookassaMetadata } from '../../common/types/metadata.type'
 
 @Injectable()
 export class InvoiceService {
@@ -32,9 +33,9 @@ export class InvoiceService {
 	 * console.log(invoice);
 	 * ```
 	 */
-	public async create(
-		data: CreateInvoiceRequest
-	): Promise<CreateInvoiceResponse> {
+	public async create<T extends YookassaMetadata = YookassaMetadata>(
+		data: CreateInvoiceRequest<T>
+	): Promise<CreateInvoiceResponse<T>> {
 		return this.http.post('/invoices', data)
 	}
 
@@ -52,7 +53,9 @@ export class InvoiceService {
 	 * console.log(invoiceDetails);
 	 * ```
 	 */
-	public async getById(id: string): Promise<Invoice> {
+	public async getById<T extends YookassaMetadata = YookassaMetadata>(
+		id: string
+	): Promise<Invoice<T>> {
 		return this.http.get(`/invoices/${id}`)
 	}
 }

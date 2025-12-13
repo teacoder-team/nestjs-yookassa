@@ -1,6 +1,7 @@
 import type { Payment } from '../../../payment/interfaces';
 import type { InvoiceCancellationPartyEnum, InvoiceCancellationReasonEnum, InvoiceStatusEnum } from '../../enums';
 import type { CartItem } from '../requests';
+import type { YookassaMetadata } from '../../../../common/types/metadata.type';
 /**
  * Способ доставки счета
  */
@@ -22,7 +23,7 @@ export interface InvoiceCancellationDetails {
 /**
  * Детали счета
  */
-export interface Invoice {
+export interface Invoice<T extends YookassaMetadata = YookassaMetadata> {
     /** Идентификатор счета в ЮKassa */
     id: string;
     /** Статус счета */
@@ -32,7 +33,7 @@ export interface Invoice {
     /** Данные о выбранном способе доставки счета */
     delivery_method?: DeliveryMethod;
     /** Данные о платеже по счету (если успешно оплачен) */
-    payment_details?: Payment;
+    payment_details?: Payment<T>;
     /** Дата и время создания счета (ISO 8601) */
     created_at: string;
     /** Срок действия счета (ISO 8601), для счетов pending */
@@ -42,5 +43,5 @@ export interface Invoice {
     /** Детали отмены счета */
     cancellation_details?: InvoiceCancellationDetails;
     /** Дополнительные метаданные (ключ-значение) */
-    metadata?: Record<string, string>;
+    metadata?: T;
 }

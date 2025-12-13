@@ -3,6 +3,7 @@ import type { ReceiptRegistrationEnum } from '../../../receipt/enums';
 import type { CancellationPartyEnum, CancellationReasonEnum, PaymentStatusEnum } from '../../enums';
 import type { PaymentMethod } from '../payment-method.interface';
 import type { ConfirmationResponse } from './confirmation.response';
+import type { YookassaMetadata } from '../../../../common/types/metadata.type';
 /**
  * Информация об отмене платежа.
  * Содержит комментарий к статусу canceled: кто отменил платеж и по какой причине.
@@ -66,7 +67,7 @@ interface Deal {
 /**
  * Данные о распределении денег — сколько и в какой магазин нужно перевести.
  */
-export interface Transfer {
+export interface Transfer<T extends YookassaMetadata = YookassaMetadata> {
     /**
      * Идентификатор магазина, в пользу которого принимается оплата.
      */
@@ -98,7 +99,7 @@ export interface Transfer {
      * значение ключа не более 512 символов.
      * Необязательное поле.
      */
-    metadata?: Record<string, string>;
+    metadata?: T;
 }
 /**
  * Данные о прохождении аутентификации по 3‑D Secure.
@@ -115,7 +116,7 @@ export interface ThreeDSecure {
  * Данные об авторизации платежа при оплате банковской картой.
  * Присутствуют только для способов оплаты: банковская карта, Mir Pay, SberPay, T-Pay.
  */
-export interface AuthorizationDetails {
+export interface AuthorizationDetails<T extends YookassaMetadata = YookassaMetadata> {
     /**
      * Retrieval Reference Number — идентификатор банковской транзакции.
      * Необязательное поле.
@@ -135,7 +136,7 @@ export interface AuthorizationDetails {
      * Присутствует, если используется Сплитование платежей.
      * Необязательное поле.
      */
-    transfers?: Transfer[];
+    transfers?: Transfer<T>[];
     /**
      * Данные о сделке, в составе которой проходит платеж.
      * Присутствует, если проводится Безопасная сделка.
@@ -157,7 +158,7 @@ export interface AuthorizationDetails {
 /**
  * Тип, представляющий информацию о платеже.
  */
-export interface CreatePaymentResponse {
+export interface CreatePaymentResponse<T extends YookassaMetadata = YookassaMetadata> {
     /**
      * Идентификатор платежа.
      */
@@ -197,7 +198,7 @@ export interface CreatePaymentResponse {
      * Метод платежа.
      * Необязательное поле.
      */
-    payment_method?: PaymentMethod;
+    payment_method?: PaymentMethod<T>;
     /**
      * Время захвата платежа.
      * Необязательное поле.
@@ -243,7 +244,7 @@ export interface CreatePaymentResponse {
      * Дополнительные метаданные платежа.
      * Необязательное поле.
      */
-    metadata?: object;
+    metadata?: T;
     /**
      * Информация об отмене платежа.
      * Необязательное поле.
@@ -254,12 +255,12 @@ export interface CreatePaymentResponse {
      * Присутствуют только для способов оплаты: банковская карта, Mir Pay, SberPay, T-Pay.
      * Необязательное поле.
      */
-    authorization_details?: AuthorizationDetails;
+    authorization_details?: AuthorizationDetails<T>;
     /**
      * Данные о распределении денег — сколько и в какой магазин нужно перевести.
      * Необязательное поле.
      */
-    transfers?: Transfer;
+    transfers?: Transfer<T>;
     /**
      * Данные о сделке, в составе которой проходит платеж.
      * Необязательное поле.

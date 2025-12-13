@@ -1,5 +1,6 @@
 import type { CreateInvoiceRequest, CreateInvoiceResponse, Invoice } from './interfaces';
 import { YookassaHttpClient } from '../../core/http/yookassa.http-client';
+import type { YookassaMetadata } from '../../common/types/metadata.type';
 export declare class InvoiceService {
     private readonly http;
     constructor(http: YookassaHttpClient);
@@ -25,7 +26,7 @@ export declare class InvoiceService {
      * console.log(invoice);
      * ```
      */
-    create(data: CreateInvoiceRequest): Promise<CreateInvoiceResponse>;
+    create<T extends YookassaMetadata = YookassaMetadata>(data: CreateInvoiceRequest<T>): Promise<CreateInvoiceResponse<T>>;
     /**
      * Получает детали счета по его ID.
      * Этот метод позволяет получить подробную информацию о счете, включая статус, корзину и платежи.
@@ -40,5 +41,5 @@ export declare class InvoiceService {
      * console.log(invoiceDetails);
      * ```
      */
-    getById(id: string): Promise<Invoice>;
+    getById<T extends YookassaMetadata = YookassaMetadata>(id: string): Promise<Invoice<T>>;
 }

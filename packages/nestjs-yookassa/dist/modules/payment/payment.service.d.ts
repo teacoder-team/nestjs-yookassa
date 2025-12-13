@@ -1,5 +1,6 @@
 import { YookassaHttpClient } from '../../core/http/yookassa.http-client';
 import type { CreatePaymentRequest, CreatePaymentResponse, GetPaymentsRequest, GetPaymentsResponse, Payment } from './interfaces';
+import type { YookassaMetadata } from '../../common/types/metadata.type';
 export declare class PaymentService {
     private readonly http;
     constructor(http: YookassaHttpClient);
@@ -32,7 +33,7 @@ export declare class PaymentService {
      * console.log(paymentResponse);
      * ```
      */
-    create(data: CreatePaymentRequest): Promise<CreatePaymentResponse>;
+    create<T extends YookassaMetadata = YookassaMetadata>(data: CreatePaymentRequest<T>): Promise<CreatePaymentResponse<T>>;
     /**
      * Получает список платежей с возможностью фильтрации и пагинации.
      *
@@ -73,7 +74,7 @@ export declare class PaymentService {
      * });
      * ```
      */
-    getAll(params?: GetPaymentsRequest): Promise<GetPaymentsResponse>;
+    getAll<T extends YookassaMetadata = YookassaMetadata>(params?: GetPaymentsRequest): Promise<GetPaymentsResponse<T>>;
     /**
      * Получает детали платежа по его ID.
      * Этот метод позволяет получить подробную информацию о платеже, включая его статус, сумму и другие данные.
@@ -88,7 +89,7 @@ export declare class PaymentService {
      * console.log(payment);
      * ```
      */
-    getById(id: string): Promise<PaymentResponse>;
+    getById<T extends YookassaMetadata = YookassaMetadata>(id: string): Promise<Payment<T>>;
     /**
      * Выполняет захват платежа.
      * Этот метод используется для захвата средств с карты клиента после того, как был создан платеж.
@@ -105,7 +106,7 @@ export declare class PaymentService {
      * console.log(paymentDetails);
      * ```
      */
-    capture(id: string): Promise<Payment>;
+    capture<T extends YookassaMetadata = YookassaMetadata>(id: string): Promise<Payment<T>>;
     /**
      * Отменяет платеж.
      * Этот метод используется для отмены платежа.
@@ -120,5 +121,5 @@ export declare class PaymentService {
      * console.log(canceledPaymentDetails);
      * ```
      */
-    cancel(id: string): Promise<Payment>;
+    cancel<T extends YookassaMetadata = YookassaMetadata>(id: string): Promise<Payment<T>>;
 }

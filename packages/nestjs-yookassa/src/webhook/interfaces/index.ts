@@ -1,2 +1,1 @@
-export * from './webhook-event.interface'
-
+export * from './notification-event.interface'

@@ -2,6 +2,7 @@ import type { LocaleEnum } from '../../../../common/enums';
 import type { Amount } from '../../../../common/interfaces';
 import type { Receipt, Recipient } from '../../../payment/interfaces';
 import type { DeliveryMethodEnum } from '../../enums';
+import type { YookassaMetadata } from '../../../../common/types/metadata.type';
 /**
  * Элемент корзины
  */
@@ -25,7 +26,7 @@ export interface DeliveryMethodData {
 /**
  * Основной объект для создания счета
  */
-export interface CreateInvoiceRequest {
+export interface CreateInvoiceRequest<T extends YookassaMetadata = YookassaMetadata> {
     /**
      * Данные для проведения платежа по выставленному счету.
      */
@@ -45,7 +46,7 @@ export interface CreateInvoiceRequest {
         /** Описание счета */
         description?: string;
         /** Дополнительные метаданные */
-        metadata?: Record<string, string>;
+        metadata?: T;
     };
     /** Корзина заказа */
     cart: CartItem[];

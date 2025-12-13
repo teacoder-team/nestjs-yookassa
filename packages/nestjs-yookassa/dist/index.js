@@ -20,6 +20,7 @@ __exportStar(require("./yookassa.service"), exports);
 // Common
 __exportStar(require("./common/enums"), exports);
 __exportStar(require("./common/interfaces"), exports);
+__exportStar(require("./common/types/metadata.type"), exports);
 // Invoice domain
 __exportStar(require("./modules/invoice/interfaces"), exports);
 __exportStar(require("./modules/invoice/enums"), exports);
@@ -35,5 +36,8 @@ __exportStar(require("./modules/receipt/enums"), exports);
 // Refund domain
 __exportStar(require("./modules/refund/interfaces"), exports);
 __exportStar(require("./modules/refund/enums"), exports);
-// Webhook
-__exportStar(require("./webhook"), exports);
+// Webhook domain
+__exportStar(require("./webhook/enums"), exports);
+__exportStar(require("./webhook/interfaces"), exports);
+__exportStar(require("./webhook/decorators"), exports);
+__exportStar(require("./webhook/guards/yookassa-webhook.guard"), exports);

@@ -1,3 +1,4 @@
 import type { Invoice } from './invoice.response';
-export interface CreateInvoiceResponse extends Invoice {
+import type { YookassaMetadata } from '../../../../common/types/metadata.type';
+export interface CreateInvoiceResponse<T extends YookassaMetadata = YookassaMetadata> extends Invoice<T> {
 }

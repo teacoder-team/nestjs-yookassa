@@ -35,3 +35,5 @@ __exportStar(require("./modules/receipt/enums"), exports);
 // Refund domain
 __exportStar(require("./modules/refund/interfaces"), exports);
 __exportStar(require("./modules/refund/enums"), exports);
+// Webhook
+__exportStar(require("./webhook"), exports);

@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "next build",
 		"dev": "next dev",
-		"start": "next start",
+		"start": "next start -p 5000",
 		"format": "prettier --write \"**/*.{js,ts,tsx,json,md}\""
 	},
 	"dependencies": {

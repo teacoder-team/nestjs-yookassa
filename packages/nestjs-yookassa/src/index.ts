@@ -25,3 +25,6 @@ export * from './modules/receipt/enums'
 // Refund domain
 export * from './modules/refund/interfaces'
 export * from './modules/refund/enums'
+
+// Webhook
+export * from './webhook'

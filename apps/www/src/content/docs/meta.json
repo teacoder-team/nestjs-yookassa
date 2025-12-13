@@ -4,6 +4,8 @@
 		"---Начало---",
 		"getting-started/installation",
 		"getting-started/introduction",
+		"---Вебхуки---",
+		"webhooks/security",
 		"---Платежи---",
 		"payments/create",
 		"payments/list",

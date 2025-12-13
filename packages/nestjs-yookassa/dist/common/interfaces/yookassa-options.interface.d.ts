@@ -12,6 +12,11 @@ export type YookassaModuleOptions = {
      * Секретный ключ API.
      */
     apiKey: string;
+    /**
+     * Прокси-URL для отправки запросов к API YooKassa.
+     * Используется в случаях, когда требуется направлять HTTP/HTTPS-запросы через прокси-сервер.
+     * Например: http://127.0.0.1:8080
+     */
     proxyUrl?: string;
 };
 /**

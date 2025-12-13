@@ -9,7 +9,6 @@ const withMDX = createMDX({
 
 const config: NextConfig = {
 	reactStrictMode: true,
-	output: 'standalone',
 	trailingSlash: false,
 	skipTrailingSlashRedirect: true,
 	experimental: {

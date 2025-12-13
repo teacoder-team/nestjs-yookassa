@@ -8,12 +8,7 @@ const withMDX = createMDX({
 })
 
 const config: NextConfig = {
-	reactStrictMode: true,
-	trailingSlash: false,
-	skipTrailingSlashRedirect: true,
-	experimental: {
-		optimizePackageImports: ['tailwindcss']
-	}
+	reactStrictMode: true
 }
 
 export default withMDX(config)

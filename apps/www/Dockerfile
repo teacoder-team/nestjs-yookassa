@@ -1,12 +1,13 @@
 FROM node:20-alpine AS build
 
+RUN apk add --no-cache git
+
 WORKDIR /app
 
 RUN npm install -g pnpm
 
 COPY package.json ./
-
-RUN pnpm install
+RUN corepack enable && pnpm install
 
 COPY . .
 

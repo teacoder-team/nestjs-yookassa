@@ -2,13 +2,12 @@ import {
 	DocsBody,
 	DocsDescription,
 	DocsPage,
-	DocsTitle
+	DocsTitle,
 } from 'fumadocs-ui/page'
 import { notFound } from 'next/navigation'
 
-import { getMDXComponents } from '@/components/shared/mdx-components'
-
 import { source } from '@/lib/source'
+import { getMDXComponents } from '@/mdx-components'
 
 type Params = Promise<{ slug: string[] }>
 

@@ -8,6 +8,7 @@ import type {
 	GetPaymentsResponse,
 	Payment
 } from './interfaces'
+import type { YookassaMetadata } from '../../common/types/metadata.type'
 
 @Injectable()
 export class PaymentService {
@@ -42,9 +43,9 @@ export class PaymentService {
 	 * console.log(paymentResponse);
 	 * ```
 	 */
-	public async create(
-		data: CreatePaymentRequest
-	): Promise<CreatePaymentResponse> {
+	public async create<T extends YookassaMetadata = YookassaMetadata>(
+		data: CreatePaymentRequest<T>
+	): Promise<CreatePaymentResponse<T>> {
 		return this.http.post('/payments', data)
 	}
 
@@ -88,9 +89,9 @@ export class PaymentService {
 	 * });
 	 * ```
 	 */
-	public async getAll(
+	public async getAll<T extends YookassaMetadata = YookassaMetadata>(
 		params: GetPaymentsRequest = {}
-	): Promise<GetPaymentsResponse> {
+	): Promise<GetPaymentsResponse<T>> {
 		return this.http.get('/payments', params)
 	}
 
@@ -108,7 +109,9 @@ export class PaymentService {
 	 * console.log(payment);
 	 * ```
 	 */
-	public async getById(id: string): Promise<PaymentResponse> {
+	public async getById<T extends YookassaMetadata = YookassaMetadata>(
+		id: string
+	): Promise<Payment<T>> {
 		return this.http.get(`/payments/${id}`)
 	}
 
@@ -128,7 +131,9 @@ export class PaymentService {
 	 * console.log(paymentDetails);
 	 * ```
 	 */
-	public async capture(id: string): Promise<Payment> {
+	public async capture<T extends YookassaMetadata = YookassaMetadata>(
+		id: string
+	): Promise<Payment<T>> {
 		return this.http.post(`/payments/${id}/capture`)
 	}
 
@@ -146,7 +151,9 @@ export class PaymentService {
 	 * console.log(canceledPaymentDetails);
 	 * ```
 	 */
-	public async cancel(id: string): Promise<Payment> {
+	public async cancel<T extends YookassaMetadata = YookassaMetadata>(
+		id: string
+	): Promise<Payment<T>> {
 		return this.http.post(`/payments/${id}/cancel`)
 	}
 }

@@ -5,6 +5,7 @@ export * from './yookassa.service'
 // Common
 export * from './common/enums'
 export * from './common/interfaces'
+export * from './common/types/metadata.type'
 
 // Invoice domain
 export * from './modules/invoice/interfaces'
